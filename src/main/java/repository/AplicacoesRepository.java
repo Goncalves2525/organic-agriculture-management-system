@@ -3,10 +3,7 @@ package repository;
 import oracle.jdbc.OracleTypes;
 import tables.AplicacoesFatProd;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -45,22 +42,27 @@ public class AplicacoesRepository {
         return aplicacoes;
     }
 
-    public boolean aplicacoesRegister(int operacaoId, int fatorProducaoId, int quantidade, String unidadeMedidaId) throws SQLException {
+    public int aplicacoesRegister(int operacaoID, int quintaID, int parcelaID, int culturaID, int operadorID, Date dataInicio, String fatorProducaoID, int quantidade, String unidadeMedidaID) throws SQLException {
 
         CallableStatement callStmt = null;
-        boolean worked = false;
+        int worked = -1;
         try {
             Connection connection = DatabaseConnection.getInstance().getConnection();
-            callStmt = connection.prepareCall("{ ? = call registarAplicacao(?,?,?,?) }");
+            callStmt = connection.prepareCall("{ ? = call registarAplicacao(?,?,?,?,?,?,?,?,?) }");
 
-            callStmt.registerOutParameter(1, OracleTypes.BOOLEAN);
-            callStmt.setInt(2, operacaoId);
-            callStmt.setInt(3, fatorProducaoId);
-            callStmt.setInt(4, quantidade);
-            callStmt.setString(5, unidadeMedidaId);
+            callStmt.registerOutParameter(1, OracleTypes.INTEGER);
+            callStmt.setInt(2, operacaoID);
+            callStmt.setInt(3, quintaID);
+            callStmt.setInt(4, parcelaID);
+            callStmt.setInt(5, culturaID);
+            callStmt.setInt(6, operadorID);
+            callStmt.setDate(7, dataInicio);
+            callStmt.setString(8, fatorProducaoID);
+            callStmt.setInt(9, quantidade);
+            callStmt.setString(10, unidadeMedidaID);
 
             callStmt.execute();
-            worked = callStmt.getBoolean(1);
+            worked = callStmt.getInt(1);
             connection.commit();
 
 

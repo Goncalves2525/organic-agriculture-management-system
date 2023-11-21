@@ -27,7 +27,8 @@ public class App {
             MainMenuUI menu = new MainMenuUI();
             menu.run();
         } catch (Exception e) {
-            System.out.println("\nApp properties not loaded!");
+            Utils.showMessageColor("\nError!" +
+                    "\n" + e.getMessage(), AnsiColor.RED);
         }
     }
 

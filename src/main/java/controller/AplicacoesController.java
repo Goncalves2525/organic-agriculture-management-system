@@ -3,6 +3,7 @@ package controller;
 import repository.AplicacoesRepository;
 import tables.AplicacoesFatProd;
 
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
@@ -26,8 +27,8 @@ public class AplicacoesController {
         return aplicacoesList;
     }
 
-    public boolean aplicacoesRegister(int operacaoId, int fatorProducaoId, int quantidade, String unidadeMedidaId) throws SQLException {
-        boolean worked = aplicacoesRepository.aplicacoesRegister(operacaoId, fatorProducaoId, quantidade, unidadeMedidaId);
+    public int aplicacoesRegister(int operacaoID, int quintaID, int parcelaID, int culturaID, int operadorID, Date dataInicio, String fatorProducaoID, int quantidade, String unidadeMedidaID) throws SQLException {
+        int worked = aplicacoesRepository.aplicacoesRegister(operacaoID, quintaID, parcelaID, culturaID, operadorID, dataInicio, fatorProducaoID, quantidade, unidadeMedidaID);
         return worked;
     }
 }
