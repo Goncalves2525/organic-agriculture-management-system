@@ -1,9 +1,9 @@
 package ui;
 
-import main.lapr3.controller.DatabaseConnectionTestController;
-import main.lapr3.data_access.DatabaseConnection;
-import main.lapr3.utils.AnsiColor;
-import main.lapr3.utils.Utils;
+import controller.DatabaseConnectionTestController;
+import repository.DatabaseConnection;
+import utils.AnsiColor;
+import utils.Utils;
 
 import java.sql.SQLException;
 
@@ -27,12 +27,10 @@ public class DatabaseConnectionTestUI implements Runnable {
         }
 
         if (result == DatabaseConnection.CONNECTION_SUCCESS) {
-            System.out.println();
-            Utils.showMessageColor("Connected to the database.", AnsiColor.GREEN);
+            Utils.showMessageColor("\nConnected to the database.", AnsiColor.GREEN);
             Utils.readLineFromConsole("Press Enter to continue.");
         } else {
-            System.out.println();
-            Utils.showMessageColor("Not connected to the database!", AnsiColor.RED);
+            Utils.showMessageColor("\nNot connected to the database!", AnsiColor.RED);
             Utils.readLineFromConsole("Press Enter to continue.");
         }
     }

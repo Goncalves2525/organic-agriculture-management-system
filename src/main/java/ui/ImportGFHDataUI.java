@@ -1,16 +1,16 @@
 package ui;
 
-import main.lapr3.controller.ImportDataCtrl;
-import main.lapr3.graphs.GFH;
-import main.lapr3.utils.AnsiColor;
-import main.lapr3.utils.Utils;
+import controller.ImportDataCtrl;
+import graphs.GFH;
+import utils.AnsiColor;
+import utils.Utils;
 
 public class ImportGFHDataUI implements Runnable{
 
     private ImportDataCtrl importDataCtrl;
 
-    private String locaisPath = "files/locais_small.xlsx";
-    private String distanciasPath = "files/distancias_small.xlsx";
+    private String locaisPath = "files/locais_small.csv";
+    private String distanciasPath = "files/distancias_small.csv";
 
     public ImportGFHDataUI() {
         this.importDataCtrl = new ImportDataCtrl();

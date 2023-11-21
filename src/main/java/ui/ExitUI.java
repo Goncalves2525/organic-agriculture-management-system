@@ -1,8 +1,8 @@
 package ui;
 
-import main.lapr3.controller.ExitController;
-import main.lapr3.utils.AnsiColor;
-import main.lapr3.utils.Utils;
+import controller.ExitController;
+import utils.AnsiColor;
+import utils.Utils;
 
 import java.sql.SQLException;
 
@@ -21,7 +21,7 @@ public class ExitUI implements Runnable {
                     "Thank you!\nWish you a great day!", AnsiColor.GREEN);
             System.exit(0);
         } catch (SQLException e) {
-            Utils.showMessageColor("Unsuccessful termination!", AnsiColor.RED);
+            Utils.showMessageColor("\nUnsuccessful termination!", AnsiColor.RED);
             System.exit(-1);
         }
     }

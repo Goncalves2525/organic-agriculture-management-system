@@ -1,8 +1,8 @@
 package ui;
 
-import main.lapr3.controller.ImportDataCtrl;
-import main.lapr3.utils.AnsiColor;
-import main.lapr3.utils.Utils;
+import controller.ImportDataCtrl;
+import utils.AnsiColor;
+import utils.Utils;
 
 public class ImportFarmOperationsLegacyUI implements Runnable {
 

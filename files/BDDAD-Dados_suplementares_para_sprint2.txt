@@ -1,0 +1,230 @@
+Inserir as seguintes plantas:
+
+Abóbora manteiga, designada por Cucurbita moschata var 'Butternut'
+
+Inserir a seguinte parcela:
+
+Em 01/12/2022, Campo Novo, 1.1 ha
+
+Inserir os seguintes fatores de produção:
+
+Adubo para aplicação no solo, Fertimax Extrume de Cavalo, da Nutrofertil, granulado, Matéria Orgânica 50%, pH 6.7, Azoto orgânico (N) 3%, Fósforo total (P2O5) 0.8%, Potássio total (K2O) 0.4%, Cálcio total (Ca) 1.6%, Magnésio total (MgO) 0.3%, Boro total (B) 0.004%
+
+Adubo para aplicação no solo, BIOFERTIL N6, da Nutrofertil, granulado, Matéria Orgânica 53%, pH 6.5, Azoto orgânico (N) 6.4%, Fósforo total (P2O5) 2.5%, Potássio total (K2O) 2.4%, Cálcio total (Ca) 6%, Magnésio total (MgO) 0.3%, Boro total (B) 0.0020%
+
+
+Inserir os seguintes setores de rega:
+
+Setor 10
+Início a 01/05/2017, sem data fim
+Caudal máximo: 2500 l/h
+Parcelas: Campo grande
+Culturas:
+- Oliveira Galega, 30 un, 01/05/2017, sem data fim
+- Oliveira Picual, 20 un, 01/05/2017, sem data fim
+
+Setor 11
+Início a 01/05/2017, sem data fim
+Caudal máximo: 1500 l/h
+Parcelas: Campo grande
+Culturas:
+- Oliveira Arbquina, 40 un, 01/05/2017, sem data fim
+
+Setor 21
+Início a 01/05/2017, sem data fim
+Caudal máximo: 3500 l/h
+Parcelas: Lameiro da ponte, Lameiro do Moinho
+Culturas:
+- Macieira Jonagored, 90 un, 01/05/2017, sem data fim
+- Macieira Fuji, 60 un, 01/05/2017, sem data fim
+- Macieira Royal Gala, 60 un, 01/05/2017, sem data fim
+- Macieira Royal Gala, 40 un, 01/05/2019, sem data fim
+- Macieira Pipo de Basto, 40 un, 01/05/2019, sem data fim
+
+Setor 22
+Início a 01/05/2019, sem data fim
+Caudal máximo: 3500 l/h
+Parcelas: Lameiro do Moinho
+Culturas:
+- Macieira Porta da Loja, 50 un, 01/05/2019, sem data fim
+- Macieira Malápio, 20 un, 01/05/2019, sem data fim
+- Macieira Canada, 30 un, 01/05/2019, sem data fim
+- Macieira Grand Fay, 40 un, 01/05/2019, sem data fim
+- Macieira Gronho Doce, 50 un, 01/05/2019, sem data fim
+
+Setor 41
+Início a 01/04/2023, 10/10/2023
+Caudal máximo: 2500 l/h
+Parcelas: Campo Novo
+Culturas:
+- Cenoura Sugarsnax Hybrid, 05/04/2023 a 31/05/2023
+- Cenoura Danvers Half Long, 05/07/2023 a 08/10/2023
+
+Setor 42
+Início a 01/04/2023, 10/10/2023
+Caudal máximo: 3500 l/h
+Parcelas: Campo Novo
+Culturas:
+- Abóbora Manteiga, 06/04/2023 a 10/09/2023
+
+Inserir as seguintes operações realizadas na quinta:
+
+Lameiro da Ponte
+
+14/05/2023 operação de rega, setor 21, 120 min
+01/06/2023 operação de rega, setor 21, 120 min
+15/06/2023 operação de rega, setor 21, 120 min
+30/06/2023 operação de rega, setor 21, 120 min
+07/07/2023 operação de rega, setor 21, 180 min
+14/07/2023 operação de rega, setor 21, 180 min
+21/07/2023 operação de rega, setor 21, 180 min
+28/07/2023 operação de rega, setor 21, 180 min
+04/08/2023 operação de rega, setor 21, 150 min
+11/08/2023 operação de rega, setor 21, 150 min
+18/08/2023 operação de rega, setor 21, 150 min
+25/08/2023 operação de rega, setor 21, 120 min
+01/09/2023 operação de rega, setor 21, 120 min
+08/09/2023 operação de rega, setor 21, 120 min
+15/09/2023 operação de rega, setor 21, 120 min
+
+18/08/2023 operação de colheita de maçã Royal Gala, 700 kg
+30/08/2023 operação de colheita de maçã Royal Gala, 900 kg
+05/09/2023 operação de colheita de maçã Jonagored, 900 kg
+08/09/2023 operação de colheita de maçã Jonagored, 1050 kg
+28/09/2023 operação de colheita de maçã Fuji, 950 kg
+03/10/2023 operação de colheita de maçã Fuji, 800 kg
+
+Lameiro do Moinho
+
+04/01/2019 operação de aplicação de fator de produção BIOFERTIL N6, no solo, 1.1 ha, 3200 kg
+09/01/2019 operação de plantação de Macieira Porta da Loja, 50 un
+09/01/2019 operação de plantação de Macieira Malápio, 20 un
+10/01/2019 operação de plantação de Macieira Pipo de Basto, 40 un
+10/01/2019 operação de plantação de Macieira Canada, 30 un
+11/01/2019 operação de plantação de Macieira Grand Fay, 40 un
+11/01/2019 operação de plantação de Macieira Gronho Doce, 50 un
+06/01/2020 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Porta da Loja, 100 kg
+06/01/2020 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Malápio, 40 kg
+06/01/2020 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Pipo de Basto, 80 kg
+06/01/2020 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Canada, 60 kg
+07/01/2020 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Grand Fay, 80 kg
+07/01/2020 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Gronho Doce, 100 kg
+07/01/2021 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Porta da Loja, 150 kg
+07/01/2021 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Malápio, 60 kg
+08/01/2021 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Pipo de Basto, 120 kg
+07/01/2021 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Canada, 90 kg
+07/01/2021 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Grand Fay, 120 kg
+08/01/2021 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Gronho Doce, 150 kg
+15/01/2022 operação de aplicação de fator de produção BIOFERTIL N6, no solo, Macieira Porta da Loja, 150 kg
+15/01/2022 operação de aplicação de fator de produção BIOFERTIL N6, no solo, Macieira Malápio, 60 kg
+15/01/2022 operação de aplicação de fator de produção BIOFERTIL N6, no solo, Macieira Pipo de Basto, 120 kg
+16/01/2022 operação de aplicação de fator de produção BIOFERTIL N6, no solo, Macieira Canada, 90 kg
+16/01/2022 operação de aplicação de fator de produção BIOFERTIL N6, no solo, Macieira Grand Fay, 120 kg
+16/01/2022 operação de aplicação de fator de produção BIOFERTIL N6, no solo, Macieira Gronho Doce, 150 kg
+15/05/2023 operação de aplicação de fator de produção EPSO Microtop, foliar, Macieira Porta da Loja, 5 kg
+15/05/2023 operação de aplicação de fator de produção EPSO Microtop, foliar, Macieira Malápio, 2 kg
+15/05/2023 operação de aplicação de fator de produção EPSO Microtop, foliar, Macieira Pipo de Basto, 4 kg
+15/05/2023 operação de aplicação de fator de produção EPSO Microtop, foliar, Macieira Canada, 3 kg
+15/05/2023 operação de aplicação de fator de produção EPSO Microtop, foliar, Macieira Grand Fay, 4 kg
+15/05/2023 operação de aplicação de fator de produção EPSO Microtop, foliar, Macieira Gronho Doce, 5 kg
+
+15/09/2023 operação de colheita de maçã Canada, 700 kg
+16/09/2023 operação de colheita de maçã Grand Fay, 600 kg
+20/09/2023 operação de colheita de maçã Grand Fay, 700 kg
+27/09/2023 operação de colheita de maçã Pipo de Basto, 600 kg
+05/10/2023 operação de colheita de maçã Pipo de Basto, 700 kg
+15/10/2023 operação de colheita de maçã Gronho Doce, 1200 kg
+15/10/2023 operação de colheita de maçã Malápio, 700 kg
+12/11/2023 operação de colheita de maçã Porta da Loja, 700 kg
+15/11/2023 operação de colheita de maçã Porta da Loja, 800 kg
+
+13/05/2023 operação de rega, setor 22, 120 min
+02/06/2023 operação de rega, setor 22, 120 min
+16/06/2023 operação de rega, setor 22, 120 min
+01/07/2023 operação de rega, setor 22, 120 min
+08/07/2023 operação de rega, setor 22, 180 min
+15/07/2023 operação de rega, setor 22, 180 min
+22/07/2023 operação de rega, setor 22, 180 min
+29/07/2023 operação de rega, setor 22, 180 min
+05/08/2023 operação de rega, setor 22, 150 min
+10/08/2023 operação de rega, setor 22, 150 min
+17/08/2023 operação de rega, setor 22, 150 min
+24/08/2023 operação de rega, setor 22, 120 min
+02/09/2023 operação de rega, setor 22, 120 min
+09/09/2023 operação de rega, setor 22, 120 min
+18/09/2023 operação de rega, setor 22, 120 min
+
+Campo Grande
+
+12/10/2016 operação de plantação de Oliveira Arbquina, 40 un
+13/01/2021 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Picual, 120 kg
+12/01/2021 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Galega, 180 kg
+12/01/2021 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Arbquina, 240 kg
+12/01/2022 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Picual, 120 kg
+12/01/2022 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Galega, 180 kg
+13/01/2022 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Arbquina, 240 kg
+12/01/2023 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Picual, 120 kg
+12/01/2023 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Galega, 180 kg
+12/01/2023 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Arbquina, 240 kg
+
+02/11/2023 operação de colheita de azeitona Arbquina, 400 kg
+05/11/2023 operação de colheita de azeitona Picual, 300 kg
+08/11/2023 operação de colheita de azeitona Galega, 350 kg
+
+02/06/2023 operação de rega, setor 10, 60 min
+02/07/2023 operação de rega, setor 10, 120 min
+02/08/2023 operação de rega, setor 10, 180 min
+04/09/2023 operação de rega, setor 10, 120 min
+02/10/2023 operação de rega, setor 10, 60 min
+
+
+Campo Novo
+
+01/04/2023 operação de aplicação de fator de produção Biocal Composto, no solo, 1.1 ha, 500 kg
+05/04/2023 operação de semeadura de cenouras Sugarsnax Hybrid, 0.5 ha, 1.2 kg
+06/04/2023 operação de semeadura de abóbora manteiga, 0.6 ha, 1.5 kg
+08/05/2023 operação de monda de plantação de cenouras Sugarsnax Hybrid, 0.5 ha
+20/05/2023 operação de monda de plantação de abóbora manteiga, 0.6 ha
+14/06/2023 operação de colheita de cenouras Sugarsnax Hybrid, 1500 kg
+20/06/2023 operação de monda de plantação de abóbora manteiga, 0.6 ha
+28/06/2023 operação de colheita de cenouras Sugarsnax Hybrid, 2500 kg
+03/07/2023 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, 0.5 ha, 1800 kg
+04/07/2023 operação de mobilização do solo, 0.5 ha
+05/07/2023 operação de semeadura de cenouras Danvers Half Long, 0.5 ha, 1.2 kg
+08/08/2023 operação de monda de plantação de cenouras Danvers Half Long, 0.5 ha
+15/09/2023 operação de colheita de abóbora manteiga, 8000 kg
+25/09/2023 operação de colheita de abóbora manteiga, 5000 kg
+18/09/2023 operação de colheita de cenouras Danvers Half Long, 900 kg
+22/09/2023 operação de colheita de cenouras Danvers Half Long, 1500 kg
+05/10/2023 operação de colheita de cenouras Danvers Half Long, 1200 kg
+10/10/2023 operação de mobilização do solo, 1.1 ha
+12/10/2023 operação de semeadura de Tremoço Amarelo, 1.1 ha, 32 kg
+
+12/06/2023 operação de rega, setor 42, 60 min
+19/06/2023 operação de rega, setor 42, 60 min
+30/06/2023 operação de rega, setor 42, 120 min
+08/07/2023 operação de rega, setor 42, 120 min
+15/07/2023 operação de rega, setor 42, 120 min
+22/07/2023 operação de rega, setor 42, 150 min
+29/07/2023 operação de rega, setor 42, 150 min
+05/08/2023 operação de rega, setor 42, 120 min
+12/08/2023 operação de rega, setor 42, 120 min
+19/08/2023 operação de rega, setor 42, 120 min
+26/08/2023 operação de rega, setor 42, 120 min
+31/08/2023 operação de rega, setor 42, 120 min
+05/09/2023 operação de rega, setor 42, 120 min
+
+20/05/2023 operação de rega, setor 41, 120 min
+02/06/2023 operação de rega, setor 41, 120 min
+09/06/2023 operação de rega, setor 41, 120 min
+09/07/2023 operação de rega, setor 41, 120 min
+16/07/2023 operação de rega, setor 41, 120 min
+23/07/2023 operação de rega, setor 41, 120 min
+30/07/2023 operação de rega, setor 41, 120 min
+07/08/2023 operação de rega, setor 41, 120 min
+14/08/2023 operação de rega, setor 41, 120 min
+21/08/2023 operação de rega, setor 41, 120 min
+28/08/2023 operação de rega, setor 41, 120 min
+06/09/2023 operação de rega, setor 41, 120 min
+13/09/2023 operação de rega, setor 41, 120 min
+20/09/2023 operação de rega, setor 41, 120 min

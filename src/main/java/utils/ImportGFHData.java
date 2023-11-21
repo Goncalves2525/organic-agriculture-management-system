@@ -1,6 +1,6 @@
 package utils;
 
-import main.lapr3.graphs.GFH;
+import graphs.GFH;
 
 import java.io.File;
 import java.io.FileReader;
@@ -107,7 +107,7 @@ public class ImportGFHData {
                 // get data to variables
                 String codeOrig = array[0];
                 String codeDest = array[1];
-                int distance = Integer.parseInt(array[2]);
+                int distance = Integer.parseInt(array[2].split("\r")[0]);
 
                 // add to matrix
                 gfhMatrix.insertDistance(codeOrig, codeDest, distance);

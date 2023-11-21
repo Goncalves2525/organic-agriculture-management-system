@@ -1,7 +1,7 @@
 package ui;
 
-import main.lapr3.controller.AplicacoesController;
-import main.lapr3.domain_tables.AplicacoesFatProd;
+import controller.AplicacoesController;
+import tables.AplicacoesFatProd;
 
 import java.sql.SQLException;
 import java.util.List;

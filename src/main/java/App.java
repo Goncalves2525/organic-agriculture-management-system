@@ -1,4 +1,7 @@
+import repository.DatabaseConnection;
 import ui.MainMenuUI;
+import utils.AnsiColor;
+import utils.Utils;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,21 +22,19 @@ public class App {
 
             DatabaseConnection.getInstance().closeConnection();
         } catch (UnknownHostException e) {
-            System.out.println("\nDatabase Server not reachable!");
-
+            Utils.showMessageColor("\nDatabase Server not reachable!" +
+                    "\nStarting app offline.", AnsiColor.YELLOW);
             MainMenuUI menu = new MainMenuUI();
             menu.run();
-
         } catch (Exception e) {
-            System.out.println("App properties not loaded!");
+            System.out.println("\nApp properties not loaded!");
         }
     }
 
     private static void loadProperties() throws IOException {
         Properties properties = new Properties(System.getProperties());
 
-        InputStream inputStream = new App().getClass().getClassLoader().getResourceAsStream("application.properties");
-        properties.load(inputStream);
+        InputStream inputStream = new App().getClass().getClassLoader().getResourceAsStream("config/application.properties");
         properties.load(inputStream);
         inputStream.close();
 

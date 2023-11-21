@@ -1,6 +1,6 @@
 package ui;
 
-import main.lapr3.controller.SementeiraController;
+import controller.SementeiraController;
 
 import java.sql.Date;
 import java.sql.SQLException;

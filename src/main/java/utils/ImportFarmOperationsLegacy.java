@@ -1,11 +1,11 @@
 package utils;
 
-import main.lapr3.domain_tables.*;
-import main.lapr3.repository_tables.TablesRepository;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import repository.TablesRepository;
+import tables.*;
 
 import java.io.File;
 import java.io.FileInputStream;

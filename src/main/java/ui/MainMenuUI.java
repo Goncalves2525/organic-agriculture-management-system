@@ -1,7 +1,7 @@
 package ui;
 
-import main.lapr3.utils.AnsiColor;
-import main.lapr3.utils.Utils;
+import utils.AnsiColor;
+import utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
