@@ -53,13 +53,6 @@ public class Location {
     @Override
     public String toString() {
         return this.code;
-//                + "\n#Employees: " + this.numberOfEmployees +
-//                "\nCoordinate: " + this.coordinate.toString() +
-//                "\nSchdule: " + this.schedule.toString() +
-//                "\nAutonomy (avg): " + this.AUTONOMY + " km" +
-//                "\nAverage Velocity (avg): " + this.AVG_VELOCITY + " km/h" +
-//                "\nCharging time (avg): " + this.CHARGING_TIME + " min" +
-//                "\nDelivery time (avg): " + this.DEPLOY_TIME + " min";
     }
 
     // TODO: method to convert km to m and other to convert km/h to m/min on UTILS (add other conversions).

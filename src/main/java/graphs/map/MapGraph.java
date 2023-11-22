@@ -26,18 +26,22 @@ public class MapGraph<V, E> extends CommonGraph<V, E> {
         mapVertices = new LinkedHashMap<>();
     }
 
-    public MapGraph(Graph<V,E> g) {
+    public MapGraph(Graph<V, E> g) {
         this(g.isDirected());
         copy(g, this);
     }
 
     @Override
-    public boolean validVertex(V vert) { return (mapVertices.get(vert) != null);   }
+    public boolean validVertex(V vert) {
+        return (mapVertices.get(vert) != null);
+    }
 
     @Override
     public Collection<V> adjVertices(V vert) {
-        
-        throw new UnsupportedOperationException("Not supported yet.");
+        if (!validVertex(vert)){
+            return null;
+        }
+        return mapVertices.get(vert).getAllAdjVerts();
     }
 
     @Override
@@ -151,7 +155,7 @@ public class MapGraph<V, E> extends CommonGraph<V, E> {
         if (!isDirected)
             // if vDest different vOrig
             if (edge(vDest, vOrig) == null) {
-                Edge<V, E> otherEdge = new Edge<>( mvd.getElement(), mvo.getElement(), weight);
+                Edge<V, E> otherEdge = new Edge<>(mvd.getElement(), mvo.getElement(), weight);
                 mvd.addAdjVert(mvo.getElement(), otherEdge);
                 numEdges++;
             }
@@ -218,7 +222,7 @@ public class MapGraph<V, E> extends CommonGraph<V, E> {
 
         MapGraph<V, E> g = new MapGraph<>(this.isDirected);
 
-        copy(this,g);
+        copy(this, g);
 
         return g;
     }

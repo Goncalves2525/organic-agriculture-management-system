@@ -12,6 +12,10 @@ import java.util.function.BinaryOperator;
  */
 public class Algorithms {
 
+
+    ///// GRAPH TRAVERSALS /////////////////////////////////////////////////////////////////////////////////////////////
+
+    // TEST OK
     /**
      * Performs breadth-first search of a Graph starting in a vertex
      *
@@ -20,6 +24,10 @@ public class Algorithms {
      * @return a LinkedList with the vertices of breadth-first search
      */
     public static <V, E> LinkedList<V> BreadthFirstSearch(Graph<V, E> g, V vert) {
+        if (g.key(vert) < 0) {
+            return null;
+        }
+
         LinkedList<V> qbfs = new LinkedList<>();
         LinkedList<V> qaux = new LinkedList<>();
         boolean[] visited = new boolean[g.numVertices()];
@@ -29,12 +37,12 @@ public class Algorithms {
         visited[g.key(vert)] = true;
 
         while (!qaux.isEmpty()) {
-            qaux.removeFirst();
-            for (V adjVert : g.adjVertices(vert)) {
-                if (!visited[g.key(adjVert)]) {
-                    qbfs.add(adjVert);
-                    qaux.add(adjVert);
-                    visited[g.key(adjVert)] = true;
+            vert = qaux.removeFirst();
+            for (V vAdj : g.adjVertices(vert)) {
+                if (!visited[g.key(vAdj)]) {
+                    qbfs.add(vAdj);
+                    qaux.add(vAdj);
+                    visited[g.key(vAdj)] = true;
                 }
             }
         }
@@ -42,6 +50,7 @@ public class Algorithms {
         return qbfs;
     }
 
+    // TEST OK
     /**
      * Performs depth-first search starting in a vertex
      *
@@ -63,6 +72,7 @@ public class Algorithms {
         }
     }
 
+    // TEST OK
     /**
      * Performs depth-first search starting in a vertex
      *
@@ -71,7 +81,8 @@ public class Algorithms {
      * @return a LinkedList with the vertices of depth-first search
      */
     public static <V, E> LinkedList<V> DepthFirstSearch(Graph<V, E> g, V vert) {
-        if (g.numVertices() <= 0) {
+
+        if (g.numVertices() <= 0 || !g.validVertex(vert)) {
             return null;
         }
 
@@ -82,6 +93,9 @@ public class Algorithms {
 
         return qdfs;
     }
+
+
+    ///// PATHS ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     /**
      * Returns all paths from vOrig to vDest
@@ -123,41 +137,7 @@ public class Algorithms {
         return allPaths(g, vOrig, vDest);
     }
 
-    /**
-     * Computes shortest-path distance from a source vertex to all reachable
-     * vertices of a graph g with non-negative edge weights
-     * This implementation uses Dijkstra's algorithm
-     *
-     * @param g        Graph instance
-     * @param vOrig    Vertex that will be the source of the path
-     * @param visited  set of previously visited vertices
-     * @param pathKeys minimum path vertices keys
-     * @param dist     minimum distances
-     */
-//    private static <V, E> void shortestPathDijkstra(Graph<V, E> g, V vOrig,
-//                                                    Comparator<E> ce, BinaryOperator<E> sum, E zero,
-//                                                    boolean[] visited, V[] pathKeys, E[] dist) {
-//        for (V vertice : g.vertices()) {
-//            dist[g.key(vertice)] = null;
-//            pathKeys[g.key(vertice)] = vertice;
-//            visited[g.key(vertice)] = false;
-//
-//            dist[g.key(vOrig)] = zero;
-//
-//        }
-//        while (g.key(vOrig) != -1) {
-//            visited[g.key(vOrig)] = true;
-//            for (V vAdj : g.adjVertices(vOrig)) {
-//                Edge<V, E> edge = g.edge(vOrig, vAdj);
-//                if (!visited[g.key(vAdj)] && ce.compare(dist[g.key(vAdj)], sum.apply(dist[g.key(vOrig)], edge.getWeight())) > 0) {
-//                    dist[g.key(vAdj)] = sum.apply(dist[g.key(vOrig)], edge.getWeight());
-//                    pathKeys[g.key(vAdj)] = vOrig;
-//                }
-//            }
-//            vOrig = g.vertices().getVertMinDist(dist, visited);
-//        }
-//    }
-
+    // todo: infra
 
     /**
      * Shortest-path between two vertices
@@ -174,9 +154,10 @@ public class Algorithms {
     public static <V, E> E shortestPath(Graph<V, E> g, V vOrig, V vDest,
                                         Comparator<E> ce, BinaryOperator<E> sum, E zero,
                                         LinkedList<V> shortPath) {
-        // TODO: implementar
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    // todo: infra
 
     /**
      * Shortest-path between a vertex and all other vertices
@@ -193,8 +174,45 @@ public class Algorithms {
     public static <V, E> boolean shortestPaths(Graph<V, E> g, V vOrig,
                                                Comparator<E> ce, BinaryOperator<E> sum, E zero,
                                                ArrayList<LinkedList<V>> paths, ArrayList<E> dists) {
-        // TODO: implementar
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    // todo: infra
+
+    /**
+     * Computes shortest-path distance from a source vertex to all reachable
+     * vertices of a graph g with non-negative edge weights
+     * This implementation uses Dijkstra's algorithm
+     *
+     * @param g        Graph instance
+     * @param vOrig    Vertex that will be the source of the path
+     * @param visited  set of previously visited vertices
+     * @param pathKeys minimum path vertices keys
+     * @param dist     minimum distances
+     */
+    private static <V, E> void shortestPathDijkstra(Graph<V, E> g, V vOrig,
+                                                    Comparator<E> ce, BinaryOperator<E> sum, E zero,
+                                                    boolean[] visited, V[] pathKeys, E[] dist) {
+        for (V vertice : g.vertices()) {
+            dist[g.key(vertice)] = null;
+            pathKeys[g.key(vertice)] = null;
+            visited[g.key(vertice)] = false;
+        }
+
+        dist[g.key(vOrig)] = zero;
+
+        while (g.key(vOrig) != -1) {
+            visited[g.key(vOrig)] = true;
+            for (V vAdj : g.adjVertices(vOrig)) {
+                Edge<V, E> edge = g.edge(vOrig, vAdj);
+                if (!visited[g.key(vAdj)] && ce.compare(dist[g.key(vAdj)], sum.apply(dist[g.key(vOrig)], edge.getWeight())) > 0) {
+                    dist[g.key(vAdj)] = sum.apply(dist[g.key(vOrig)], edge.getWeight());
+                    pathKeys[g.key(vAdj)] = vOrig;
+                }
+            }
+            vOrig = null; //ERRADO! g.ve vertices().getVertMinDist(dist, visited);
+        }
+
     }
 
     /**
@@ -213,6 +231,11 @@ public class Algorithms {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+    // TODO: belman-ford algorithm
+
+
+    ///// FLOYD-WARSHALL ///////////////////////////////////////////////////////////////////////////////////////////////
+
     /**
      * Calculates the minimum distance graph using Floyd-Warshall
      *
@@ -226,6 +249,16 @@ public class Algorithms {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
+
+    ///// CIRCUIT EULER: HIERHOLZER
+
+    // todo: circuit
+
+
+    ///// MINIMUM SPANNING TREE ////////////////////////////////////////////////////////////////////////////////////////
+
+    // todo: kruskal
+
     /**
      * Minimum spanning tree - PRIM Algorithm
      *
@@ -235,4 +268,21 @@ public class Algorithms {
 
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+
+    ///// TOPOLOGICAL SORT /////////////////////////////////////////////////////////////////////////////////////////////
+
+    // todo: kahns algorithm
+
+
+    ///// GRAPH COLORING ///////////////////////////////////////////////////////////////////////////////////////////////
+
+    // todo: welsh-powell
+
+    // todo: d-satur
+
+
+    ///// MAXIMUM NETWORK FLOW /////////////////////////////////////////////////////////////////////////////////////////
+
+    // todo: ford-fulkerson
 }
