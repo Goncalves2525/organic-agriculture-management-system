@@ -226,31 +226,13 @@ public class Algorithms {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
-    // TODO: javadoc
-//    public static <V, E> void prim(Graph<V, E> g, V vOrig,
-//                                   Comparator<E> ce, BinaryOperator<E> sum, E zero,
-//                                   boolean[] visited, V[] pathKeys, E[] dist) {
-//
-//        for (V vertice : g.vertices()) {
-//            dist[g.key(vertice)] = null;
-//            pathKeys[g.key(vertice)] = vertice;
-//            visited[g.key(vertice)] = false;
-//        }
-//
-//
-//        dist[g.key(vOrig)] = zero;
-//
-//
-//        while (g.key(vOrig) != -1) {
-//            visited[g.key(vOrig)] = true;
-//            for (V vAdj : g.adjVertices(vOrig)) {
-//                Edge<V, E> edge = g.edge(vOrig, vAdj);
-//                if (!visited[g.key(vAdj)] && ce.compare(dist[g.key(vAdj)], sum.apply(dist[g.key(vOrig)], edge.getWeight())) > 0) {
-//                    dist[g.key(vAdj)] = sum.apply(dist[g.key(vOrig)], edge.getWeight());
-//                    pathKeys[g.key(vAdj)] = vOrig;
-//                }
-//            }
-//            vOrig = g.vertices().getVertMinDist(dist, visited);
-//        }
-//    }
+    /**
+     * Minimum spanning tree - PRIM Algorithm
+     *
+     * @return minimum spanning tree
+     */
+    public static <V, E> MatrixGraph<V, E> mstPRIM(Graph<V, E> g) {
+
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
 }

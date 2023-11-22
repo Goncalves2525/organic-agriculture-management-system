@@ -20,17 +20,6 @@ public class Schedule {
 
     @Override
     public String toString() {
-        return String.format("(%d, %d)", openHour, closeHour);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (!(obj instanceof Schedule))
-            return false;
-        if (obj == this)
-            return true;
-        return this.getOpenHour() == ((Schedule) obj).getOpenHour()
-                && this.getCloseHour() == ((Schedule) obj).getCloseHour();
+        return String.format("%d:00 to %d:00", openHour, closeHour);
     }
 }

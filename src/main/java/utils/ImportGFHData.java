@@ -1,6 +1,8 @@
 package utils;
 
+import domain.Location;
 import graphs.GFH;
+import graphs.Graph;
 
 import java.io.File;
 import java.io.FileReader;
@@ -9,19 +11,21 @@ import java.util.Scanner;
 
 public class ImportGFHData {
 
-    private GFH gfhMatrix = new GFH();
+    private GFH gfh = new GFH();
 
     /**
      * Runs the import data from Excels files.
      */
-    public void run(String locaisPath, String distanciasPath) {
+    public Graph<Location, Integer> run(String locaisPath, String distanciasPath) {
         Utils.showMessageColor("\nFiles import started.", AnsiColor.BLUE);
         if (importExcel(locaisPath, distanciasPath)) {
             Utils.showMessageColor("\nFiles imported successfuly.", AnsiColor.GREEN);
             Utils.readLineFromConsole("Press Enter to continue.");
+            return gfh.getGfh();
         } else {
             Utils.showMessageColor("\nFiles import failed.\nPlease, review file location or name.", AnsiColor.RED);
             Utils.readLineFromConsole("Press Enter to continue.");
+            return null;
         }
     }
 
@@ -44,6 +48,11 @@ public class ImportGFHData {
 
             // Run method for Excel file
             importLocais(excelLocaisPath);
+
+            // Auxiliary path initializer
+            currentDirFile = new File(".");
+            pathSufix = currentDirFile.getAbsolutePath();
+            pathSufix = pathSufix.substring(0, pathSufix.length() - 1);
 
             // Path to distancias Excel file
             String excelDistanciasPath = pathSufix + distanciasPath;
@@ -86,8 +95,10 @@ public class ImportGFHData {
                     closeHour = 17;
                 }
 
+                Location location = new Location(code, numberOfEmployees, latitude, longitude, openHour, closeHour);
+
                 // add to matrix
-                gfhMatrix.insertLocation(code, numberOfEmployees, latitude, longitude, openHour, closeHour);
+                gfh.addLocation(location);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,10 +118,10 @@ public class ImportGFHData {
                 // get data to variables
                 String codeOrig = array[0];
                 String codeDest = array[1];
-                int distance = Integer.parseInt(array[2].split("\r")[0]);
+                Integer distance = Integer.parseInt(array[2].split("\r")[0]);
 
                 // add to matrix
-                gfhMatrix.insertDistance(codeOrig, codeDest, distance);
+                gfh.addDistance(codeOrig, codeDest, distance);
             }
         } catch (IOException e) {
             e.printStackTrace();
