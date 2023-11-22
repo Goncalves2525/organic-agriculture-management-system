@@ -1,5 +1,7 @@
 package controller;
 
+import domain.Location;
+import graphs.Graph;
 import utils.ImportFarmOperationsLegacy;
 import utils.ImportGFHData;
 
@@ -27,7 +29,7 @@ public class ImportDataCtrl {
         importFarmOperationsLegacy.addExtraDataSprint2();
     }
 
-    public void runImportGFHData(String locaisPath, String distanciasPath) { importGFHData.run(locaisPath, distanciasPath);}
+    public Graph<Location, Integer> runImportGFHData(String locaisPath, String distanciasPath) { return importGFHData.run(locaisPath, distanciasPath);}
 
     public void printGFHData() { importGFHData.toString(); }
 }

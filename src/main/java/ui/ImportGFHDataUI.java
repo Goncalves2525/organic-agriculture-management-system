@@ -1,7 +1,9 @@
 package ui;
 
 import controller.ImportDataCtrl;
+import domain.Location;
 import graphs.GFH;
+import graphs.Graph;
 import utils.AnsiColor;
 import utils.Utils;
 
@@ -19,13 +21,10 @@ public class ImportGFHDataUI implements Runnable{
     public void run() {
         int result = 0;
         try {
-            importDataCtrl.runImportGFHData(locaisPath, distanciasPath);
+            Graph<Location, Integer> gfh = importDataCtrl.runImportGFHData(locaisPath, distanciasPath);
 
-            Utils.showMessageColor("DONE!", AnsiColor.GREEN);
-            Utils.readLineFromConsole("Press Enter to continue.");
-
-            GFH gfh = new GFH();
-            System.out.println(gfh.getGfhMatrix().toString());
+            Utils.showMessageColor("Building graph!", AnsiColor.BLUE);
+            System.out.println(gfh.toString());
             Utils.readLineFromConsole("Press Enter to continue.");
 
             // TODO: add ESINF US
