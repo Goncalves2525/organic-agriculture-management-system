@@ -3,6 +3,8 @@ package repository;
 import tables.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.List;
 
 public class TablesRepository {
@@ -58,7 +60,7 @@ public class TablesRepository {
     ///// ADD TO TABLES defaults ///////////////////////////////////////////////////////////////////////////////////////
 
     public boolean addToTableTiposCulturaDefault(TiposCultura tipoCultura) {
-        if(tipoCultura.getIdTipoCultura() == 0) {
+        if (tipoCultura.getIdTipoCultura() == 0) {
             lstTiposCultura.add(tipoCultura);
             return true;
         }
@@ -66,7 +68,7 @@ public class TablesRepository {
     }
 
     public boolean addToTableEspeciesVegetaisDefault(EspeciesVegetais especieVegetal) {
-        if(especieVegetal.getIdEspecieVegetal() == 0) {
+        if (especieVegetal.getIdEspecieVegetal() == 0) {
             lstEspeciesVegetais.add(especieVegetal);
             return true;
         }
@@ -74,14 +76,14 @@ public class TablesRepository {
     }
 
     public boolean addToTableCulturasDefault(Culturas cultura) {
-        if(cultura.getIdCultura() == 0) {
+        if (cultura.getIdCultura() == 0) {
             lstCulturas.add(cultura);
             return true;
         }
         return false;
     }
 
-    private boolean addToTableCultivosDefaultByParcela(int idParcela, double area, String unidadeMedida){
+    private boolean addToTableCultivosDefaultByParcela(int idParcela, double area, String unidadeMedida) {
         boolean foundCultivo = false;
 
         // Add default Cultivo for this Parcela (Cultivo record that represents the whole Parcela)
@@ -809,20 +811,20 @@ public class TablesRepository {
 
     ///// SET DATA TO TABLE ////////////////////////////////////////////////////////////////////////////////////////////
 
-    public boolean setSetorRegaToCultivo(int setorId, String nomeParcela, String nomeCompletoCultura){
+    public boolean setSetorRegaToCultivo(int setorId, String nomeParcela, String nomeCompletoCultura) {
 
         boolean set = false;
         int parcelaId = 0;
         int culturaId = 0;
 
         for (Parcelas obj : lstParcelas) {
-            if(obj.getNome().equals(nomeParcela)){
+            if (obj.getNome().equals(nomeParcela)) {
                 parcelaId = obj.getIdParcela();
             }
         }
 
         for (Culturas obj : lstCulturas) {
-            if(obj.getNomeCompleto().equals(nomeCompletoCultura)){
+            if (obj.getNomeCompleto().equals(nomeCompletoCultura)) {
                 culturaId = obj.getIdCultura();
             }
         }
@@ -933,6 +935,16 @@ public class TablesRepository {
 
     public List<Operacoes> getLstOperacoes() {
         return lstOperacoes;
+    }
+
+    public Collection<Operacoes> getObjFromList(int id) {
+        LinkedList<Operacoes> list = new LinkedList<>();
+        for (Operacoes obj : getLstOperacoes()) {
+            if (obj.getCulturaId() == id) {
+                list.push(obj);
+            }
+        }
+        return list;
     }
 
     public List<AplicacoesFatProd> getLstAplicacoes() {

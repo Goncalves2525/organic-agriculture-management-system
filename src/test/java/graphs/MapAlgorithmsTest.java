@@ -9,6 +9,9 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * @author DEI-ISEP, adapted thourghout ESINF classes
+ */
 class MapAlgorithmsTest {
 
     final Graph<String, Integer> completeMap = new MapGraph<>(false);
