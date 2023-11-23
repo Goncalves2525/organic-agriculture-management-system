@@ -1,6 +1,6 @@
 package domain;
 
-public class Distance {
+public class Distance implements Comparable<Distance>{
 
     public final Location origLocation;
     public final Location destLocation;
@@ -22,5 +22,16 @@ public class Distance {
 
     public int getDistance() {
         return distance;
+    }
+
+    @Override
+    public int compareTo(Distance o) {
+        if (this.distance > o.distance) {
+            return 1;
+        } else if (this.distance < o.distance) {
+            return -1;
+        } else {
+            return 0;
+        }
     }
 }

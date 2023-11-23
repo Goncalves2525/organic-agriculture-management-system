@@ -168,7 +168,7 @@ class MapAlgorithmsTest {
      */
     @Test
     public void testShortestPaths() {
-        System.out.println("Test of shortest path");
+        System.out.println("Test of shortest paths");
 
         ArrayList<LinkedList<String>> paths = new ArrayList<>();
         ArrayList<Integer> dists = new ArrayList<>();
