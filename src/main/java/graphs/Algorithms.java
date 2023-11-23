@@ -163,31 +163,48 @@ public class Algorithms {
     private static <V, E> void shortestPathDijkstra(Graph<V, E> g, V vOrig,
                                                     Comparator<E> ce, BinaryOperator<E> sum, E zero,
                                                     boolean[] visited, V[] pathKeys, E[] dist) {
-        for (V vertice : g.vertices()) {
-            dist[g.key(vertice)] = null;
-            pathKeys[g.key(vertice)] = null;
-            visited[g.key(vertice)] = false;
+
+        Iterable<V> verticesIterator = g.vertices();
+
+        for (V v : verticesIterator) {
+            int index = g.key(v);
+            visited[index] = false;
+            pathKeys[index] = null;
+            dist[index] = null;
         }
 
         dist[g.key(vOrig)] = zero;
-        int vOrigAux = g.key(vOrig);
 
+        int vOrigAux = g.key(vOrig);
         while (vOrigAux != -1) {
             visited[vOrigAux] = true;
             vOrig = g.vertex(vOrigAux);
+            verticesIterator = g.adjVertices(vOrig);
+            for (V vertice : verticesIterator) {
+                Edge<V, E> edge = g.edge(vOrig, vertice);
+                int aux = g.key(vertice);
 
-            for (V vAdj : g.adjVertices(vOrig)) {
-                Edge<V, E> edge = g.edge(vOrig, vAdj);
-                if (!visited[g.key(vAdj)] && (dist[g.key(vAdj)]) == null ||
-                        ce.compare(dist[g.key(vAdj)], sum.apply(dist[g.key(vOrig)], edge.getWeight())) > 0) {
-                    dist[g.key(vAdj)] = sum.apply(dist[g.key(vOrig)], edge.getWeight());
-                    pathKeys[g.key(vAdj)] = vOrig;
+                if (!visited[aux] && (dist[aux] == null || ce.compare(dist[aux], sum.apply(dist[g.key(vOrig)], edge.getWeight())) > 0)) {
+                    dist[aux] = sum.apply(dist[g.key(vOrig)], edge.getWeight());
+                    pathKeys[aux] = vOrig;
+
                 }
             }
 
-            vOrigAux = getVertMinDist(g, vOrig, dist, visited, ce, zero);
+            vOrigAux = getVertMinDist(dist, visited, ce);
         }
+    }
 
+    private static <E> int getVertMinDist(E[] dist, boolean[] visited, Comparator<E> ce) {
+        E mindist = null;
+        Integer indice = -1;
+        for (int i = 0; i < dist.length; i++) {
+            if (!visited[i] && (dist[i] != null) && ((mindist == null) || ce.compare(dist[i], mindist) < 0)) {
+                indice = i;
+                mindist = dist[i];
+            }
+        }
+        return indice;
     }
 
     /** OK **/
@@ -249,10 +266,13 @@ public class Algorithms {
         shortPath.clear();
         boolean[] visited = new boolean[g.numVertices()];
 
+        @SuppressWarnings("unchecked")
         E[] dist = (E[]) new Object[g.numVertices()];
+        @SuppressWarnings("unchecked")
         V[] pathKeys = (V[]) new Object[g.numVertices()];
 
         shortestPathDijkstra(g, vOrig, ce, sum, zero, visited, pathKeys, dist);
+
         getPath(g, vOrig, vDest, pathKeys, shortPath);
 
         return shortPath.isEmpty() ? null : dist[g.key(vDest)];
@@ -279,8 +299,11 @@ public class Algorithms {
             return false;
         }
 
+        int numVerts = g.numVertices();
         boolean[] visited = new boolean[g.numVertices()];
+        @SuppressWarnings("unchecked")
         E[] dist = (E[]) new Object[g.numVertices()];
+        @SuppressWarnings("unchecked")
         V[] pathKeys = (V[]) new Object[g.numVertices()];
 
         shortestPathDijkstra(g, vOrig, ce, sum, zero, visited, pathKeys, dist);
@@ -288,17 +311,18 @@ public class Algorithms {
         dists.clear();
         paths.clear();
 
-        for (int i = 0; i < g.numVertices(); i++) {
+        for (int i = 0; i < numVerts; i++) {
             paths.add(null);
             dists.add(null);
         }
 
-        for (V vDest : g.vertices()) {
-            if (dist[g.key(vDest)] != null) {
+        for (V vertDest : g.vertices()) {
+            int i = g.key(vertDest);
+            if (dist[i] != null) {
                 LinkedList<V> shortPath = new LinkedList<>();
-                getPath(g, vOrig, vDest, pathKeys, shortPath);
-                paths.set(g.key(vDest), shortPath);
-                dists.set(g.key(vDest), dist[g.key(vDest)]);
+                getPath(g, vOrig, vertDest, pathKeys, shortPath);
+                paths.set(i, shortPath);
+                dists.set(i, dist[i]);
             }
         }
 
@@ -327,10 +351,12 @@ public class Algorithms {
             path.addFirst(vDest);
 
             if (g.key(vOrig) != g.key(vDest)) {
-                vDest = pathKeys[g.key(vDest)];
+                int index = g.key(vDest);
+                vDest = pathKeys[index];
                 getPath(g, vOrig, vDest, pathKeys, path);
             }
         }
+
     }
 
     // TODO: belman-ford algorithm
