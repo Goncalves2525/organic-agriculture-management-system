@@ -1,64 +1,75 @@
 package ui;
 
 import controller.ImportDataCtrl;
+import domain.Coordinate;
 import domain.Location;
 import graphs.Algorithms;
+import graphs.Edge;
 import graphs.Graph;
+import graphs.map.MapGraph;
 import graphs.matrix.MatrixGraph;
 
-import java.util.Comparator;
+import java.util.*;
+import java.util.function.BinaryOperator;
 
-public class USEI04UI implements Runnable{
+public class USEI04UI implements Runnable {
 
-    private ImportDataCtrl importDataCtrl;
+    private Graph<Location, Integer> gfh;
 
-    private String locaisPath = "files/locais_small.csv";
-    private String distanciasPath = "files/distancias_small.csv";
+    public USEI04UI(Graph<Location, Integer> gfh) {
+        this.gfh = gfh;
+    }
 
-    public USEI04UI() {
-        this.importDataCtrl = new ImportDataCtrl();
+    public double calcDistance(Coordinate coordinatesA, Coordinate coordinatesB) { // O(1)
+
+        double latA = coordinatesA.getLatitude(); // O(1)
+        double latB = coordinatesB.getLatitude(); // O(1)
+        double lonA = coordinatesA.getLongitude(); // O(1)
+        double lonB = coordinatesB.getLongitude(); // O(1)
+        double R = 6371e3; // metres
+        double φ1 = Math.toRadians(latA); // O(1)
+        double φ2 = Math.toRadians(latB); // O(1)
+        double Δφ = Math.toRadians(latB - latA); // O(1)
+        double Δλ = Math.toRadians(lonB - lonA); // O(1)
+
+        double a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+                Math.cos(φ1) * Math.cos(φ2) *
+                        Math.sin(Δλ / 2) * Math.sin(Δλ / 2); // O(1)
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // O(1)
+
+        return R * c; // O(1)
     }
 
     @Override
     public void run() {
-        Graph<Location, Integer> gfh = importDataCtrl.runImportGFHData(locaisPath, distanciasPath);
+        System.out.println("\nShortest Path that Visits Every Vertex:");
 
-        // Print the original graph
-        System.out.println("Original Graph:");
-        System.out.println(gfh.toString());
+        // Get all vertices in the graph
+        List<Location> vertices = new ArrayList<>(gfh.vertices());
 
-        ResultInfo resultInfo = minConnectionNetwork(gfh);
+        LinkedList<Location> minConnectionPath = null;
+        Integer minConnectionDistance = Integer.MAX_VALUE;
 
-        // Print the minimum connection network
-        System.out.println("\nMinimum Connection Network:");
-        System.out.println(resultInfo);
-    }
+        // Loop through all possible combinations of vertices
+        for (Location origin : vertices) {
+            for (Location destination : vertices) {
+                if (!origin.equals(destination)) {
+                    LinkedList<Location> currentPath = new LinkedList<>();
+                    Integer currentDistance = Algorithms.shortestPath(
+                            gfh, origin, destination, Integer::compare, Integer::sum, 0, currentPath);
 
-    private ResultInfo minConnectionNetwork(Graph<Location, Integer> gfh) {
-        // Use the minDistGraph method from Algorithms class
-        MatrixGraph<Location, Integer> minDistGraph = Algorithms.minDistGraph2(gfh, Comparator.naturalOrder(), Integer::sum);
-
-        // Calculate the total distance
-        int totalDistance = minDistGraph.edges().stream().mapToInt(edge -> edge.getWeight()).sum();
-
-        // Create ResultInfo object to hold the result
-        return new ResultInfo(minDistGraph, totalDistance);
-    }
-
-    private static class ResultInfo {
-        private final MatrixGraph<Location, Integer> minDistGraph;
-        private final int totalDistance;
-
-        public ResultInfo(MatrixGraph<Location, Integer> minDistGraph, int totalDistance) {
-            this.minDistGraph = minDistGraph;
-            this.totalDistance = totalDistance;
+                    // Update the minimum connection network if a shorter path is found
+                    if (currentDistance < minConnectionDistance) {
+                        minConnectionDistance = currentDistance;
+                        minConnectionPath = currentPath;
+                    }
+                }
+            }
         }
 
-        @Override
-        public String toString() {
-            return "Locations: " + minDistGraph.vertices() +
-                    "\nDistances: " + minDistGraph.edges() +
-                    "\nTotal Distance: " + totalDistance;
-        }
+        // Display the minimum connection network
+        //displayMinimumConnectionNetwork(minConnectionPath, minConnectionDistance);
     }
-}
+
+    }
