@@ -375,6 +375,53 @@ public class Algorithms {
     }
 
 
+    public static <V, E> MatrixGraph<V, E> minDistGraph2(Graph<V, E> g, Comparator<E> ce, BinaryOperator<E> sum) {
+        int numVerts = g.numVertices();
+        if (numVerts == 0) {
+            return null;
+        }
+
+        MatrixGraph<V, E> g2 = new MatrixGraph<>(g.isDirected());
+
+        // Initialize the matrix graph with vertices
+        for (V vertex : g.vertices()) {
+            g2.addVertex(vertex);
+        }
+
+        // Initialize the matrix graph with edges and weights
+        for (Edge<V, E> edge : g.edges()) {
+            V vOrig = edge.getVOrig();
+            V vDest = edge.getVDest();
+            E weight = edge.getWeight();
+
+            if (weight != null) {
+                g2.addEdge(vOrig, vDest, weight);
+            }
+        }
+
+        // Apply the Floyd-Warshall algorithm
+        for (int k = 0; k < numVerts; k++) {
+            for (int i = 0; i < numVerts; i++) {
+                if (i != k && g2.edge(i, k) != null) {
+                    for (int j = 0; j < numVerts; j++) {
+                        if (j != i && j != k && g2.edge(k, j) != null) {
+                            E s = sum.apply(g2.edge(i, k).getWeight(), g2.edge(k, j).getWeight());
+                            Edge<V, E> edgeIJ = g2.edge(i, j);
+
+                            // Check if the edgeIJ is null or the new weight is smaller
+                            if (edgeIJ == null || ce.compare(edgeIJ.getWeight(), s) > 0) {
+                                g2.addEdge(g2.vertex(i), g2.vertex(j), s);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return g2;
+    }
+
+
     ///// CIRCUIT EULER: HIERHOLZER
 
     // todo: circuit euler

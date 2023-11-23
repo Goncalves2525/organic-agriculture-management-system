@@ -7,6 +7,7 @@ import graphs.Graph;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -61,8 +62,18 @@ public class MatrixGraph<V,E> extends CommonGraph<V,E> {
 
     @Override
     public Collection<Edge<V, E>> edges() {
-        // TODO: implementar
-        throw new UnsupportedOperationException("Not supported yet.");
+        List<Edge<V, E>> edgeList = new ArrayList<>();
+
+        for (int i = 0; i < numVerts; i++) {
+            for (int j = 0; j < numVerts; j++) {
+                Edge<V, E> edge = edge(vertex(i), vertex(j));
+                if (edge != null) {
+                    edgeList.add(edge);
+                }
+            }
+        }
+
+        return edgeList;
     }
 
     @Override

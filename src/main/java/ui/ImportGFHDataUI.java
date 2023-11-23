@@ -38,7 +38,7 @@ public class ImportGFHDataUI implements Runnable{
             //options.add(new MenuItem("USEI01", new USEI01UI()));
             //options.add(new MenuItem("USEI02", new USEI02UI()));
             options.add(new MenuItem("USEI03", new USEI03UI()));
-            //options.add(new MenuItem("USEI04", new USEI04UI()));
+            options.add(new MenuItem("USEI04", new USEI04UI()));
             //options.add(new MenuItem("USEI05", new USEI05UI()));
             int option = 0;
             do {
