@@ -17,6 +17,7 @@ public class MainMenuUI implements Runnable {
         options.add(new MenuItem("Database Connection Test", new DatabaseConnectionTestUI()));
         options.add(new MenuItem("Import legacy data of \"Gestão de Operações da Quinta.\"", new ImportFarmOperationsLegacyUI()));
         options.add(new MenuItem("Menu Sementeiras", new SementeiraUI()));
+        options.add(new MenuItem("Menu Mondas", new MondasUI()));
         options.add(new MenuItem("Menu Aplicações (Fatores de Produção)", new AplicacoesUI()));
         options.add(new MenuItem("Menu Colheitas", new ColheitasUI()));
         options.add(new MenuItem("Run GFH Manager", new ImportGFHDataUI()));
