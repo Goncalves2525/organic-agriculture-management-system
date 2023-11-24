@@ -20,11 +20,11 @@ public class ImportGFHData {
         Utils.showMessageColor("\nFiles import started.", AnsiColor.BLUE);
         if (importExcel(locaisPath, distanciasPath)) {
             Utils.showMessageColor("\nFiles imported successfuly.", AnsiColor.GREEN);
-            Utils.readLineFromConsole("Press Enter to continue.");
+            //Utils.readLineFromConsole("Press Enter to continue.");
             return gfh.getGfh();
         } else {
             Utils.showMessageColor("\nFiles import failed.\nPlease, review file location or name.", AnsiColor.RED);
-            Utils.readLineFromConsole("Press Enter to continue.");
+            //Utils.readLineFromConsole("Press Enter to continue.");
             return null;
         }
     }

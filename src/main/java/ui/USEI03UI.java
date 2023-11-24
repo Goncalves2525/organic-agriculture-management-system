@@ -92,6 +92,9 @@ public class USEI03UI implements Runnable {
 
 
     public LinkedList<Location> getAllLocations(Graph<Location, Integer> gfh) {
+        if (gfh == null) {
+            return null;
+        }
         LinkedList<Location> locations = new LinkedList<>();
         for (Location location : gfh.vertices()) {
             locations.add(location);
@@ -101,6 +104,9 @@ public class USEI03UI implements Runnable {
 
 
     public ArrayList<Coordinate> getAllCoordinates(LinkedList<Location> locations) {
+        if (locations == null) {
+            return null;
+        }
         ArrayList<Coordinate> coordinates = new ArrayList<>();
         for (Location location : locations) {
             coordinates.add(location.getCoordinate());
@@ -109,6 +115,9 @@ public class USEI03UI implements Runnable {
     }
 
     public ArrayList<Coordinate> getMostDistantCoordinates(ArrayList<Coordinate> coordinates) {
+        if (coordinates == null) {
+            return null;
+        }
         double maxDistance = 0;
         Coordinate originCoordinate = null;
         Coordinate destinationCoordinate = null;
@@ -165,6 +174,9 @@ public class USEI03UI implements Runnable {
             distance = gfh.edge(location, nextLocation).getWeight();
             if (distance > autonomiaMax) {
                 tripIsPossible = false;
+                shortPath = null;
+                chargeLocations = null;
+                pathLength = null;
                 break;
             } else {
                 if (autonomiaAtual - distance <= 0) {
