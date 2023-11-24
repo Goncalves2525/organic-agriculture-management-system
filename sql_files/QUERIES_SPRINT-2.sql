@@ -8,15 +8,128 @@
 * num dado intervalo de tempo.
 */
 
+WITH OperationData AS (
+    SELECT
+        O.idOperacao,
+        O.dataInicio,
+        O.dataFim,
+        O.PARCELAID,
+        'APLICACAO_FATPROD' AS OperationType
+    FROM
+        OPERACOES O
+        JOIN APLICACOES_FATPROD AF ON O.idOperacao = AF.OPERACAOID
+
+    UNION
+
+    SELECT
+        O.idOperacao,
+        O.dataInicio,
+        O.dataFim,
+        O.PARCELAID,
+        'SEMENTEIRA' AS OperationType
+    FROM
+        OPERACOES O
+        JOIN SEMENTEIRAS S ON O.idOperacao = S.OPERACAOID
+
+    UNION
+
+    SELECT
+        O.idOperacao,
+        O.dataInicio,
+        O.dataFim,
+        O.PARCELAID,
+        'PLANTACOES' AS OperationType
+    FROM
+        OPERACOES O
+        JOIN PLANTACOES S ON O.idOperacao = S.OPERACAOID
+
+    UNION
+
+    SELECT
+        O.idOperacao,
+        O.dataInicio,
+        O.dataFim,
+        O.PARCELAID,
+        'REGAS' AS OperationType
+    FROM
+        OPERACOES O
+        JOIN REGAS S ON O.idOperacao = S.OPERACAOID
+
+    UNION
+
+    SELECT
+        O.idOperacao,
+        O.dataInicio,
+        O.dataFim,
+        O.PARCELAID,
+        'PODAS' AS OperationType
+    FROM
+        OPERACOES O
+        JOIN PODAS S ON O.idOperacao = S.OPERACAOID
+
+    UNION
+
+    SELECT
+        O.idOperacao,
+        O.dataInicio,
+        O.dataFim,
+        O.PARCELAID,
+        'INCORPS_SOLO' AS OperationType
+    FROM
+        OPERACOES O
+        JOIN INCORPS_SOLO S ON O.idOperacao = S.OPERACAOID
+
+    UNION
+
+    SELECT
+        O.idOperacao,
+        O.dataInicio,
+        O.dataFim,
+        O.PARCELAID,
+        'COLHEITAS' AS OperationType
+    FROM
+        OPERACOES O
+        JOIN COLHEITAS S ON O.idOperacao = S.OPERACAOID
+
+            UNION
+
+    SELECT
+        O.idOperacao,
+        O.dataInicio,
+        O.dataFim,
+        O.PARCELAID,
+        'MONDAS' AS OperationType
+    FROM
+        OPERACOES O
+        JOIN MONDAS S ON O.idOperacao = S.OPERACAOID
+
+            UNION
+
+    SELECT
+        O.idOperacao,
+        O.dataInicio,
+        O.dataFim,
+        O.PARCELAID,
+        'MOBILIZACOES_SOLO' AS OperationType
+    FROM
+        OPERACOES O
+        JOIN MOBILIZACOES_SOLO S ON O.idOperacao = S.OPERACAOID
+
+)
 SELECT
-    parcelas.idparcela AS ID_Parcela,
-    parcelas.nome AS Parcela,
-    operacoes.idoperacao AS ID_Operacao
-FROM OPERACOES
-JOIN parcelas ON operacoes.parcelaid = parcelas.idparcela
-WHERE operacoes.dataInicio BETWEEN TO_DATE('2010-12-10', 'YYYY-MM-DD') AND TO_DATE('2030-01-20', 'YYYY-MM-DD')
-GROUP BY parcelas.idparcela, parcelas.nome, operacoes.idoperacao
-ORDER BY parcelas.idparcela;
+    OD.PARCELAID,
+    OD.dataInicio,
+    OD.OperationType,
+    COUNT(*) AS OperationCount
+FROM
+    OperationData OD
+WHERE
+    OD.dataInicio BETWEEN TO_DATE('2010-12-10  ', 'YYYY-MM-DD') AND TO_DATE('2030-01-20', 'YYYY-MM-DD')
+GROUP BY
+    OD.PARCELAID, OD.DATAiNICIO, OD.OperationType
+ORDER BY
+    OD.PARCELAID, OD.OperationType;
+
 
 /*
 * USBD19

@@ -81,17 +81,4 @@ public class MondasRepository {
         }
         return mondasList;
     }
-
-    private void closeResources(CallableStatement callStmt, ResultSet resultSet) {
-        try {
-            if (!Objects.isNull(callStmt)) {
-                callStmt.close();
-            }
-            if (!Objects.isNull(resultSet)) {
-                resultSet.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 }
