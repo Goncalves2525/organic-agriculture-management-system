@@ -459,32 +459,59 @@ public class Algorithms {
      * @return minimum spanning tree
      */
     public static <V, E extends Comparable<E>> Graph<V, E> kruskalAlgorithm(Graph<V, E> g) {
-
         Graph<V, E> mst = new MapGraph<>(false);
         List<Edge<V, E>> lstEdges = new ArrayList<>();
-        LinkedList<V> connectedVertices;
 
-        for (V vertice : g.vertices()) {
-            mst.addVertex(vertice);
+        for (V vertex : g.vertices()) {
+            mst.addVertex(vertex);
         }
 
         for (Edge<V, E> edge : g.edges()) {
             lstEdges.add(edge);
         }
 
-        //sort:
-        lstEdges.sort(null);
+        // Sort edges using a comparator
+        lstEdges.sort(Comparator.comparing(Edge::getWeight));
 
-        for (Edge e : lstEdges) {
-            V verticeOrig = (V) e.getVOrig();
-            V verticeDest = (V) e.getVDest();
-            E edgeWeight = (E) e.getWeight();
-            connectedVertices = DepthFirstSearch(mst, verticeOrig);
-            if (!connectedVertices.contains(verticeDest)) {
+        for (Edge<V, E> edge : lstEdges) {
+            V verticeOrig = edge.getVOrig();
+            V verticeDest = edge.getVDest();
+            E edgeWeight = edge.getWeight();
+
+            // Check if adding the edge creates a cycle
+            if (!createsCycle(mst, verticeOrig, verticeDest)) {
                 mst.addEdge(verticeOrig, verticeDest, edgeWeight);
             }
         }
+
         return mst;
+    }
+
+    private static <V, E> boolean createsCycle(Graph<V, E> graph, V vOrig, V vDest) {
+        LinkedList<V> visitedVertices = new LinkedList<>();
+        visitedVertices.add(vOrig);
+
+        return createsCycleHelper(graph, vOrig, vDest, visitedVertices);
+    }
+
+    private static <V, E> boolean createsCycleHelper(Graph<V, E> graph, V currentVertex, V targetVertex, LinkedList<V> visitedVertices) {
+        if (currentVertex.equals(targetVertex)) {
+            return true; // Found a cycle
+        }
+
+        for (V adjacentVertex : graph.adjVertices(currentVertex)) {
+            if (!visitedVertices.contains(adjacentVertex)) {
+                visitedVertices.add(adjacentVertex);
+
+                if (createsCycleHelper(graph, adjacentVertex, targetVertex, visitedVertices)) {
+                    return true; // Found a cycle
+                }
+
+                visitedVertices.removeLast();
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -508,7 +535,6 @@ public class Algorithms {
 //        vOrig
 //    }
 
-
     ///// TOPOLOGICAL SORT /////////////////////////////////////////////////////////////////////////////////////////////
 
     // todo: kahns algorithm
@@ -525,4 +551,44 @@ public class Algorithms {
 
     // todo: ford-fulkerson
 
+    public static <V, E> int calculatePathWeight(Graph<V, E> g, LinkedList<V> path) {
+        int weight = 0;
+        for (int i = 0; i < path.size() - 1; i++) {
+            V currentVertex = path.get(i);
+            V nextVertex = path.get(i + 1);
+            Edge<V, E> edge = g.edge(currentVertex, nextVertex);
+            if (edge != null) {
+                weight += (int) edge.getWeight();
+            }
+        }
+        return weight;
+    }
+
+    public static <V, E> boolean hamiltonianPathUtil(Graph<V, E> g, boolean[] visited, LinkedList<V> path, int pos) {
+        if (pos == g.numVertices()) {
+            return true;  // All vertices are visited
+        }
+
+        V lastVertex = path.getLast();
+
+        for (V v : g.vertices()) {
+            int key = g.key(v);
+            if (!visited[key]) {
+                if (pos == 0 || g.edge(lastVertex, v) != null) {
+                    visited[key] = true;
+                    path.addLast(v);
+
+                    if (hamiltonianPathUtil(g, visited, path, pos + 1)) {
+                        return true;
+                    }
+
+                    // Backtrack
+                    visited[key] = false;
+                    path.removeLast();
+                }
+            }
+        }
+
+        return false;
+    }
 }

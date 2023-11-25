@@ -1,16 +1,15 @@
 package ui;
 
-import controller.ImportDataCtrl;
-import domain.Coordinate;
+
 import domain.Location;
+import dto.USEI04_DTO;
 import graphs.Algorithms;
 import graphs.Edge;
 import graphs.Graph;
-import graphs.map.MapGraph;
-import graphs.matrix.MatrixGraph;
-
 import java.util.*;
-import java.util.function.BinaryOperator;
+
+import static graphs.Algorithms.calculatePathWeight;
+import static graphs.Algorithms.hamiltonianPathUtil;
 
 public class USEI04UI implements Runnable {
 
@@ -20,56 +19,87 @@ public class USEI04UI implements Runnable {
         this.gfh = gfh;
     }
 
-    public double calcDistance(Coordinate coordinatesA, Coordinate coordinatesB) { // O(1)
-
-        double latA = coordinatesA.getLatitude(); // O(1)
-        double latB = coordinatesB.getLatitude(); // O(1)
-        double lonA = coordinatesA.getLongitude(); // O(1)
-        double lonB = coordinatesB.getLongitude(); // O(1)
-        double R = 6371e3; // metres
-        double φ1 = Math.toRadians(latA); // O(1)
-        double φ2 = Math.toRadians(latB); // O(1)
-        double Δφ = Math.toRadians(latB - latA); // O(1)
-        double Δλ = Math.toRadians(lonB - lonA); // O(1)
-
-        double a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
-                Math.cos(φ1) * Math.cos(φ2) *
-                        Math.sin(Δλ / 2) * Math.sin(Δλ / 2); // O(1)
-
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); // O(1)
-
-        return R * c; // O(1)
-    }
-
     @Override
     public void run() {
-        System.out.println("\nShortest Path that Visits Every Vertex:");
+        List<Location> allLocations = new ArrayList<>(gfh.vertices());
 
-        // Get all vertices in the graph
-        List<Location> vertices = new ArrayList<>(gfh.vertices());
+        // If empty
+        if (allLocations.isEmpty()) {
+            System.out.println("Graph is empty. Cannot find path.");
+            return;
+        }
 
-        LinkedList<Location> minConnectionPath = null;
-        Integer minConnectionDistance = Integer.MAX_VALUE;
+        USEI04_DTO result = findShortestHamiltonianPath(gfh);
 
-        // Loop through all possible combinations of vertices
-        for (Location origin : vertices) {
-            for (Location destination : vertices) {
-                if (!origin.equals(destination)) {
-                    LinkedList<Location> currentPath = new LinkedList<>();
-                    Integer currentDistance = Algorithms.shortestPath(
-                            gfh, origin, destination, Integer::compare, Integer::sum, 0, currentPath);
+        // Print
+        if (result.hasHamiltonianPath()) {
+            LinkedList<Location> hamiltonianPath = result.getPath();
+            int totalCost = result.getPathWeight();
 
-                    // Update the minimum connection network if a shorter path is found
-                    if (currentDistance < minConnectionDistance) {
-                        minConnectionDistance = currentDistance;
-                        minConnectionPath = currentPath;
+            for (int i = 0; i < hamiltonianPath.size() - 1; i++) {
+                Location currentLocation = hamiltonianPath.get(i);
+                Location nextLocation = hamiltonianPath.get(i + 1);
+                int cost = gfh.edge(currentLocation, nextLocation).getWeight();
+                totalCost += cost;
+
+                System.out.println(currentLocation.getCode() + " --> " + nextLocation.getCode() + " (Cost: " + cost + ")");
+            }
+
+            System.out.println("Total Cost: " + totalCost);
+        } else {
+            System.out.println("No feasible path found.");
+        }
+    }
+
+    private USEI04_DTO findShortestHamiltonianPath(Graph<Location, Integer> g) {
+        int numVerts = g.numVertices();
+        if (numVerts == 0) {
+            return new USEI04_DTO(false, new LinkedList<>(), 0);
+        }
+
+        boolean[] visited = new boolean[numVerts];
+
+        for (Location vertex : g.vertices()) {
+            LinkedList<Location> path = new LinkedList<>();
+            path.addLast(vertex);
+            visited[g.key(vertex)] = true;
+
+            if (shortestHamiltonianPathUtil(g, visited, path, 1)) {
+                int pathWeight = calculatePathWeight(g, path);
+                return new USEI04_DTO(true, path, pathWeight);
+            }
+
+            // Reset visited array for the next iteration
+            Arrays.fill(visited, false);
+        }
+
+        return new USEI04_DTO(false, new LinkedList<>(), 0);
+    }
+
+    private boolean shortestHamiltonianPathUtil(Graph<Location, Integer> g, boolean[] visited, LinkedList<Location> path, int pos) {
+        if (pos == g.numVertices()) {
+            return true;  // All vertices are visited
+        }
+
+        Location lastVertex = path.getLast();
+
+        for (Location v : g.vertices()) {
+            int key = g.key(v);
+            if (!visited[key]) {
+                if (pos == 0 || g.edge(lastVertex, v) != null) {
+                    visited[key] = true;
+                    path.addLast(v);
+
+                    if (shortestHamiltonianPathUtil(g, visited, path, pos + 1)) {
+                        return true;
                     }
+
+                    // Backtrack
+                    visited[key] = false;
+                    path.removeLast();
                 }
             }
         }
-
-        // Display the minimum connection network
-        //displayMinimumConnectionNetwork(minConnectionPath, minConnectionDistance);
+        return false;
     }
-
-    }
+}
