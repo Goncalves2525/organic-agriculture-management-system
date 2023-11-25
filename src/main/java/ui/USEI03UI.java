@@ -46,6 +46,9 @@ public class USEI03UI implements Runnable {
     }
 
     public USEI03_DTO getBiggestShortestPathData(Integer autonomiaMax) {
+        if (autonomiaMax == null) {
+            return null;
+        }
         MatrixGraph<Location, Integer> matrixGraphConverted = new MatrixGraph<>(gfh);
         MatrixGraph<Location, Integer> matrixGraph = Algorithms.minDistGraph1(matrixGraphConverted, Integer::compare, Integer::sum);
 
@@ -71,6 +74,9 @@ public class USEI03UI implements Runnable {
     }
 
     public USEI03_DTO getShortestPathData(Location origin, Location destination, int autonomiaMax) {
+        if (origin == null || destination == null) {
+            return null;
+        }
         LinkedList<Location> shortPath = new LinkedList<>();
         Integer pathLength = Algorithms.shortestPath(gfh, origin, destination, Integer::compare, Integer::sum, 0, shortPath);
         int autonomiaAtual = autonomiaMax;

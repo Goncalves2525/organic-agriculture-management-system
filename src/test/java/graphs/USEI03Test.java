@@ -1,21 +1,17 @@
 package graphs;
 
 import controller.ImportDataCtrl;
-import domain.Coordinate;
 import domain.Location;
 import domain.USEI03_DTO;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ui.USEI03UI;
-import utils.ImportGFHData;
-import utils.Utils;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.LinkedList;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class USEI03Test {
     private ImportDataCtrl importDataCtrlBig = new ImportDataCtrl();
@@ -29,120 +25,89 @@ public class USEI03Test {
     USEI03UI usei03uiBig = new USEI03UI(gfhBig);
     USEI03UI usei03uiSmall = new USEI03UI(gfhSmall);
 
+
+
     @Test
-    void testGetAllLocations() {
+    public void testGetBiggestShortestPathData() {
+        USEI03_DTO dto = usei03uiBig.getBiggestShortestPathData(null);
 
-        LinkedList<Location> result1 = usei03uiBig.getAllLocations(null);
-        assertNull(result1, "If graph is null, result should be null");
+        assertNull(dto);
 
-        LinkedList<Location> result2 = usei03uiBig.getAllLocations(gfhBig);
-        assertEquals(323, result2.size(), "If graph is not null, result should be a list of all locations");
+        USEI03_DTO dto2 = usei03uiBig.getBiggestShortestPathData(200000);
+        LinkedList<Location> path1 = dto2.getShortPath();
+        Location origin1 = path1.get(0);
+        String originName1 = origin1.getCode();
+        Location destination1 = path1.get(path1.size() - 1);
+        String destinationName1 = destination1.getCode();
+        int numberOfCharges1 = dto2.getNumberOfCharges();
 
-        LinkedList<Location> result3 = usei03uiSmall.getAllLocations(gfhSmall);
-        assertEquals(17, result3.size(), "If graph is not null, result should be a list of all locations");
+        assertEquals("CT162", originName1);
+        assertEquals("CT194", destinationName1);
+        assertEquals(3, numberOfCharges1);
 
+        USEI03_DTO dto3 = usei03uiSmall.getBiggestShortestPathData(200000);
+        LinkedList<Location> path2 = dto3.getShortPath();
+        Location origin2 = path2.get(0);
+        String originName2 = origin2.getCode();
+        Location destination2 = path2.get(path2.size() - 1);
+        String destinationName2 = destination2.getCode();
+        int numberOfCharges2 = dto3.getNumberOfCharges();
+
+        assertEquals("CT15", originName2);
+        assertEquals("CT8", destinationName2);
+        assertEquals(1, numberOfCharges2);
     }
 
     @Test
-    void testGetAllCoordinates(){
-        ArrayList<Coordinate> result1 = usei03uiBig.getAllCoordinates(null);
-        assertNull(result1, "If list of locations is null, result should be null");
+    public void testGetShortestPathData() {
+        USEI03_DTO dto = usei03uiBig.getShortestPathData(null, null, 200000);
 
-        ArrayList<Coordinate> result2 = usei03uiBig.getAllCoordinates(usei03uiBig.getAllLocations(gfhBig));
-        assertEquals(323, result2.size(), "If list of locations is not null, result should be a list of all coordinates");
+        assertNull(dto);
 
-        ArrayList<Coordinate> result3 = usei03uiSmall.getAllCoordinates(usei03uiSmall.getAllLocations(gfhSmall));
-        assertEquals(17, result3.size(), "If list of locations is not null, result should be a list of all coordinates");
+        USEI03_DTO dto1 = usei03uiBig.getBiggestShortestPathData(200000);
+        LinkedList<Location> path = dto1.getShortPath();
+        Location origin = path.get(0);
+        Location destination = path.get(path.size() - 1);
+        USEI03_DTO dto2 = usei03uiBig.getShortestPathData(origin, destination, 200000);
+        LinkedList<Location> path1 = dto2.getShortPath();
+        Location location1 = path1.get(1);
+        String locationName1 = location1.getCode();
+
+        assertEquals("CT34", locationName1);
+
+        USEI03_DTO dto3 = usei03uiSmall.getBiggestShortestPathData(200000);
+        LinkedList<Location> path2 = dto3.getShortPath();
+        Location origin2 = path2.get(0);
+        Location destination2 = path2.get(path2.size() - 1);
+        USEI03_DTO dto4 = usei03uiSmall.getShortestPathData(origin2, destination2, 200000);
+        LinkedList<Location> path3 = dto4.getShortPath();
+        Location location2 = path3.get(1);
+        String locationName2 = location2.getCode();
+
+        assertEquals("CT12", locationName2);
     }
 
     @Test
-    void testGetMostDistantCoordinates(){
-        ArrayList<Coordinate> result1 = usei03uiBig.getMostDistantCoordinates(null);
-        assertNull(result1, "If list of coordinates is null, result should be null");
+    public void testShowShortestPath() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        System.setOut(new PrintStream(outContent));
 
-        ArrayList<Coordinate> result2 = usei03uiBig.getMostDistantCoordinates(usei03uiBig.getAllCoordinates(usei03uiBig.getAllLocations(gfhBig)));
-        Coordinate originCoordinate = result2.get(0);
-        Coordinate destinationCoordinate = result2.get(1);
-        Coordinate originCoordinateExpected = new Coordinate(42.116700, -8.266700);
-        Coordinate destinationCoordinateExpected = new Coordinate(37.016100, -7.935000);
-
-        assertEquals(originCoordinateExpected, originCoordinate, "Same origins.");
-        assertEquals(destinationCoordinateExpected, destinationCoordinate, "Same destinations.");
-
-        ArrayList<Coordinate> result3 = usei03uiSmall.getMostDistantCoordinates(usei03uiSmall.getAllCoordinates(usei03uiSmall.getAllLocations(gfhSmall)));
-        Coordinate originCoordinate2 = result3.get(0);
-        Coordinate destinationCoordinate2 = result3.get(1);
-        Coordinate originCoordinateExpected2 = new Coordinate(37.016100, -7.935000);
-        Coordinate destinationCoordinateExpected2 = new Coordinate(41.800000, -6.750000);
-
-        assertEquals(originCoordinateExpected2, originCoordinate2, "Same origins.");
-        assertEquals(destinationCoordinateExpected2, destinationCoordinate2, "Same destinations.");
-    }
-
-    @Test
-    void testGetMostDistantLocations(){
-        ArrayList<Coordinate> coordinates = usei03uiBig.getMostDistantCoordinates(usei03uiBig.getAllCoordinates(usei03uiBig.getAllLocations(gfhBig)));
-        ArrayList<Location> result1 = usei03uiBig.getMostDistantLocations(coordinates.get(0), coordinates.get(1), usei03uiBig.getAllLocations(gfhBig));
-        Location origin = result1.get(0);
-        Location destination = result1.get(1);
-        Location originExpected = new Location("origin1", 0, coordinates.get(0).getLatitude(), coordinates.get(0).getLongitude(), 0, 0);
-        Location destinationExpected = new Location("destination1", 0, coordinates.get(1).getLatitude(), coordinates.get(1).getLongitude(), 0, 0);
-
-        ArrayList<Coordinate> coordinates2 = usei03uiSmall.getMostDistantCoordinates(usei03uiSmall.getAllCoordinates(usei03uiSmall.getAllLocations(gfhSmall)));
-        ArrayList<Location> result2 = usei03uiSmall.getMostDistantLocations(coordinates2.get(0), coordinates2.get(1), usei03uiSmall.getAllLocations(gfhSmall));
-        Location origin2 = result2.get(0);
-        Location destination2 = result2.get(1);
-        Location originExpected2 = new Location("origin2", 0, coordinates2.get(0).getLatitude(), coordinates2.get(0).getLongitude(), 0, 0);
-        Location destinationExpected2 = new Location("destination2", 0, coordinates2.get(1).getLatitude(), coordinates2.get(1).getLongitude(), 0, 0);
-    }
-
-    @Test
-    void testGetShortestPathData(){
-        ArrayList<Coordinate> coordinates = usei03uiBig.getMostDistantCoordinates(usei03uiBig.getAllCoordinates(usei03uiBig.getAllLocations(gfhBig)));
-        ArrayList<Location> locations = usei03uiBig.getMostDistantLocations(coordinates.get(0), coordinates.get(1), usei03uiBig.getAllLocations(gfhBig));
-        USEI03_DTO dto = usei03uiBig.getShortestPathData(locations.get(0), locations.get(1), 1);
-        boolean tripIsPossible = dto.isTripIsPossible();
-        boolean tripIsPossibleExpected = false;
-        assertEquals(tripIsPossibleExpected, tripIsPossible, "Trip is not possible because autonomy is too low.");
-
-    }
-
-    @Test
-    void testShowShortestPath(){
-        ArrayList<Coordinate> coordinates = usei03uiBig.getMostDistantCoordinates(usei03uiBig.getAllCoordinates(usei03uiBig.getAllLocations(gfhBig)));
-        ArrayList<Location> locations = usei03uiBig.getMostDistantLocations(coordinates.get(0), coordinates.get(1), usei03uiBig.getAllLocations(gfhBig));
-        USEI03_DTO dto = usei03uiBig.getShortestPathData(locations.get(0), locations.get(1), 200000);
-        boolean tripIsPossible = dto.isTripIsPossible();
-        LinkedList<Location> shortPath = dto.getShortPath();
+        USEI03_DTO dto = usei03uiBig.getBiggestShortestPathData(1);
+        LinkedList<Location> path = dto.getShortPath();
         ArrayList<Location> chargeLocations = dto.getChargeLocations();
         Integer pathLength = dto.getPathLength();
         int numberOfCharges = dto.getNumberOfCharges();
+        int minimumAutonomy = dto.getMinimumAutonomy();
+        Location origin = null;
+        Location destination = null;
 
-        boolean expectedTripIsPossible = true;
-        Integer expectedPathLength = 679976;
-        int expectedNumberOfCharges = 3;
+        usei03uiBig.showShortestPath(false, path, chargeLocations, pathLength, numberOfCharges, origin, destination, minimumAutonomy);
 
-        assertEquals(expectedTripIsPossible, tripIsPossible, "Trip is possible because autonomy is high enough.");
-        assertEquals(expectedPathLength, pathLength, "Path length is 0 because there is no path.");
-        assertEquals(expectedNumberOfCharges, numberOfCharges, "Number of charges is 0 because there is no path.");
+        System.setOut(System.out);
 
-        ArrayList<Coordinate> coordinates2 = usei03uiSmall.getMostDistantCoordinates(usei03uiSmall.getAllCoordinates(usei03uiSmall.getAllLocations(gfhSmall)));
-        ArrayList<Location> locations2 = usei03uiSmall.getMostDistantLocations(coordinates2.get(0), coordinates2.get(1), usei03uiSmall.getAllLocations(gfhSmall));
-        USEI03_DTO dto2 = usei03uiSmall.getShortestPathData(locations2.get(0), locations2.get(1), 200000);
-        boolean tripIsPossible2 = dto2.isTripIsPossible();
-        LinkedList<Location> shortPath2 = dto2.getShortPath();
-        ArrayList<Location> chargeLocations2 = dto2.getChargeLocations();
-        Integer pathLength2 = dto2.getPathLength();
-        int numberOfCharges2 = dto2.getNumberOfCharges();
+        String consoleOutput = outContent.toString();
 
-        boolean expectedTripIsPossible2 = true;
-        Integer expectedPathLength2 = 604469;
-        int expectedNumberOfCharges2 = 2;
-
-        assertEquals(expectedTripIsPossible2, tripIsPossible2, "Trip is possible because autonomy is high enough.");
-        assertEquals(expectedPathLength2, pathLength2, "Path length is 0 because there is no path.");
-        assertEquals(expectedNumberOfCharges2, numberOfCharges2, "Number of charges is 0 because there is no path.");
+        assertTrue(consoleOutput.contains("\nO veículo não tem autonomia suficiente para efetuar a viagem. Precisava de ter pelo menos " + minimumAutonomy + "m de autonomia."));
 
     }
-
 }
