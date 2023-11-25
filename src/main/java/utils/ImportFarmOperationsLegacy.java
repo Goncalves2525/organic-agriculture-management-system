@@ -549,7 +549,7 @@ public class ImportFarmOperationsLegacy {
             String timestamp = currentTimestamp.format(formattedTimestamp);
 
             // Create Sql file (if it doesn't exist or populate if it does)
-            String sqlFilePath = pathSufix + "sql-files/INSERTS_auto_" + timestamp + ".sql";
+            String sqlFilePath = pathSufix + "sql_files/INSERTS_auto_" + timestamp + ".sql";
             Path sqlFile = Paths.get(sqlFilePath);
             if (!Files.exists(sqlFile)) {
                 Files.createFile(sqlFile);
