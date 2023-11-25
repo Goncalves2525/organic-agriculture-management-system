@@ -1,6 +1,6 @@
 package controller;
 
-import repository.AplicacoesRepository;
+import dto.CultivosDTO;
 import repository.ColheitasRepository;
 import tables.Colheitas;
 
@@ -23,5 +23,9 @@ public class ColheitasController {
 
     public List<Colheitas> getColheitas() throws SQLException {
         return colheitasRepository.getColheitas();
+    }
+
+    public boolean registerColheitas (CultivosDTO cultivos) throws SQLException {
+        return colheitasRepository.registerColheitas(cultivos);
     }
 }

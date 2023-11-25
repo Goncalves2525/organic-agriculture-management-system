@@ -1,7 +1,10 @@
 package repository;
 
+import dto.CultivosDTO;
 import oracle.jdbc.OracleTypes;
 import tables.Colheitas;
+import utils.AnsiColor;
+import utils.Utils;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -45,6 +48,52 @@ public class ColheitasRepository {
         }
 
         return colheitas;
+    }
+
+    /**
+     * Register an operation and updates parameters within COLHEITAS and OPERACOES and PRODUTOS
+     * @param cultivo
+     * @return true for success and false for rollback
+     * @throws SQLException
+     */
+    public boolean registerColheitas(CultivosDTO cultivo) throws SQLException {
+
+        CallableStatement callStmt = null;
+
+        try {
+            Connection connection = DatabaseConnection.getInstance().getConnection();
+            callStmt = connection.prepareCall("{ ? = call registerColheita(?,?,?,?,?,?,?,?) }");
+
+            callStmt.registerOutParameter(1, OracleTypes.INTEGER);
+
+            callStmt.setInt(2, 1);
+            callStmt.setInt(3, cultivo.getParcelaid());
+            callStmt.setInt(4, cultivo.getCulturaid());
+            callStmt.setInt(5,0);
+            callStmt.setString(6, cultivo.getDataColheita());
+            callStmt.setInt(7, cultivo.getQuantidade());
+            callStmt.setString(8, cultivo.getUNIDADE());
+            callStmt.setString(9, cultivo.getProduto());
+
+            callStmt.execute();
+            int outcome = callStmt.getInt(1);
+            connection.commit();
+
+            boolean sucesso = false;
+            if (outcome == 1) {
+                sucesso = true;
+                Utils.showMessageColor("Colheita registada com sucesso!", AnsiColor.GREEN);
+                return sucesso;
+            } else {
+                Utils.showMessageColor("Colheita não resgistada.", AnsiColor.RED);
+                return sucesso;
+            }
+
+        } finally {
+            if (!Objects.isNull(callStmt)) {
+                callStmt.close();
+            }
+        }
     }
 
     /**

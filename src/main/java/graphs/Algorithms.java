@@ -389,7 +389,6 @@ public class Algorithms {
                             E s = sum.apply(g2.edge(i, k).getWeight(), g2.edge(k, j).getWeight());
                             if ((g2.edge(i, j) == null || ce.compare(g2.edge(i, j).getWeight(), s) > 0)) {
                                 g2.edge(i, j).setWeight(s);
-
                             }
                         }
                     }
