@@ -14,8 +14,8 @@ import java.util.Scanner;
 public class ImportGFHDataUI implements Runnable{
 
     private ImportDataCtrl importDataCtrl;
-    private String locaisPath = "files/locais_big.csv";
-    private String distanciasPath = "files/distancias_big.csv";
+    private String locaisPath = "files/locais_small.csv";
+    private String distanciasPath = "files/distancias_small.csv";
 
     public ImportGFHDataUI() {
         this.importDataCtrl = new ImportDataCtrl();
