@@ -56,8 +56,6 @@ public class USEI03UI implements Runnable {
         Location origin = null;
         Location destination = null;
         Collection<Edge<Location, Integer>> allDistances = matrixGraph.edges();
-        Utils.showMessageColor("matrix:", AnsiColor.BLUE);
-        System.out.println(matrixGraph);
         for (Edge<Location, Integer> distance : allDistances) {
             if (distance.getWeight() > maxDistance) {
                 maxDistance = distance.getWeight();
@@ -65,8 +63,6 @@ public class USEI03UI implements Runnable {
                 destination = distance.getVDest();
             }
         }
-        Utils.showMessageColor("Distância: ", AnsiColor.BLUE);
-        System.out.println(maxDistance + "m");
 
         USEI03_DTO dto = getShortestPathData(origin, destination, autonomiaMax);
 
