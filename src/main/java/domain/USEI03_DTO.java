@@ -10,14 +10,16 @@ public class USEI03_DTO {
     private Integer pathLength;
     int numberOfCharges;
     int autonomiaMax;
+    int minimumAutonomy;
 
-    public USEI03_DTO(boolean tripIsPossible, LinkedList<Location> shortPath, ArrayList<Location> chargeLocations, Integer pathLength, int numberOfCharges, int autonomiaMax) {
+    public USEI03_DTO(boolean tripIsPossible, LinkedList<Location> shortPath, ArrayList<Location> chargeLocations, Integer pathLength, int numberOfCharges, int autonomiaMax, int minimumAutonomy) {
         this.tripIsPossible = tripIsPossible;
         this.shortPath = shortPath;
         this.chargeLocations = chargeLocations;
         this.pathLength = pathLength;
         this.numberOfCharges = numberOfCharges;
         this.autonomiaMax = autonomiaMax;
+        this.minimumAutonomy = minimumAutonomy;
     }
 
     public boolean isTripIsPossible() {
@@ -69,6 +71,14 @@ public class USEI03_DTO {
         this.autonomiaMax = autonomiaMax;
     }
 
+    public int getMinimumAutonomy() {
+        return minimumAutonomy;
+    }
+
+    public void setMinimumAutonomy(int minimumAutonomy) {
+        this.minimumAutonomy = minimumAutonomy;
+    }
+
     @Override
     public String toString() {
         return "USEI03_DTO{" +
@@ -78,6 +88,7 @@ public class USEI03_DTO {
                 ", pathLength=" + pathLength +
                 ", numberOfCharges=" + numberOfCharges +
                 ", autonomiaMax=" + autonomiaMax +
+                ", minimumAutonomy=" + minimumAutonomy +
                 '}';
     }
 

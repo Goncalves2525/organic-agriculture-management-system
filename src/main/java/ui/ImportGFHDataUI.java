@@ -14,7 +14,6 @@ import java.util.Scanner;
 public class ImportGFHDataUI implements Runnable{
 
     private ImportDataCtrl importDataCtrl;
-
     private String locaisPath = "files/locais_big.csv";
     private String distanciasPath = "files/distancias_big.csv";
 
@@ -31,8 +30,6 @@ public class ImportGFHDataUI implements Runnable{
             Utils.showMessageColor("Building graph!", AnsiColor.BLUE);
             System.out.println(gfh.toString());
             Utils.readLineFromConsole("Press Enter to continue.");
-
-            // TODO: add ESINF US
 
             List<MenuItem> options = new ArrayList<MenuItem>();
             //options.add(new MenuItem("USEI01", new USEI01UI()));

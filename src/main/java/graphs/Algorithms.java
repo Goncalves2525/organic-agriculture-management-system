@@ -359,21 +359,8 @@ public class Algorithms {
 
     }
 
-    // TODO: belman-ford algorithm
-
-
     ///// FLOYD-WARSHALL ///////////////////////////////////////////////////////////////////////////////////////////////
-
-    /** OK **/
-    /**
-     * Calculates the minimum distance graph using Floyd-Warshall
-     *
-     * @param g   initial graph
-     * @param ce  comparator between elements of type E
-     * @param sum sum two elements of type E
-     * @return the minimum distance graph
-     */
-    public static <V, E> MatrixGraph<V, E> minDistGraph(Graph<V, E> g, Comparator<E> ce, BinaryOperator<E> sum) {
+    public static <V, E> MatrixGraph<V, E> minDistGraph1(Graph<V, E> g, Comparator<E> ce, BinaryOperator<E> sum) {
         int numVerts = g.numVertices();
         if (numVerts == 0) {
             return null;
@@ -381,14 +368,25 @@ public class Algorithms {
 
         Graph<V, E> g2 = g.clone();
 
+        E[][] edges = (E[][]) new Object[numVerts][numVerts];
+
+        for (int i = 0; i < numVerts; i++) {
+            for (int j = 0; j < numVerts; j++) {
+                Edge<V,E> edge = g2.edge(i, j);
+                if (edge != null){
+                    edges[i][j] = edge.getWeight();
+                }
+            }
+        }
+
         for (int k = 0; k < numVerts; k++) {
             for (int i = 0; i < numVerts; i++) {
-                if (i != k && g.edge(i, k) != null) {
+                if (i != k && edges[i][k] != null) {
                     for (int j = 0; j < numVerts; j++) {
-                        if (j != i && j != k && g.edge(k, j) != null) {
-                            E s = sum.apply(g2.edge(i, k).getWeight(), g2.edge(k, j).getWeight());
-                            if ((g2.edge(i, j) == null || ce.compare(g2.edge(i, j).getWeight(), s) > 0)) {
-                                g2.edge(i, j).setWeight(s);
+                        if (j != i && j != k && edges[k][j] != null) {
+                            E s = sum.apply(edges[i][k], edges[k][j]);
+                            if ((edges[i][j] == null) || ce.compare(edges[i][j], s) > 0) {
+                                edges[i][j] = s;
                             }
                         }
                     }
@@ -396,7 +394,7 @@ public class Algorithms {
             }
         }
 
-        return new MatrixGraph<>(g2);
+        return new MatrixGraph<>(false, g.vertices(), edges);
     }
 
 
