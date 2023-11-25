@@ -17,29 +17,7 @@ public class SementeiraRepository {
     public SementeiraRepository() {
     }
 
-    public void funcTeste () throws SQLException {
-        CallableStatement callStmt = null;
-        //ResultSet resultSet = null;
-        boolean result = false;
-        try {
-            Connection connection = DatabaseConnection.getInstance().getConnection();
-            callStmt = connection.prepareCall("{ ? = call func_Check_Operador(?) }");
-            callStmt.registerOutParameter(1, OracleTypes.BOOLEAN);
-            callStmt.setInt(2, 1);
 
-            callStmt.execute();
-            result = callStmt.getBoolean(1);
-            callStmt.close();
-        }
-        catch (SQLException e){
-            System.out.println(e.getMessage());
-        }
-        finally {
-            if (!Objects.isNull(callStmt)) {
-                callStmt.close();
-            }
-        }
-    }
 
     public List<Sementeiras> getSementeiras() throws SQLException {
 
@@ -73,42 +51,38 @@ public class SementeiraRepository {
     }
 
     // TODO: alterar parâmetros de entrada
-    public void sementeirasRegister(int idCultivo, int idParcela, int idOperador, Date dataInicio, Date dataFim, int qtd, String name) throws SQLException {
+    public void sementeirasRegister(int p_id_Quinta, String parcela, String cultura, int p_id_Operador, Date dataInicio, Date dataFim, double p_qtdSementeira, String p_unMedidaSementeira, double p_qtdArea, String p_unMedidaArea) throws SQLException {
 
         CallableStatement callStmt = null;
         boolean result = false;
         try {
             Connection connection = DatabaseConnection.getInstance().getConnection();
-            callStmt = connection.prepareCall("{ ? = call FUNC_REGISTAR_SEMEADURA(?,?,?,?,?,?,?) }");
+            callStmt = connection.prepareCall("{ ? = call FUNC_REGISTAR_SEMEADURA(?,?,?,?,?,?,?,?,?,?) }");
             callStmt.registerOutParameter(1, OracleTypes.BOOLEAN);
-            int p_id_Cultivo = 1;
-            int p_id_Parcela = 1;
-            int p_id_Operador = 1;
-            String p_unMedida = "ha";
-            int p_qtd = 5;
-            long millis=System.currentTimeMillis();
-            long millis2=System.currentTimeMillis();
-            java.sql.Date p_dataInicio = new java.sql.Date(millis);
-            java.sql.Date p_dataFim = new java.sql.Date(millis2);
-            callStmt.setInt(2, p_id_Cultivo);
-            callStmt.setInt(3, p_id_Parcela);
-            callStmt.setInt(4, p_id_Operador);
-            callStmt.setDate(5, p_dataInicio);
-            callStmt.setDate(6, p_dataFim);
-            callStmt.setInt(7, p_qtd);
-            callStmt.setString(8, p_unMedida);
 
-//            callStmt.setInt(1, sailorId);
-//            callStmt.setString(2, name);
-//            callStmt.setInt(3, rating);
-//            java.sql.Date sqlDate = new java.sql.Date(birthday.getTime());
-//            callStmt.setDate(4, sqlDate);
+            java.sql.Date p_dataInicio = new java.sql.Date(dataInicio.getTime());
+            java.sql.Date p_dataFim = new java.sql.Date(dataFim.getTime());
+            callStmt.setInt(2, p_id_Quinta);
+            callStmt.setString(3, parcela);
+            callStmt.setString(4, cultura);
+            callStmt.setInt(5, p_id_Operador);
+            callStmt.setDate(6, p_dataInicio);
+            callStmt.setDate(7, p_dataFim);
+            callStmt.setDouble(8,p_qtdSementeira );
+            callStmt.setString(9, p_unMedidaSementeira);
+            callStmt.setDouble(10,p_qtdArea );
+            callStmt.setString(11, p_unMedidaArea);
 
             callStmt.execute();
             result = callStmt.getBoolean(1);
             System.out.println(result);
-            //connection.commit();
-        } finally {
+            callStmt.close();
+            connection.commit();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        finally {
             if (!Objects.isNull(callStmt)) {
                 callStmt.close();
             }
@@ -152,4 +126,6 @@ public class SementeiraRepository {
         }
         return sementeiras;
     }
+
+
 }

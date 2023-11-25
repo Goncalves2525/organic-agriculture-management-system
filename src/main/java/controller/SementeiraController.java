@@ -25,9 +25,9 @@ public class SementeiraController {
         sementeiraRepository.getSementeiras();
     }
 
-    public void sementeirasRegister(int idCultivo, int idParcela, int idOperador, Date dataInicio, Date dataFim, int qtd, String name) throws SQLException {
-        //sementeiraRepository.sementeirasRegister(idCultivo, idParcela, idOperador, dataInicio, dataFim, qtd, name);
-        sementeiraRepository.funcTeste();
+    public void sementeirasRegister(int p_id_Quinta, String parcela, String cultura, int p_id_Operador, Date dataInicio, Date dataFim, double p_qtdSementeira, String p_unMedidaSementeira, double p_qtdArea, String p_unMedidaArea) throws SQLException {
+        sementeiraRepository.sementeirasRegister(p_id_Quinta,parcela, cultura, p_id_Operador, dataInicio, dataFim, p_qtdSementeira, p_unMedidaSementeira, p_qtdArea, p_unMedidaArea);
+        //sementeiraRepository.funcTeste();
     }
 }
 

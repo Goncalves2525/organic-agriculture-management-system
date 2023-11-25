@@ -10,7 +10,7 @@
 | **Agricultura**             | Ciência/Prática da Agricultura.                                                                                                                                           |
 | **Agricultura Biológica**   | Forma de produzir alimentos baseada na sustentabilidade e responsabilidade agroecológica e social.                                                                        |
 | **Alimento**                | Produtos nos quais os animais se alimentam para sobreviver.                                                                                                               |
-| **Animais**                 | Organismos.                                                                                                                                                               |
+| **Animais**                 | Organismos multicelulares que consomem material orgânico, respiram e são capazes de se mexer.                                                                             |
 | **Armazém**                 | Edifício para armazenar mercadoria(s).                                                                                                                                    |
 | **Atmosfera**               | Gases que cercam a Terra.                                                                                                                                                 |
 | **Biodiversidade**          | Variedade e variabilidade da vida na Terra.                                                                                                                               |
@@ -49,3 +49,6 @@
 | **Solo**                    | Camada de terra onde as plantas podem crescer.                                                                                                                            |
 | **Terras Agrícolas**        | Área cultivável.                                                                                                                                                          |
 | **Tempo**                   | Estado da atmosfera em um local e momento específico.                                                                                                                     |
+| **Hub**                     | Pontos de recolha de cabazes de produtos.                                                                                                                                 |
+| **V**                       | Velocidade, medida em km/h.                                                                                                                                               |
+| **GFH**                     | Empresa .                                                                                                                                                                 |
