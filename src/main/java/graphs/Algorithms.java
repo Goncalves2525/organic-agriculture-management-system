@@ -162,49 +162,49 @@ public class Algorithms {
      */
     private static <V, E> void shortestPathDijkstra(Graph<V, E> g, V vOrig,
                                                     Comparator<E> ce, BinaryOperator<E> sum, E zero,
-                                                    boolean[] visited, V[] pathKeys, E[] dist) {
+                                                    boolean[] visited, V[] pathKeys, E[] dist) { // O(V^2)
 
-        Iterable<V> verticesIterator = g.vertices();
+        Iterable<V> verticesIterator = g.vertices(); // O(V)
 
-        for (V v : verticesIterator) {
-            int index = g.key(v);
-            visited[index] = false;
-            pathKeys[index] = null;
-            dist[index] = null;
+        for (V v : verticesIterator) { // O(V)
+            int index = g.key(v); // O(1)
+            visited[index] = false; // O(1)
+            pathKeys[index] = null; // O(1)
+            dist[index] = null; // O(1)
         }
 
-        dist[g.key(vOrig)] = zero;
+        dist[g.key(vOrig)] = zero; // O(1)
 
-        int vOrigAux = g.key(vOrig);
-        while (vOrigAux != -1) {
-            visited[vOrigAux] = true;
-            vOrig = g.vertex(vOrigAux);
-            verticesIterator = g.adjVertices(vOrig);
-            for (V vertice : verticesIterator) {
-                Edge<V, E> edge = g.edge(vOrig, vertice);
-                int aux = g.key(vertice);
+        int vOrigAux = g.key(vOrig); // O(1)
+        while (vOrigAux != -1) { // O(V^2)
+            visited[vOrigAux] = true; // O(1)
+            vOrig = g.vertex(vOrigAux); // O(1)
+            verticesIterator = g.adjVertices(vOrig); // O(V)
+            for (V vertice : verticesIterator) {  // O(V)
+                Edge<V, E> edge = g.edge(vOrig, vertice); // O(1)
+                int aux = g.key(vertice); // O(1)
 
-                if (!visited[aux] && (dist[aux] == null || ce.compare(dist[aux], sum.apply(dist[g.key(vOrig)], edge.getWeight())) > 0)) {
-                    dist[aux] = sum.apply(dist[g.key(vOrig)], edge.getWeight());
-                    pathKeys[aux] = vOrig;
+                if (!visited[aux] && (dist[aux] == null || ce.compare(dist[aux], sum.apply(dist[g.key(vOrig)], edge.getWeight())) > 0)) { // O(1)
+                    dist[aux] = sum.apply(dist[g.key(vOrig)], edge.getWeight()); // O(1)
+                    pathKeys[aux] = vOrig; // O(1)
 
                 }
             }
 
-            vOrigAux = getVertMinDist(dist, visited, ce);
+            vOrigAux = getVertMinDist(dist, visited, ce); // O(V)
         }
     }
 
-    private static <E> int getVertMinDist(E[] dist, boolean[] visited, Comparator<E> ce) {
-        E mindist = null;
-        Integer indice = -1;
-        for (int i = 0; i < dist.length; i++) {
-            if (!visited[i] && (dist[i] != null) && ((mindist == null) || ce.compare(dist[i], mindist) < 0)) {
-                indice = i;
-                mindist = dist[i];
+    private static <E> int getVertMinDist(E[] dist, boolean[] visited, Comparator<E> ce) { // O(V)
+        E mindist = null; // O(1)
+        Integer indice = -1; // O(1)
+        for (int i = 0; i < dist.length; i++) { // O(V)
+            if (!visited[i] && (dist[i] != null) && ((mindist == null) || ce.compare(dist[i], mindist) < 0)) { // O(1)
+                indice = i; // O(1)
+                mindist = dist[i]; // O(1)
             }
         }
-        return indice;
+        return indice; // O(1)
     }
 
     /** OK **/
@@ -252,30 +252,30 @@ public class Algorithms {
      */
     public static <V, E> E shortestPath(Graph<V, E> g, V vOrig, V vDest,
                                         Comparator<E> ce, BinaryOperator<E> sum, E zero,
-                                        LinkedList<V> shortPath) {
+                                        LinkedList<V> shortPath) { // O(V^2)
 
-        if (!g.validVertex(vOrig) || !g.validVertex(vDest)) {
-            return null;
+        if (!g.validVertex(vOrig) || !g.validVertex(vDest)) { // O(1)
+            return null; // O(1)
         }
 
-        if (vOrig == vDest) {
-            shortPath.push(vOrig);
-            return zero;
+        if (vOrig == vDest) { // O(1)
+            shortPath.push(vOrig); // O(1)
+            return zero; // O(1)
         }
 
-        shortPath.clear();
-        boolean[] visited = new boolean[g.numVertices()];
+        shortPath.clear(); // O(1)
+        boolean[] visited = new boolean[g.numVertices()]; // O(1)
 
-        @SuppressWarnings("unchecked")
-        E[] dist = (E[]) new Object[g.numVertices()];
-        @SuppressWarnings("unchecked")
-        V[] pathKeys = (V[]) new Object[g.numVertices()];
 
-        shortestPathDijkstra(g, vOrig, ce, sum, zero, visited, pathKeys, dist);
+        E[] dist = (E[]) new Object[g.numVertices()]; // O(1)
 
-        getPath(g, vOrig, vDest, pathKeys, shortPath);
+        V[] pathKeys = (V[]) new Object[g.numVertices()]; // O(1)
 
-        return shortPath.isEmpty() ? null : dist[g.key(vDest)];
+        shortestPathDijkstra(g, vOrig, ce, sum, zero, visited, pathKeys, dist); // O(V^2)
+
+        getPath(g, vOrig, vDest, pathKeys, shortPath); // O(V)
+
+        return shortPath.isEmpty() ? null : dist[g.key(vDest)]; // O(1)
     }
 
     /** OK **/
@@ -341,52 +341,52 @@ public class Algorithms {
      * @param path     stack with the minimum path (correct order)
      */
     private static <V, E> void getPath(Graph<V, E> g, V vOrig, V vDest,
-                                       V[] pathKeys, LinkedList<V> path) {
+                                       V[] pathKeys, LinkedList<V> path) { // O(V)
 
-        if (g.adjVertices(vDest).isEmpty()) {
-            return;
+        if (g.adjVertices(vDest).isEmpty()) { // O(1)
+            return; // O(1)
         }
 
-        if (vDest != null) {
-            path.addFirst(vDest);
+        if (vDest != null) { // O(1)
+            path.addFirst(vDest); // O(1)
 
-            if (g.key(vOrig) != g.key(vDest)) {
-                int index = g.key(vDest);
-                vDest = pathKeys[index];
-                getPath(g, vOrig, vDest, pathKeys, path);
+            if (g.key(vOrig) != g.key(vDest)) { // O(1)
+                int index = g.key(vDest); // O(1)
+                vDest = pathKeys[index]; // O(1)
+                getPath(g, vOrig, vDest, pathKeys, path); // O(V)
             }
         }
 
     }
 
     ///// FLOYD-WARSHALL ///////////////////////////////////////////////////////////////////////////////////////////////
-    public static <V, E> MatrixGraph<V, E> minDistGraph1(Graph<V, E> g, Comparator<E> ce, BinaryOperator<E> sum) {
-        int numVerts = g.numVertices();
-        if (numVerts == 0) {
-            return null;
+    public static <V, E> MatrixGraph<V, E> minDistGraph1(Graph<V, E> g, Comparator<E> ce, BinaryOperator<E> sum) { // O(V^3)
+        int numVerts = g.numVertices(); // O(1)
+        if (numVerts == 0) { // O(1)
+            return null; // O(1)
         }
 
-        Graph<V, E> g2 = g.clone();
+        Graph<V, E> g2 = g.clone(); // O(V^2)
 
-        E[][] edges = (E[][]) new Object[numVerts][numVerts];
+        E[][] edges = (E[][]) new Object[numVerts][numVerts]; // O(1)
 
-        for (int i = 0; i < numVerts; i++) {
-            for (int j = 0; j < numVerts; j++) {
-                Edge<V,E> edge = g2.edge(i, j);
-                if (edge != null){
-                    edges[i][j] = edge.getWeight();
+        for (int i = 0; i < numVerts; i++) { // O(V^2)
+            for (int j = 0; j < numVerts; j++) { // O(V)
+                Edge<V,E> edge = g2.edge(i, j); // O(1)
+                if (edge != null){ // O(1)
+                    edges[i][j] = edge.getWeight(); // O(1)
                 }
             }
         }
 
-        for (int k = 0; k < numVerts; k++) {
-            for (int i = 0; i < numVerts; i++) {
-                if (i != k && edges[i][k] != null) {
-                    for (int j = 0; j < numVerts; j++) {
-                        if (j != i && j != k && edges[k][j] != null) {
-                            E s = sum.apply(edges[i][k], edges[k][j]);
-                            if ((edges[i][j] == null) || ce.compare(edges[i][j], s) > 0) {
-                                edges[i][j] = s;
+        for (int k = 0; k < numVerts; k++) { // O(V^3)
+            for (int i = 0; i < numVerts; i++) { // O(V)
+                if (i != k && edges[i][k] != null) { // O(1)
+                    for (int j = 0; j < numVerts; j++) { // O(V)
+                        if (j != i && j != k && edges[k][j] != null) { // O(1)
+                            E s = sum.apply(edges[i][k], edges[k][j]); // O(1)
+                            if ((edges[i][j] == null) || ce.compare(edges[i][j], s) > 0) { // O(1)
+                                edges[i][j] = s; // O(1)
                             }
                         }
                     }
@@ -394,7 +394,7 @@ public class Algorithms {
             }
         }
 
-        return new MatrixGraph<>(false, g.vertices(), edges);
+        return new MatrixGraph<>(false, g.vertices(), edges); // O(V^3)
     }
 
 

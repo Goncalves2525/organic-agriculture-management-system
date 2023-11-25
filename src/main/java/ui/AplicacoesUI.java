@@ -64,30 +64,36 @@ public class AplicacoesUI implements Runnable {
         Scanner sc = new Scanner(System.in);
         System.out.println("Registar Aplicação");
         System.out.println("------------------\n");
-        System.out.println("Operação ID: ");
-        int operacaoID = sc.nextInt();
         int quintaID = 1;
-        System.out.println("Parcela ID: ");
-        int parcelaID = sc.nextInt();
+        System.out.println("Nome da Parcela: ");
+        String parcelaNome = sc.nextLine();
         System.out.println("Cultura ID: ");
         int culturaID = sc.nextInt();
+        sc.nextLine();
         System.out.println("Operador ID: ");
         int opradorID = sc.nextInt();
+        sc.nextLine();
         System.out.println("Data de Inicio: (AAAA-MM-DD)");
         Date dataInicio = Date.valueOf(sc.next());
+        sc.nextLine();
         System.out.println("Fator de Produção: ");
-        String fatorProducaoID = sc.next();
+        String fatorProducaoID = sc.nextLine();
         System.out.println("Quantidade: ");
         int quantidade = sc.nextInt();
+        sc.nextLine();
         System.out.println("Unidade de Medida: ");
-        String unidadeMedidaID = sc.next();
+        String unidadeMedidaID = sc.nextLine();
+        System.out.println("Area: ");
+        float area = sc.nextFloat();
 
-        int worked = controller.aplicacoesRegister(operacaoID, quintaID, parcelaID, culturaID, opradorID, dataInicio, fatorProducaoID, quantidade, unidadeMedidaID);
+        int worked = controller.aplicacoesRegister(quintaID, parcelaNome, culturaID, opradorID, dataInicio, fatorProducaoID, quantidade, unidadeMedidaID, area);
 
         if (worked == 1) {
             System.out.println("\nAplicação registada com sucesso!");
         } else if (worked == 0){
-            System.out.println("\nOperação já existe.");
+            System.out.println("\nErro! Não foi possível registar a Aplicação");
+        } else if (worked == -2){
+            System.out.println("\nA área da parcela é inferior à área da aplicação");
         }
     }
 }

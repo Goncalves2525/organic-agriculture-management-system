@@ -588,6 +588,7 @@ public class TablesRepository {
             // if not found, will keep 0, and consider "operacao" to the "parcela"
         }
 
+        /*
         // Checks if entry exists
         for (Operacoes obj : lstOperacoes) {
             if (obj.getParcelaId() == parcelaId && obj.getCulturaId() == culturaId
@@ -596,13 +597,13 @@ public class TablesRepository {
                 break;
             }
         }
+        */
 
-        // Adds if it doesn't exist already
-        if (!found) {
+
             Operacoes newEntry = new Operacoes(operacaoId, quintaId, parcelaId, culturaId, 0, dataInicio, null);
             lstOperacoes.add(newEntry);
             ++operacaoId;
-        }
+
 
         return (operacaoId - 1);
     }

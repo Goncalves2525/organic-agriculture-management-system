@@ -42,7 +42,7 @@ public class AplicacoesRepository {
         return aplicacoes;
     }
 
-    public int aplicacoesRegister(int operacaoID, int quintaID, int parcelaID, int culturaID, int operadorID, Date dataInicio, String fatorProducaoID, int quantidade, String unidadeMedidaID) throws SQLException {
+    public int aplicacoesRegister(int quintaID, String parcelaNome, int culturaID, int operadorID, Date dataInicio, String fatorProducaoID, int quantidade, String unidadeMedidaID, float area) throws SQLException {
 
         CallableStatement callStmt = null;
         int worked = -1;
@@ -51,15 +51,15 @@ public class AplicacoesRepository {
             callStmt = connection.prepareCall("{ ? = call registarAplicacao(?,?,?,?,?,?,?,?,?) }");
 
             callStmt.registerOutParameter(1, OracleTypes.INTEGER);
-            callStmt.setInt(2, operacaoID);
-            callStmt.setInt(3, quintaID);
-            callStmt.setInt(4, parcelaID);
-            callStmt.setInt(5, culturaID);
-            callStmt.setInt(6, operadorID);
-            callStmt.setDate(7, dataInicio);
-            callStmt.setString(8, fatorProducaoID);
-            callStmt.setInt(9, quantidade);
-            callStmt.setString(10, unidadeMedidaID);
+            callStmt.setInt(2, quintaID);
+            callStmt.setString(3, parcelaNome);
+            callStmt.setInt(4, culturaID);
+            callStmt.setInt(5, operadorID);
+            callStmt.setDate(6, dataInicio);
+            callStmt.setString(7, fatorProducaoID);
+            callStmt.setInt(8, quantidade);
+            callStmt.setString(9, unidadeMedidaID);
+            callStmt.setFloat(10, area);
 
             callStmt.execute();
             worked = callStmt.getInt(1);
