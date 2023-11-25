@@ -19,7 +19,7 @@
 | **Cadeia de Consumo Curta** | Poucos ou nenhum intermediário entre produtor e consumidor.                                                                                                               |
 | **Cliente**                 | Um cliente é geralmente usado para se referir a um comprador ou utilizador atual duma organização.                                                                        |
 | **Clima**                   | Condições climatéricas numa área.                                                                                                                                         |
-| **Colheita**                | Processo de coleta de plantas e animais como alimento.                                                                                                                    |
+| **Colheita**                | Operação de colheita, numa dada parcela, numa dada altura, com uma quantidade definida.                                                                                   |
 | **Composto**                | Mistura de ingredientes usada como fertilizante para plantas e para melhorar as propriedades do solo.                                                                     |
 | **Consumidor**              | Uma pessoa que compra bens e serviços para uso pessoal.                                                                                                                   |
 | **Controlador**             | Dispositivo que permite o envio de água ou soluções aquosas de acordo com um plano de irrigação.                                                                          |
@@ -34,21 +34,25 @@
 | **Garagem**                 | Edifício para armazenar máquinas e ferramentas.                                                                                                                           |
 | **Gerente de Distribuição** | Pessoa que gerencia o processo de coleta e transporte de produtos agrícolas entre quintas, centros de distribuição e posterior coleta pelos clientes.                     |
 | **Gestor Agrícola**         | Pessoa que gere as colheitas na quinta, realiza diferentes ações de cultivo e regista-as no livro de campo.                                                               |
+| **GFH**                     | Empresa operadora logística de distribuição de cabazes com produtos agrícolas.                                                                                            |
+| **Hub**                     | Pontos de recolha de cabazes de produtos.                                                                                                                                 |
 | **Irrigação**               | Fornecimento de água ou soluções aquosas para as culturas.                                                                                                                |
 | **Instalações Agrícolas**   | Quinta composta por uma série de terras e edifícios.                                                                                                                      |
 | **Livro de Campo**          | Plano de requisitos de irrigação, correções minerais e fertilizações a serem realizados ao longo da temporada agrícola.                                                   |
 | **Motorista**               | Uma pessoa empregada para dirigir um carro particular ou alugado.                                                                                                         |
 | **Policultura**             | A prática de cultivar mais de uma espécie de cultura no mesmo local.                                                                                                      |
+| **Poda**                    | Operação de poda, numa dada parcela, numa dada altura, com uma quantidade definida.                                                                                       |
 | **Praga**                   | Surto de espécies prejudiciais ao desenvolvimento agrícola.                                                                                                               |
 | **Produtor**                | Uma pessoa ou empresa que fabrica, cultiva ou fornece produtos para venda.                                                                                                |
 | **Quinta**                  | Uma área de terra e seus edifícios usados para cultivar colheitas e criar animais.                                                                                        |
 | **Recursos**                | Um estoque de algo.                                                                                                                                                       |
+| **Rega**                    | Operação de rega, numa dada parcela, numa dada altura, com uma quantidade definida.                                                                                       |
 | **Rotação de Culturas**     | A prática de plantar diferentes culturas sequencialmente na mesma área para melhorar a saúde do solo.                                                                     |
 | **Sensor**                  | Dispositivo que detecta ou mede uma propriedade física e registra, indica ou responde a ela de alguma forma.                                                              |
+| **Semeadura**               | Operação de semeadura, numa dada parcela, numa dada altura, com uma quantidade definida.                                                                                  |
 | **Sistema de Irrigação**    | A aplicação artificial de água no solo por meio de vários sistemas de tubos, bombas e pulverizações.                                                                      |
 | **Solo**                    | Camada de terra onde as plantas podem crescer.                                                                                                                            |
 | **Terras Agrícolas**        | Área cultivável.                                                                                                                                                          |
 | **Tempo**                   | Estado da atmosfera em um local e momento específico.                                                                                                                     |
-| **Hub**                     | Pontos de recolha de cabazes de produtos.                                                                                                                                 |
 | **V**                       | Velocidade, medida em km/h.                                                                                                                                               |
-| **GFH**                     | Empresa .                                                                                                                                                                 |
+

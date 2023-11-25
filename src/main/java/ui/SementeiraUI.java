@@ -22,8 +22,9 @@ public class SementeiraUI implements Runnable{
             int p_id_Quinta = 1;
             String parcela = Utils.readLineFromConsole("Parcela: ");
             int p_id_Operador = 123456789;
-            Date dataInicio = (Date) Utils.readDateFromConsole("Data de início, no formato yyyy-mm-dd: ");
-            Date dataFim = (Date) Utils.readDateFromConsole("Data de fim, no formato yyyy-mm-dd: ");
+            String dataInicio = Utils.readLineFromConsole("Data de início, no formato dd-MM-yyyy:");
+            //String dataFim = Utils.readLineFromConsole("Data de fim, no formato dd-MM-yyyy:");
+            String dataFim = dataInicio;
             String produto = Utils.readLineFromConsole("Produto a semear:");
             double hectares = Utils.readDoubleFromConsole("Área a semear:");
             String p_unMedidaArea = Utils.readLineFromConsole("Unidade de medida da área:");
@@ -33,8 +34,6 @@ public class SementeiraUI implements Runnable{
 
             //controller.sementeirasRegister(1,101,0,123456789, Date.valueOf("2021-01-01"), Date.valueOf("2021-01-01"), 1, "kg");
             controller.sementeirasRegister(p_id_Quinta, parcela, produto, p_id_Operador, dataInicio, dataFim, p_qtd, p_unMedida, hectares, p_unMedidaArea);
-            System.out.println("\nOperação de semeadura registada com sucesso!");
-
         } catch (SQLException e ) {
             System.out.println("\nOperação de semeadura não registada, com o seguinte erro:\n" + e.getMessage());
         }

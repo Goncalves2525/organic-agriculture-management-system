@@ -51,23 +51,26 @@ public class SementeiraRepository {
     }
 
     // TODO: alterar parâmetros de entrada
-    public void sementeirasRegister(int p_id_Quinta, String parcela, String cultura, int p_id_Operador, Date dataInicio, Date dataFim, double p_qtdSementeira, String p_unMedidaSementeira, double p_qtdArea, String p_unMedidaArea) throws SQLException {
+    public void sementeirasRegister(int p_id_Quinta, String parcela, String cultura, int p_id_Operador, String dataInicio, String dataFim, double p_qtdSementeira, String p_unMedidaSementeira, double p_qtdArea, String p_unMedidaArea) throws SQLException {
 
         CallableStatement callStmt = null;
         boolean result = false;
         try {
             Connection connection = DatabaseConnection.getInstance().getConnection();
+
+            // Enable DBMS_OUTPUT
+            try (CallableStatement enableStmt = connection.prepareCall("BEGIN DBMS_OUTPUT.ENABLE(NULL); END;")) {
+                enableStmt.execute();
+            }
+
             callStmt = connection.prepareCall("{ ? = call FUNC_REGISTAR_SEMEADURA(?,?,?,?,?,?,?,?,?,?) }");
             callStmt.registerOutParameter(1, OracleTypes.BOOLEAN);
-
-            java.sql.Date p_dataInicio = new java.sql.Date(dataInicio.getTime());
-            java.sql.Date p_dataFim = new java.sql.Date(dataFim.getTime());
             callStmt.setInt(2, p_id_Quinta);
             callStmt.setString(3, parcela);
             callStmt.setString(4, cultura);
             callStmt.setInt(5, p_id_Operador);
-            callStmt.setDate(6, p_dataInicio);
-            callStmt.setDate(7, p_dataFim);
+            callStmt.setString(6, dataInicio);
+            callStmt.setString(7, dataFim);
             callStmt.setDouble(8,p_qtdSementeira );
             callStmt.setString(9, p_unMedidaSementeira);
             callStmt.setDouble(10,p_qtdArea );
@@ -75,7 +78,31 @@ public class SementeiraRepository {
 
             callStmt.execute();
             result = callStmt.getBoolean(1);
-            System.out.println(result);
+            String errorMessage = "";
+            try (CallableStatement readStmt = connection.prepareCall("BEGIN DBMS_OUTPUT.GET_LINE(?, ?); END;")) {
+                readStmt.registerOutParameter(1, OracleTypes.VARCHAR);
+                readStmt.registerOutParameter(2, OracleTypes.NUMERIC);
+
+                // Loop to retrieve messages until no more available
+                while (true) {
+                    readStmt.setInt(2, 32000);  // Maximum line length
+                    readStmt.execute();
+                    String message = readStmt.getString(1);
+                    if (message == null) {
+                        break;  // No more messages
+                    }
+                    errorMessage = message;
+                }
+            }
+
+            if(result)
+                System.out.println("\nOperação de semeadura registada com sucesso!");
+            else{
+                System.out.println("\nOperação de semeadura não registada, com o seguinte erro: " + errorMessage);
+
+            }
+
+            //System.out.println(result);
             callStmt.close();
             connection.commit();
         }
