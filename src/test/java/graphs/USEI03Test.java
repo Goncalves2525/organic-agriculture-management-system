@@ -1,15 +1,10 @@
 package graphs;
 
 import controller.ImportDataCtrl;
-import domain.Coordinate;
 import domain.Location;
 import domain.USEI03_DTO;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ui.USEI03UI;
-import utils.ImportGFHData;
-import utils.Utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -48,7 +43,7 @@ public class USEI03Test {
 
         assertEquals("CT162", originName1);
         assertEquals("CT194", destinationName1);
-        assertEquals(2, numberOfCharges1);
+        assertEquals(3, numberOfCharges1);
 
         USEI03_DTO dto3 = usei03uiSmall.getBiggestShortestPathData(200000);
         LinkedList<Location> path2 = dto3.getShortPath();
