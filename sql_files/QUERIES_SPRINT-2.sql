@@ -1,5 +1,165 @@
 -- SPRINT 2
 
+/* USBD11 */
+
+/** ***************************************************************************************************************** */
+
+/* USBD12 */
+
+/** ***************************************************************************************************************** */
+
+/* USBD13
+* Como Gestor Agrícola,
+* quero registar uma operação de colheita.
+*/
+
+-- Funtion to get OPERACAO max id
+create or replace function getOperacoesMaxId return number
+is
+    maxId number;
+begin
+    select max(idoperacao) into maxId
+    from operacoes;
+    return maxId;
+exception
+    when others then
+    dbms_output.put_line('Error: ' || SQLERRM);
+    return 0;
+end getOperacoesMaxId;
+
+-- to test getOperacoesMaxId
+declare
+    maxId number;
+begin
+    maxId := getOperacoesMaxId;
+    if maxId is not null then
+        DBMS_OUTPUT.PUT_LINE('maxId: ' || maxId);
+    end if;
+end;
+
+-- Function to get the list of CULTIVOS
+create or replace function getCultivosData return SYS_REFCURSOR
+is
+    v_cursor SYS_REFCURSOR;
+begin
+    open v_cursor for
+        select
+            cultivos.parcelaid,
+            parcelas.nome,
+            cultivos.culturaid,
+            culturas.nomecompleto,
+            produtos.produto
+        from cultivos
+        left join parcelas on cultivos.parcelaid = parcelas.idparcela
+        left join culturas on cultivos.culturaid = culturas.idcultura
+        left join produtos on culturas.idcultura = produtos.culturaid
+        where cultivos.datafim is null
+            and cultivos.culturaid <> 0;
+    return v_cursor;
+end getCultivosData;
+
+-- to test getCultivosData
+set serveroutput on;
+declare
+    v_cursor SYS_REFCURSOR;
+    v_parcelaid NUMBER;
+    v_nome VARCHAR(50);
+    v_culturaid NUMBER;
+    v_nomecompleto VARCHAR(50);
+    v_produto VARCHAR(50);
+BEGIN
+    v_cursor := getCultivosData;
+    LOOP
+        FETCH v_cursor INTO
+            v_parcelaid,
+            v_nome,
+            v_culturaid,
+            v_nomecompleto,
+            v_produto;
+        EXIT WHEN v_cursor%NOTFOUND;
+
+        DBMS_OUTPUT.PUT_LINE('ParcelaID: ' || v_parcelaid ||
+                             ', Nome: ' || v_nome ||
+                             ', CulturaID: ' || v_culturaid ||
+                             ', Nome Completo: ' || v_nomecompleto ||
+                             ', Produto: ' || v_produto);
+    END LOOP;
+    CLOSE v_cursor;
+END;
+
+-- Function to get PRODUTO quantidade
+create or replace function getProdutoQuantidade (
+    idcultura number
+)
+return number
+is
+    quantidade_ver number;
+begin
+    select produtos.quantidade into quantidade_ver
+    from produtos
+    where produtos.culturaid = idcultura;
+    return quantidade_ver;
+exception
+    when others then
+    dbms_output.put_line('Error: ' || SQLERRM);
+    return 0;
+end getProdutoQuantidade;
+
+-- to test getProdutoQuantidade
+declare
+    idcultura number := 30;
+    quantidade_ver number;
+begin
+    quantidade_ver := getProdutoQuantidade(idcultura);
+    if quantidade_ver is not null then
+        DBMS_OUTPUT.PUT_LINE('quantidade: ' || quantidade_ver);
+    end if;
+end;
+
+-- Function to insert data into COLHEITAS, OPERACOES and update PRODUTOS
+CREATE OR REPLACE FUNCTION registerColheita (
+    quinta_id number,
+    parcela_id number,
+    cultura_id number,
+    operador_id number,
+    data_inicio varchar2,
+    quantidade_atual number,
+    unidade varchar2,
+    produto_atual varchar2
+) RETURN NUMBER
+IS
+    opid number;
+    quantidade_nova number;
+begin
+    opid := (getOperacoesMaxId + 1);
+    quantidade_nova := (getProdutoQuantidade(cultura_id) + quantidade_atual);
+    begin
+        -- Insert data into the table
+        INSERT INTO OPERACOES(idOperacao, QUINTAID, PARCELAID, CULTURAID, OPERADORID, dataInicio)
+            VALUES (opid, quinta_id, parcela_id, cultura_id, 0, TO_DATE(data_inicio, 'YYYY-MM-DD'));
+        INSERT INTO COLHEITAS(OPERACAOID, quantidade, UNIDADEMEDIDA)
+            VALUES (opid, quantidade_atual, unidade);
+        UPDATE PRODUTOS
+            SET quantidade = quantidade_nova, UNIDADEMEDIDA = unidade
+            WHERE CULTURAID = cultura_id AND produto = produto_atual;
+        COMMIT; -- Commit the transaction if successful
+        RETURN 1; -- Return success status
+    EXCEPTION
+        -- Rollback the transaction if an exception occurs
+        WHEN OTHERS THEN
+            ROLLBACK;
+            -- Log or handle the exception
+            DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+            RETURN 0; -- Return failure status
+    END;
+END registerColheita;
+
+/** ***************************************************************************************************************** */
+
+/* USBD14 */
+
+/** ***************************************************************************************************************** */
+
 /**
 * US BD15
 *Como Gestor Agrícola, quero registar uma operação de poda
@@ -25,9 +185,7 @@ EXCEPTION
 END insert_poda;
 /
 
-
 -- chamar a funcao
-
 DECLARE
     result_message VARCHAR2(200);
 BEGIN
@@ -36,7 +194,58 @@ BEGIN
 END;
 /
 
+/** ***************************************************************************************************************** */
 
+/* USBD16 */
+
+/** ***************************************************************************************************************** */
+
+/*
+* USBD17
+* Como Gestor Agrícola,
+* pretendo obter a lista dos fatores de produção aplicados numa dada parcela,
+* e respetivas quantidades,
+* para cada tipo de substância componente,
+* num dado intervalo de tempo.
+*/
+
+with substancias_cte as (
+    select
+        componentes.fichatecnicaid,
+        substancias.substancia,
+        substancias.percentagem
+    from componentes
+    left join substancias on componentes.substanciaid = substancias.idsubstancia
+    ),
+fatprod_cte as (
+    select
+        fatores_producao.idfatorproducao as idfat,
+        fatores_producao.fichatecnicaid as ft_ft,
+        substancias_cte.fichatecnicaid as sub_ft,
+        substancias_cte.substancia as sub_sub,
+        substancias_cte.percentagem as sub_perc
+    from fatores_producao
+    left join substancias_cte on fatores_producao.fichatecnicaid = substancias_cte.fichatecnicaid
+    )
+select
+    parcelas.nome as "Parcela",
+    aplicacoes_fatprod.fatorprodid as "Fator Produção",
+    sum(aplicacoes_fatprod.quantidade) as "Qt FP Aplicado",
+    fatprod_cte.sub_sub as "Substancia",
+    fatprod_cte.sub_perc "%subst",
+    (sum(aplicacoes_fatprod.quantidade)*fatprod_cte.sub_perc) as "Qtd Substancia Aplicada",
+    aplicacoes_fatprod.unidademedida as "Unidade"
+from aplicacoes_fatprod
+left join operacoes on aplicacoes_fatprod.operacaoid = operacoes.idoperacao
+left join parcelas on operacoes.parcelaid = parcelas.idparcela
+left join fatprod_cte on aplicacoes_fatprod.fatorprodid = fatprod_cte.idfat
+where parcelas.nome like 'CAMPO GRANDE'
+    and operacoes.dataInicio between to_date('01-01-2022', 'DD-MM-YYYY')
+        and to_date('31-12-2022', 'DD-MM-YYYY')
+group by parcelas.nome, aplicacoes_fatprod.fatorprodid, fatprod_cte.sub_sub, fatprod_cte.sub_perc, aplicacoes_fatprod.unidademedida
+order by aplicacoes_fatprod.fatorprodid
+
+/** ***************************************************************************************************************** */
 
 /*
 * USBD18
@@ -169,6 +378,7 @@ ORDER BY
     OD.PARCELAID, OD.OperationType;
 	
 
+/** ***************************************************************************************************************** */
 
 /*
 * USBD19
@@ -196,7 +406,7 @@ WHERE operacoes.dataInicio BETWEEN TO_DATE('2010-12-10  ', 'YYYY-MM-DD') AND TO_
 GROUP BY operacoes.idoperacao, aplicacoes_fatprod.fatorprodid, formulacoes.tipo, parcelas.idparcela, parcelas.nome, culturas.idcultura, culturas.nome
 ORDER BY operacoes.idoperacao;
 
-
+/** ***************************************************************************************************************** */
 
 /**
 * US BD20
@@ -272,6 +482,3 @@ BEGIN
     GetParcelasData(datainicio, datafim);
 END;
 /
-
-
-
