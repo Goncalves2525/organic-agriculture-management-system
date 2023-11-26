@@ -591,4 +591,20 @@ public class Algorithms {
 
         return false;
     }
+
+    /**
+     * Calcula a influência de cada vértice no grafo com base no grau do vértice.
+     *
+     * @param graph Grafo
+     * @return Mapa de vértices e sua influência
+     */
+    public static <V, E> Map<V, Integer> calculateInfluence(Graph<V, E> graph) {
+        Map<V, Integer> influenceMap = new HashMap<>();
+
+        for (V vertex : graph.vertices()) {
+            influenceMap.put(vertex, graph.adjVertices(vertex).size());
+        }
+
+        return influenceMap;
+    }
 }

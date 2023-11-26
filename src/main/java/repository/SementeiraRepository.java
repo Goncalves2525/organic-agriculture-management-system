@@ -84,6 +84,9 @@ public class SementeiraRepository {
                 readStmt.registerOutParameter(2, OracleTypes.NUMERIC);
 
                 // Loop to retrieve messages until no more available
+
+
+                //adicionar cor
                 while (true) {
                     readStmt.setInt(2, 32000);  // Maximum line length
                     readStmt.execute();

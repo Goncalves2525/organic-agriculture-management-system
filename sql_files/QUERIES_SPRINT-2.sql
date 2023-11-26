@@ -35,6 +35,8 @@ begin
         raise unMedidaException;
     end if;
     if resultCheck then
+        insert into Cultivos(quintaID,parcelaid,culturaid,datainicio,quantidade,unidademedida)
+        values(p_id_Quinta,p_id_Parcela,p_id_Cultura,p_dataInicio,p_qtd,p_unMedidaSemeadura);
         insert into OPERACOES (idOperacao,QUINTAID,CULTuraID,PARCELAID,OPERADORID,DATAINICIO,DATAFIM)
         select max(idOperacao)+1, p_id_Quinta,p_id_Cultura,p_id_Parcela,p_id_Operador,p_dataInicio,p_dataFim from OPERACOES;
         insert into Sementeiras(OperacaoID,quantidade,UnidadeMedida)
