@@ -151,27 +151,44 @@ end getCultivosForMondasData;
 
 -- Function to insert data into MONDAS AND OPERACOES
 CREATE OR REPLACE FUNCTION insertMondas (
-    quinta_id number,
-    parcela_id number,
-    cultura_id number,
-    operador_id number,
-    data_inicio varchar2,
-    quantidade_atual number,
-    unidade varchar2,
-    produto_atual varchar2
+    quinta_id NUMBER,
+    parcela_id NUMBER,
+    cultura_id NUMBER,
+    operador_id NUMBER,
+    data_inicio VARCHAR2,
+    quantidade_atual NUMBER,
+    unidade VARCHAR2,
+    produto_atual VARCHAR2
 ) RETURN NUMBER
 IS
-    opid number;
-    quantidade_nova number;
-begin
+    opid NUMBER;
+    quantidade_nova NUMBER;
+    parcelaID NUMBER;
+    parcela_valid BOOLEAN;
+    area_parcela NUMBER;
+BEGIN
+    -- Check if the Parcela is valid using the func_Check_Parcela function
+    SELECT area INTO area_parcela FROM Parcelas WHERE idParcela = parcela_id;
+    parcela_valid := func_Check_Parcela(parcela_id, area_parcela);
+
+    IF NOT parcela_valid THEN
+        -- If the Parcela is not valid, return failure status
+        DBMS_OUTPUT.PUT_LINE('Error: Parcela is not valid.');
+        RETURN 0;
+    END IF;
+
+    -- Get the next operation ID
     opid := (getOperacoesMaxId + 1);
-    begin
+
+    BEGIN
         -- Insert data into the table
         INSERT INTO OPERACOES(idOperacao, QUINTAID, PARCELAID, CULTURAID, OPERADORID, dataInicio)
             VALUES (opid, quinta_id, parcela_id, cultura_id, 0, TO_DATE(data_inicio, 'YYYY-MM-DD'));
+
         INSERT INTO MONDAS(OPERACAOID, quantidade, UNIDADEMEDIDA)
             VALUES (opid, quantidade_atual, unidade);
-        COMMIT; -- Commit the transaction if successful
+
+        COMMIT;
         RETURN 1; -- Return success status
     EXCEPTION
         -- Rollback the transaction if an exception occurs
@@ -182,6 +199,7 @@ begin
             RETURN 0; -- Return failure status
     END;
 END insertMondas;
+/
 
 /** ***************************************************************************************************************** */
 
