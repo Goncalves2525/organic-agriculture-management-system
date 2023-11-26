@@ -66,7 +66,7 @@ public class USEI03UI implements Runnable {
 
         USEI03_DTO dto = getShortestPathData(origin, destination, autonomiaMax); //O(V^2)
 
-        return dto;
+        return dto; //O(1)
     }
 
     public USEI03_DTO getShortestPathData(Location origin, Location destination, int autonomiaMax) { //O(V^2)

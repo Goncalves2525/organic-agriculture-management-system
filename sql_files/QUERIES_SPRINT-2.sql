@@ -158,6 +158,34 @@ END registerColheita;
 
 /* USBD14 */
 
+create or replace NONEDITIONABLE FUNCTION registarAplicacao(quintaID number, parcelaNome varchar2, culturaID number, operadorID number, dataInicio date, fatorProdID varchar2, quantidade number, unidadeMedida varchar2, area float)
+RETURN NUMBER IS
+    worked number := 1;
+    idOperacao number;
+    parcelaID number;
+    correctArea boolean := true;
+BEGIN
+    idOperacao := getOperacoesMaxId + 1;
+SELECT idparcela INTO parcelaID FROM Parcelas WHERE parcelaNome = parcelas.nome;
+correctArea := check_Area(area, parcelaID);
+
+    IF correctArea = false THEN
+        INSERT INTO OPERACOES(IDOPERACAO, QUINTAID, PARCELAID, CULTURAID, OPERADORID, DATAINICIO, DATAFIM) values (idOperacao, quintaID, parcelaID, culturaID, operadorID, dataInicio, null);
+INSERT INTO APLICACOES_FATPROD(OPERACAOID, FATORPRODID, QUANTIDADE, UNIDADEMEDIDA) values (idOperacao, fatorProdID, quantidade, unidadeMedida);
+COMMIT;
+ELSE
+        worked := -2;
+END IF;
+
+RETURN worked;
+EXCEPTION
+    when others then
+        rollback;
+        worked := 0;
+return worked;
+
+END registarAplicacao;
+
 /** ***************************************************************************************************************** */
 
 /**
@@ -244,6 +272,8 @@ where parcelas.nome like 'CAMPO GRANDE'
         and to_date('31-12-2022', 'DD-MM-YYYY')
 group by parcelas.nome, aplicacoes_fatprod.fatorprodid, fatprod_cte.sub_sub, fatprod_cte.sub_perc, aplicacoes_fatprod.unidademedida
 order by aplicacoes_fatprod.fatorprodid
+
+
 
 /** ***************************************************************************************************************** */
 
@@ -389,6 +419,7 @@ ORDER BY
 
 SELECT
     operacoes.idoperacao as ID_Operacao,
+    operacoes.dataInicio as Data_Operacao,
     aplicacoes_fatprod.fatorprodid as Fator_de_Producao,
     formulacoes.tipo as Tipo,
     parcelas.idparcela as ID_Parcela,
@@ -396,15 +427,39 @@ SELECT
     culturas.idcultura as ID_Cultura,
     culturas.nome as Cultura
 FROM aplicacoes_fatprod
-    INNER JOIN fatores_producao ON aplicacoes_fatprod.fatorprodid = fatores_producao.idfatorproducao
-    INNER JOIN formulacoes ON fatores_producao.formulacaoid = formulacoes.idformulacao
-    INNER JOIN operacoes ON aplicacoes_fatprod.operacaoid = operacoes.idoperacao
-    INNER JOIN cultivos ON operacoes.parcelaid = cultivos.parcelaid AND operacoes.culturaid = cultivos.culturaid
-    INNER JOIN parcelas ON cultivos.parcelaid = parcelas.idparcela
-    INNER JOIN culturas ON cultivos.culturaid = culturas.idcultura
-WHERE operacoes.dataInicio BETWEEN TO_DATE('2010-12-10  ', 'YYYY-MM-DD') AND TO_DATE('2030-01-20', 'YYYY-MM-DD')
-GROUP BY operacoes.idoperacao, aplicacoes_fatprod.fatorprodid, formulacoes.tipo, parcelas.idparcela, parcelas.nome, culturas.idcultura, culturas.nome
-ORDER BY operacoes.idoperacao;
+         INNER JOIN fatores_producao ON aplicacoes_fatprod.fatorprodid = fatores_producao.idfatorproducao
+         INNER JOIN formulacoes ON fatores_producao.formulacaoid = formulacoes.idformulacao
+         INNER JOIN operacoes ON aplicacoes_fatprod.operacaoid = operacoes.idoperacao
+         INNER JOIN cultivos ON operacoes.parcelaid = cultivos.parcelaid AND operacoes.culturaid = cultivos.culturaid
+         INNER JOIN parcelas ON cultivos.parcelaid = parcelas.idparcela
+         INNER JOIN culturas ON cultivos.culturaid = culturas.idcultura
+WHERE operacoes.dataInicio BETWEEN TO_DATE('2019-01-01', 'YYYY-MM-DD') AND TO_DATE('2023-07-06', 'YYYY-MM-DD')
+GROUP BY operacoes.idoperacao, operacoes.dataInicio, aplicacoes_fatprod.fatorprodid, formulacoes.tipo, parcelas.idparcela, parcelas.nome, culturas.idcultura, culturas.nome
+ORDER BY operacoes.dataInicio;
+
+/*
+ Mostrar apenas LAMEIRO DO MOINHO
+ */
+SELECT
+    operacoes.idoperacao as ID_Operacao,
+    operacoes.dataInicio as Data_Operacao,
+    aplicacoes_fatprod.fatorprodid as Fator_de_Producao,
+    formulacoes.tipo as Tipo,
+    parcelas.idparcela as ID_Parcela,
+    parcelas.nome as Parcela,
+    culturas.idcultura as ID_Cultura,
+    culturas.nome as Cultura
+FROM aplicacoes_fatprod
+         INNER JOIN fatores_producao ON aplicacoes_fatprod.fatorprodid = fatores_producao.idfatorproducao
+         INNER JOIN formulacoes ON fatores_producao.formulacaoid = formulacoes.idformulacao
+         INNER JOIN operacoes ON aplicacoes_fatprod.operacaoid = operacoes.idoperacao
+         INNER JOIN cultivos ON operacoes.parcelaid = cultivos.parcelaid AND operacoes.culturaid = cultivos.culturaid
+         INNER JOIN parcelas ON cultivos.parcelaid = parcelas.idparcela
+         INNER JOIN culturas ON cultivos.culturaid = culturas.idcultura
+WHERE operacoes.dataInicio BETWEEN TO_DATE('2019-01-01', 'YYYY-MM-DD') AND TO_DATE('2023-07-06', 'YYYY-MM-DD')
+  AND parcelas.nome LIKE 'LAMEIRO DO MOINHO'
+GROUP BY operacoes.idoperacao, operacoes.dataInicio, aplicacoes_fatprod.fatorprodid, formulacoes.tipo, parcelas.idparcela, parcelas.nome, culturas.idcultura, culturas.nome
+ORDER BY operacoes.dataInicio;
 
 /** ***************************************************************************************************************** */
 
