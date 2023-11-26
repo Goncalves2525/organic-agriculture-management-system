@@ -1,6 +1,116 @@
 -- SPRINT 2
 
-/* USBD11 */
+/* US BD11
+* Como Gestor Agrícola,
+* quero registar uma operação de semeadura */
+
+create or replace function FUNC_REGISTAR_SEMEADURA(p_id_Quinta in number,parcela in varchar2,cultura in varchar2,p_id_Operador in number, p_dataInicio in date,p_dataFim in date,p_qtd in number, p_unMedidaSemeadura Sementeiras.UNIDADEMEDIDA%Type, p_AreaParcela in number, p_unidadeMedidaParcela Parcelas.UnidadeMedida%Type)
+return boolean
+is
+   outResult boolean := false;
+   resultCheck boolean := true;
+   quintaException EXCEPTION;
+   parcelaException EXCEPTION;
+   operadorException EXCEPTION;
+   unMedidaException EXCEPTION;
+   p_id_Parcela number;
+   p_id_Cultura number;
+begin
+    SELECT idParcela INTO p_id_Parcela FROM Parcelas where nome=parcela;
+    SELECT idCultura into p_id_Cultura from Culturas where nomecompleto=cultura;
+    if not func_check_Quinta(p_id_Quinta) then
+        resultCheck := false;
+        raise quintaException;
+    end if;
+    if not func_Check_Parcela(p_id_Parcela,p_AreaParcela) then
+        resultCheck := false;
+        raise parcelaException;
+    end if;
+    if not func_Check_Operador(p_id_Operador) then
+        resultCheck := false;
+        raise operadorException;
+    end if;
+    if not func_Check_UnMedida(p_unMedidaSemeadura) then
+        resultCheck := false;
+        raise unMedidaException;
+    end if;
+    if resultCheck then
+        insert into OPERACOES (idOperacao,QUINTAID,CULTuraID,PARCELAID,OPERADORID,DATAINICIO,DATAFIM)
+        select max(idOperacao)+1, p_id_Quinta,p_id_Cultura,p_id_Parcela,p_id_Operador,p_dataInicio,p_dataFim from OPERACOES;
+        insert into Sementeiras(OperacaoID,quantidade,UnidadeMedida)
+        select max(idOperacao), p_qtd,p_unMedidaSemeadura from OPERACOES;
+        COMMIT;
+        outResult := true;
+    end if;
+    if outResult then
+      dbms_output.put_line('Operação registada com sucesso!');
+      else
+      dbms_output.put_line('Operação não registada!');
+    end if;
+    return outResult;
+exception
+    when quintaException then
+        dbms_output.put_line('Quinta não existente');
+        rollback;
+        return outResult;
+    when operadorException then
+        dbms_output.put_line('Operador inválido');
+        rollback;
+        return outResult;
+    when parcelaException then
+        dbms_output.put_line('Parcela inválida ou com área superior à atual');
+        rollback;
+        return outResult;
+    when unMedidaException then
+        dbms_output.put_line('Unidade de medida inválida');
+        rollback;
+        return outResult;
+    when others then
+        rollback;
+        dbms_output.put_line('Erro:' || sqlerrm);
+        return outResult;
+end;
+
+
+create or replace function func_check_Quinta(p_id_Quinta number) return boolean
+is
+result_Count int;
+begin
+select count(*)
+into result_Count
+from Quintas where IDQUINTA=p_id_Quinta;
+return result_Count>0;
+End;
+
+create or replace function func_Check_Parcela(p_id_Parcela number, p_area_Parcela number) return boolean
+is
+result_Count int;
+begin
+select count(*)
+into result_Count
+from Parcelas where IDPARCELA=p_id_Parcela and area>=p_area_Parcela;
+return result_Count>0;
+End;
+
+create or replace function func_Check_Operador(p_id_operador number) return boolean
+is
+result_Count int;
+begin
+select count(*)
+into result_Count
+from Operadores where IDOPERADOR=p_id_operador;
+return result_Count>0;
+End;
+
+create or replace function func_Check_UnMedida(p_unMedida Unidades_Medida.idUnidadeMedida%Type) return boolean
+is
+result_Count int;
+begin
+select count(*)
+into result_Count
+from Unidades_Medida where idUnidadeMedida=p_unMedida;
+return result_Count>0;
+End;
 
 /** ***************************************************************************************************************** */
 
@@ -217,31 +327,29 @@ RETURN NUMBER IS
     correctArea boolean := true;
 BEGIN
     idOperacao := getOperacoesMaxId + 1;
-SELECT idparcela INTO parcelaID FROM Parcelas WHERE parcelaNome = parcelas.nome;
-correctArea := check_Area(area, parcelaID);
-
+    SELECT idparcela INTO parcelaID FROM Parcelas WHERE parcelaNome = parcelas.nome;
+    correctArea := check_Area(area, parcelaID);
     IF correctArea = false THEN
         INSERT INTO OPERACOES(IDOPERACAO, QUINTAID, PARCELAID, CULTURAID, OPERADORID, DATAINICIO, DATAFIM) values (idOperacao, quintaID, parcelaID, culturaID, operadorID, dataInicio, null);
-INSERT INTO APLICACOES_FATPROD(OPERACAOID, FATORPRODID, QUANTIDADE, UNIDADEMEDIDA) values (idOperacao, fatorProdID, quantidade, unidadeMedida);
-COMMIT;
-ELSE
+        INSERT INTO APLICACOES_FATPROD(OPERACAOID, FATORPRODID, QUANTIDADE, UNIDADEMEDIDA) values (idOperacao, fatorProdID, quantidade, unidadeMedida);
+        COMMIT;
+    ELSE
         worked := -2;
-END IF;
-
-RETURN worked;
+    END IF;
+    RETURN worked;
 EXCEPTION
     when others then
         rollback;
         worked := 0;
-return worked;
-
+    return worked;
 END registarAplicacao;
 
 /** ***************************************************************************************************************** */
 
 /**
 * US BD15
-*Como Gestor Agrícola, quero registar uma operação de poda
+* Como Gestor Agrícola,
+* quero registar uma operação de poda
 */
 
 CREATE OR REPLACE FUNCTION insert_poda(
@@ -253,16 +361,13 @@ AS
 BEGIN
     -- Insert into PODAS table
     INSERT INTO PODAS VALUES(p_idoperacao, p_quantidade, p_unidade);
-
     -- Return success message
     RETURN 'Insert successful';
-
 EXCEPTION
     WHEN OTHERS THEN
         -- Handle exceptions
         RETURN 'Error: ' || SQLCODE || ' - ' || SQLERRM;
 END insert_poda;
-/
 
 -- chamar a funcao
 DECLARE
@@ -275,7 +380,66 @@ END;
 
 /** ***************************************************************************************************************** */
 
-/* USBD16 */
+/* US BD16
+* Como Gestor Agrícola, 
+* pretendo obter a lista dos produtos colhidos numa dada parcela,
+* para cada espécie, num dado intervalo de tempo.
+*/
+
+--Função get_ListaProdColhidos
+Create or replace function get_ListaProdColhidos(p_nome_Parcela in varchar2,p_dataInicio in date,p_dataFim in date)
+return sys_refcursor
+as listaProdColhidos sys_refcursor;
+idOperacao number;
+   produto  varchar2(255);
+   especie varchar2(255);
+   parcela  varchar2(255);
+   dataOperacao date;
+   produto_anterior VARCHAR2(255) := NULL;
+   especie_anterior VARCHAR2(255) := NULL;
+   primeira_vez BOOLEAN := TRUE;
+begin
+open listaProdColhidos for
+select  e.especie, c.NomeCompleto,par.Nome as Parcela
+from produtos p
+left join culturas c on p.culturaid=c.idcultura
+left join especies_vegetais e on c.especieVegetalID=e.idespecievegetal
+left join operacoes o on c.IdCultura=o.culturaID
+left join colheitas colhe on o.idoperacao=colhe.operacaoid
+left join parcelas par on o.parcelaid=par.idparcela
+INNER JOIN cultivos ON o.parcelaid = cultivos.parcelaid AND o.culturaid = cultivos.culturaid
+where o.dataInicio between p_dataInicio and p_dataFim and par.Nome=p_nome_Parcela
+group by e.especie, c.NomeCompleto,par.Nome;
+
+dbms_output.put_line('Parcela = ' || p_nome_Parcela);
+dbms_output.put_line('Intervalo = entre ' || TO_CHAR(p_dataInicio, 'DD/MM/YYYY') || ' e ' || TO_CHAR(p_dataFim, 'DD/MM/YYYY'));
+dbms_output.put_line('Resultado:');
+LOOP
+        FETCH listaProdColhidos INTO especie, produto;
+        EXIT WHEN listaProdColhidos%NOTFOUND;
+
+        IF primeira_vez OR especie_anterior != especie THEN
+            dbms_output.put_line('    ' || especie);
+            especie_anterior := especie;
+            primeira_vez := FALSE;
+        END IF;
+
+        dbms_output.put_line('        ' || produto );
+    END LOOP;
+return listaProdColhidos;
+end;
+
+--Chamada da função get_ListaProdColhidos
+set serveroutput on
+declare
+   resultado sys_refcursor;
+begin
+   -- Call the function (example)
+   resultado := get_ListaProdColhidos('CAMPO NOVO','20-MAY-23','06-NOV-23');
+   exception
+   when others then
+   dbms_output.put_line('Erro: ' || sqlerrm);
+end;
 
 /** ***************************************************************************************************************** */
 
@@ -346,9 +510,7 @@ WITH OperationData AS (
     FROM
         OPERACOES O
         JOIN APLICACOES_FATPROD AF ON O.idOperacao = AF.OPERACAOID
-
     UNION
-
     SELECT
         O.idOperacao,
         O.dataInicio,
@@ -358,9 +520,7 @@ WITH OperationData AS (
     FROM
         OPERACOES O
         JOIN SEMENTEIRAS S ON O.idOperacao = S.OPERACAOID
-
     UNION
-
     SELECT
         O.idOperacao,
         O.dataInicio,
@@ -370,9 +530,7 @@ WITH OperationData AS (
     FROM
         OPERACOES O
         JOIN PLANTACOES S ON O.idOperacao = S.OPERACAOID
-
     UNION
-
     SELECT
         O.idOperacao,
         O.dataInicio,
@@ -382,9 +540,7 @@ WITH OperationData AS (
     FROM
         OPERACOES O
         JOIN REGAS S ON O.idOperacao = S.OPERACAOID
-
     UNION
-
     SELECT
         O.idOperacao,
         O.dataInicio,
@@ -394,9 +550,7 @@ WITH OperationData AS (
     FROM
         OPERACOES O
         JOIN PODAS S ON O.idOperacao = S.OPERACAOID
-
     UNION
-
     SELECT
         O.idOperacao,
         O.dataInicio,
@@ -406,9 +560,7 @@ WITH OperationData AS (
     FROM
         OPERACOES O
         JOIN INCORPS_SOLO S ON O.idOperacao = S.OPERACAOID
-
     UNION
-
     SELECT
         O.idOperacao,
         O.dataInicio,
@@ -418,9 +570,7 @@ WITH OperationData AS (
     FROM
         OPERACOES O
         JOIN COLHEITAS S ON O.idOperacao = S.OPERACAOID
-
-            UNION
-
+    UNION
     SELECT
         O.idOperacao,
         O.dataInicio,
@@ -430,9 +580,7 @@ WITH OperationData AS (
     FROM
         OPERACOES O
         JOIN MONDAS S ON O.idOperacao = S.OPERACAOID
-
-            UNION
-
+    UNION
     SELECT
         O.idOperacao,
         O.dataInicio,
@@ -442,7 +590,6 @@ WITH OperationData AS (
     FROM
         OPERACOES O
         JOIN MOBILIZACOES_SOLO S ON O.idOperacao = S.OPERACAOID
-
 )
 SELECT
     OD.PARCELAID,
@@ -533,7 +680,7 @@ GROUP BY parcelas.idparcela, parcelas.nome, parcelas.area, parcelas.unidademedid
     EXTRACT(YEAR FROM operacoes.datainicio)
 
 
-CREATE OR REPLACE PROCEDURE GetParcelasData(
+CREATE OR REPLACE PROCEDURE GetParcelasDataProc(
     p_datainicio VARCHAR2,
     p_datafim VARCHAR2
 )
@@ -557,7 +704,7 @@ BEGIN
         JOIN 
             REGAS ON operacoes.idoperacao = regas.operacaoid
         WHERE 
-            operacoes.datainicio BETWEEN TO_DATE('2010-12-10  ', 'YYYY-MM-DD') AND TO_DATE('2030-01-20', 'YYYY-MM-DD') AND TO_DATE('2010-12-10  ', 'YYYY-MM-DD') AND TO_DATE('2030-01-20', 'YYYY-MM-DD')
+            operacoes.datainicio BETWEEN TO_DATE('2010-12-10', 'YYYY-MM-DD') AND TO_DATE('2030-01-20', 'YYYY-MM-DD')
         GROUP BY 
             parcelas.idparcela, 
             parcelas.nome, 
@@ -570,14 +717,14 @@ BEGIN
         DBMS_OUTPUT.PUT_LINE(
             'ID Parcela: ' || result.idparcela ||
             ', Nome: ' || result.nome ||
-            ', Área: ' || result.area ||
+            ', �?rea: ' || result.area ||
             ', Unidade de Medida: ' || result.unidademedida ||
             ', Mês: ' || result.mes ||
             ', Ano: ' || result.ano ||
             ', Total de Regas: ' || result.TOTALDEREGAS
         );
     END LOOP;
-END GetParcelasData;
+END GetParcelasDataProc;
 /
 
 SET SERVEROUTPUT ON;
@@ -589,176 +736,3 @@ BEGIN
 END;
 /
 
-
-
-/**
-US BD11 Como Gestor Agrícola, quero registar uma operação de semeadura
-*/
-
-
-create or replace function FUNC_REGISTAR_SEMEADURA(p_id_Quinta in number,parcela in varchar2,cultura in varchar2,p_id_Operador in number, p_dataInicio in date,p_dataFim in date,p_qtd in number, p_unMedidaSemeadura Sementeiras.UNIDADEMEDIDA%Type, p_AreaParcela in number, p_unidadeMedidaParcela Parcelas.UnidadeMedida%Type)
-return boolean
-is
-   outResult boolean := false;
-   resultCheck boolean := true;
-   quintaException EXCEPTION;
-   parcelaException EXCEPTION;
-   operadorException EXCEPTION;
-   unMedidaException EXCEPTION;
-   p_id_Parcela number;
-   p_id_Cultura number;
-begin
-    SELECT idParcela INTO p_id_Parcela FROM Parcelas where nome=parcela;
-    SELECT idCultura into p_id_Cultura from Culturas where nomecompleto=cultura;
-    if not func_check_Quinta(p_id_Quinta) then
-        resultCheck := false;
-        raise quintaException;
-    end if;
-    if not func_Check_Parcela(p_id_Parcela,p_AreaParcela) then
-        resultCheck := false;
-        raise parcelaException;
-    end if;
-    if not func_Check_Operador(p_id_Operador) then
-        resultCheck := false;
-        raise operadorException;
-    end if;
-    if not func_Check_UnMedida(p_unMedidaSemeadura) then
-        resultCheck := false;
-        raise unMedidaException;
-    end if;
-    if resultCheck then
-        insert into OPERACOES (idOperacao,QUINTAID,CULTuraID,PARCELAID,OPERADORID,DATAINICIO,DATAFIM)
-        select max(idOperacao)+1, p_id_Quinta,p_id_Cultura,p_id_Parcela,p_id_Operador,p_dataInicio,p_dataFim from OPERACOES;
-        insert into Sementeiras(OperacaoID,quantidade,UnidadeMedida)
-        select max(idOperacao), p_qtd,p_unMedidaSemeadura from OPERACOES;
-        COMMIT;
-        outResult := true;
-    end if;
-    if outResult then
-      dbms_output.put_line('Operação registada com sucesso!');
-      else
-      dbms_output.put_line('Operação não registada!');
-    end if;
-    return outResult;
-exception
-    when quintaException then
-        dbms_output.put_line('Quinta não existente');
-        rollback;
-        return outResult;
-    when operadorException then
-        dbms_output.put_line('Operador inválido');
-        rollback;
-        return outResult;
-    when parcelaException then
-        dbms_output.put_line('Parcela inválida ou com área superior à atual');
-        rollback;
-        return outResult;
-    when unMedidaException then
-        dbms_output.put_line('Unidade de medida inválida');
-        rollback;
-        return outResult;
-    when others then
-        rollback;
-        dbms_output.put_line('Erro:' || sqlerrm);
-        return outResult;
-end;
-
-
-create or replace function func_check_Quinta(p_id_Quinta number) return boolean
-is
-result_Count int;
-begin
-select count(*)
-into result_Count
-from Quintas where IDQUINTA=p_id_Quinta;
-return result_Count>0;
-End;
-
-create or replace function func_Check_Parcela(p_id_Parcela number, p_area_Parcela number) return boolean
-is
-result_Count int;
-begin
-select count(*)
-into result_Count
-from Parcelas where IDPARCELA=p_id_Parcela and area>=p_area_Parcela;
-return result_Count>0;
-End;
-
-create or replace function func_Check_Operador(p_id_operador number) return boolean
-is
-result_Count int;
-begin
-select count(*)
-into result_Count
-from Operadores where IDOPERADOR=p_id_operador;
-return result_Count>0;
-End;
-
-create or replace function func_Check_UnMedida(p_unMedida Unidades_Medida.idUnidadeMedida%Type) return boolean
-is
-result_Count int;
-begin
-select count(*)
-into result_Count
-from Unidades_Medida where idUnidadeMedida=p_unMedida;
-return result_Count>0;
-End;
-
-/**
-US BD16 Como Gestor Agrícola, pretendo obter a lista dos produtos colhidos numa dada parcela, para cada espécie, num dado intervalo de tempo
-*/
-
---Função get_ListaProdColhidos
-Create or replace function get_ListaProdColhidos(p_nome_Parcela in varchar2,p_dataInicio in date,p_dataFim in date)
-return sys_refcursor
-as listaProdColhidos sys_refcursor;
-idOperacao number;
-   produto  varchar2(255);
-   especie varchar2(255);
-   parcela  varchar2(255);
-   dataOperacao date;
-   produto_anterior VARCHAR2(255) := NULL;
-   especie_anterior VARCHAR2(255) := NULL;
-   primeira_vez BOOLEAN := TRUE;
-begin
-open listaProdColhidos for
-select  e.especie, c.NomeCompleto,par.Nome as Parcela
-from produtos p
-left join culturas c on p.culturaid=c.idcultura
-left join especies_vegetais e on c.especieVegetalID=e.idespecievegetal
-left join operacoes o on c.IdCultura=o.culturaID
-left join colheitas colhe on o.idoperacao=colhe.operacaoid
-left join parcelas par on o.parcelaid=par.idparcela
-INNER JOIN cultivos ON o.parcelaid = cultivos.parcelaid AND o.culturaid = cultivos.culturaid
-where o.dataInicio between p_dataInicio and p_dataFim and par.Nome=p_nome_Parcela
-group by e.especie, c.NomeCompleto,par.Nome;
-
-dbms_output.put_line('Parcela = ' || p_nome_Parcela);
-dbms_output.put_line('Intervalo = entre ' || TO_CHAR(p_dataInicio, 'DD/MM/YYYY') || ' e ' || TO_CHAR(p_dataFim, 'DD/MM/YYYY'));
-dbms_output.put_line('Resultado:');
-LOOP
-        FETCH listaProdColhidos INTO especie, produto;
-        EXIT WHEN listaProdColhidos%NOTFOUND;
-
-        IF primeira_vez OR especie_anterior != especie THEN
-            dbms_output.put_line('    ' || especie);
-            especie_anterior := especie;
-            primeira_vez := FALSE;
-        END IF;
-
-        dbms_output.put_line('        ' || produto );
-    END LOOP;
-return listaProdColhidos;
-end;
-
---Chamada da função get_ListaProdColhidos
-set serveroutput on
-declare
-   resultado sys_refcursor;
-begin
-   -- Call the function (example)
-   resultado := get_ListaProdColhidos('CAMPO NOVO','20-MAY-23','06-NOV-23');
-   exception
-   when others then
-   dbms_output.put_line('Erro: ' || sqlerrm);
-end;
