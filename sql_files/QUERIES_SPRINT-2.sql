@@ -156,13 +156,12 @@ CREATE OR REPLACE FUNCTION insertMondas (
     cultura_id NUMBER,
     operador_id NUMBER,
     data_inicio VARCHAR2,
-    quantidade_atual NUMBER,
+    quantidade NUMBER,
     unidade VARCHAR2,
     produto_atual VARCHAR2
 ) RETURN NUMBER
 IS
     opid NUMBER;
-    quantidade_nova NUMBER;
     parcelaID NUMBER;
     parcela_valid BOOLEAN;
     area_parcela NUMBER;
@@ -186,7 +185,7 @@ BEGIN
             VALUES (opid, quinta_id, parcela_id, cultura_id, 0, TO_DATE(data_inicio, 'YYYY-MM-DD'));
 
         INSERT INTO MONDAS(OPERACAOID, quantidade, UNIDADEMEDIDA)
-            VALUES (opid, quantidade_atual, unidade);
+            VALUES (opid, quantidade, unidade);
 
         COMMIT;
         RETURN 1; -- Return success status
@@ -288,11 +287,12 @@ create or replace function getProdutoQuantidade (
 )
 return number
 is
-    quantidade_ver number;
+    quantidade_ver number := 0;
 begin
     select produtos.quantidade into quantidade_ver
     from produtos
     where produtos.culturaid = idcultura;
+    if quantidade_ver is null then quantidade_ver := 0;
     return quantidade_ver;
 exception
     when others then

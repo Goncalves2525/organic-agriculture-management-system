@@ -1,7 +1,5 @@
 package dto;
 
-import utils.AnsiColor;
-
 public class CultivosDTO {
 
     private int parcelaid;
@@ -10,7 +8,7 @@ public class CultivosDTO {
     private String cultura;
     private String produto;
     private double quantidade;
-    private String UNIDADE = "un";
+    private String unidadeColheita = "un";
 
     private String unidadeMonda = "ha";
     private String dataColheita;
@@ -39,8 +37,8 @@ public class CultivosDTO {
         return quantidade;
     }
 
-    public String getUNIDADE() {
-        return UNIDADE;
+    public String getUnidadeColheita() {
+        return unidadeColheita;
     }
 
     public String getUnidadeMonda() {
@@ -55,6 +53,10 @@ public class CultivosDTO {
         this.quantidade = quantidade;
     }
 
+    public void setUnidadeColheita(String unidadeColheita) {
+        this.unidadeColheita = unidadeColheita;
+    }
+
     public void setDataColheita(String dataColheita) {
         this.dataColheita = dataColheita;
     }
@@ -63,6 +65,16 @@ public class CultivosDTO {
         this.unidadeMonda = unidadeMonda;
     }
 
+    public CultivosDTO(int parcelaid, String parcela, int culturaid, String cultura, String produto, String unidadeColheita) {
+        this.parcelaid = parcelaid;
+        this.parcela = parcela;
+        this.culturaid = culturaid;
+        this.cultura = cultura;
+        this.produto = produto;
+        this.quantidade = 0;
+        this.unidadeColheita = unidadeColheita;
+        this.dataColheita = null;
+    }
     public CultivosDTO(int parcelaid, String parcela, int culturaid, String cultura, String produto) {
         this.parcelaid = parcelaid;
         this.parcela = parcela;

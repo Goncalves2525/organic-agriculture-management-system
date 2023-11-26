@@ -72,7 +72,7 @@ public class ColheitasRepository {
             callStmt.setInt(5,0);
             callStmt.setString(6, cultivo.getDataColheita());
             callStmt.setDouble(7, cultivo.getQuantidade());
-            callStmt.setString(8, cultivo.getUNIDADE());
+            callStmt.setString(8, cultivo.getUnidadeColheita());
             callStmt.setString(9, cultivo.getProduto());
 
             callStmt.execute();

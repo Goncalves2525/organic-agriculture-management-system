@@ -7,7 +7,6 @@ import utils.AnsiColor;
 import utils.Utils;
 
 import java.sql.SQLException;
-import java.util.Date;
 
 public class ColheitasUI implements Runnable {
 
@@ -29,16 +28,20 @@ public class ColheitasUI implements Runnable {
                 Utils.showMessageColor("Escolha um produto de um dado cultivo, para proceder à COLHEITA.", AnsiColor.BLUE);
                 cultivoPicked = (CultivosDTO) Utils.showAndSelectOneNoCancel(ctrlCultivos.getCultivos(), "CULTIVOS:");
 
-                int quantidade = Utils.readIntegerFromConsole("Quantas unidades foram colhidas?");
+                double quantidade = Utils.readDoubleFromConsole("Qual a quantidade que foi colhida?");
                 cultivoPicked.setQuantidade(quantidade);
+
+                String unidade = Utils.readLineFromConsole("Qual a unidade de medida a considerar (ex: kg)?");
+                cultivoPicked.setUnidadeColheita(unidade);
 
                 String dataColheita = Utils.readLineFromConsole("Qual a data em que foi realizada a colheita? (aaaa-mm-dd)");
                 cultivoPicked.setDataColheita(dataColheita);
 
                 Utils.showMessageColor("\nVou proceder ao registo da colheita de: \n" +
                                 cultivoPicked + "\n Data: " + dataColheita +
-                                " | Quantidade: " + cultivoPicked.getQuantidade()
-                        , AnsiColor.CYAN);
+                                " | Quantidade: " + cultivoPicked.getQuantidade() +
+                                " " + cultivoPicked.getUnidadeColheita()
+                                , AnsiColor.CYAN);
 
                 option = Utils.confirm("Confirma o registo com estes dados? (y/n)");
                 if (option) { break; }

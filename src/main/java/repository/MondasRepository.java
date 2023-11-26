@@ -92,7 +92,7 @@ public class MondasRepository {
             if (!resultSet.next()) break;
             Mondas aplicacao = new Mondas(
                     resultSet.getInt("OPERACAOID"),
-                    resultSet.getInt("quantidade"),
+                    resultSet.getDouble("quantidade"),
                     resultSet.getString("UNIDADEMEDIDA")
             );
             mondasList.add(aplicacao);
