@@ -431,7 +431,7 @@ dbms_output.put_line('Parcela = ' || p_nome_Parcela);
 dbms_output.put_line('Intervalo = entre ' || TO_CHAR(p_dataInicio, 'DD/MM/YYYY') || ' e ' || TO_CHAR(p_dataFim, 'DD/MM/YYYY'));
 dbms_output.put_line('Resultado:');
 LOOP
-        FETCH listaProdColhidos INTO especie, produto;
+        FETCH listaProdColhidos INTO especie, produto, parcela;
         EXIT WHEN listaProdColhidos%NOTFOUND;
 
         IF primeira_vez OR especie_anterior != especie THEN
