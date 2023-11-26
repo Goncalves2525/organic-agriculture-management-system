@@ -4,6 +4,7 @@
 
 | TEA (PT)                    | Definição                                                                                                                                                                 |
 |-----------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **A**                       | Unidade que descreve a autonomia de um veículo elétrico.                                                                                                                  |
 | **Adubação Verde**          | Cultura cultivada especificamente para ser incorporada ao solo enquanto ainda está verde.                                                                                 |
 | **Água**                    | Recurso líquido que forma lagos, oceanos e muito mais.                                                                                                                    |
 | **Agricultor**              | Uma pessoa envolvida na agricultura que cria organismos vivos para fins alimentares.                                                                                      |
@@ -24,6 +25,8 @@
 | **Consumidor**              | Uma pessoa que compra bens e serviços para uso pessoal.                                                                                                                   |
 | **Controlador**             | Dispositivo que permite o envio de água ou soluções aquosas de acordo com um plano de irrigação.                                                                          |
 | **Cooperação**              | Processo de trabalhar juntos para um mesmo fim.                                                                                                                           |
+| **Croqui**                  | Esboço básico, que não exige grande precisão.                                                                                                                             |
+| **Cultivos**                | Tabela de relação entre culturas e parcelas.                                                                                                                              |
 | **Culturas Permanentes**    | Uma cultura permanente é aquela produzida a partir de plantas que duram várias estações, em vez de serem replantadas a cada colheita.                                     |
 | **Culturas Temporárias**    | Culturas temporárias são aquelas que são semeadas e colhidas no mesmo ano agrícola, às vezes mais de uma vez.                                                             |
 | **Ecossistema**             | Comunidade de organismos vivos em conjunto com os componentes não vivos de seu ambiente.                                                                                  |
@@ -42,6 +45,7 @@
 | **Motorista**               | Uma pessoa empregada para dirigir um carro particular ou alugado.                                                                                                         |
 | **Policultura**             | A prática de cultivar mais de uma espécie de cultura no mesmo local.                                                                                                      |
 | **Poda**                    | Operação de poda, numa dada parcela, numa dada altura, com uma quantidade definida.                                                                                       |
+| **Podas**                   | Tabela de registo de operações de Poda.                                                                                                                                   |
 | **Praga**                   | Surto de espécies prejudiciais ao desenvolvimento agrícola.                                                                                                               |
 | **Produtor**                | Uma pessoa ou empresa que fabrica, cultiva ou fornece produtos para venda.                                                                                                |
 | **Quinta**                  | Uma área de terra e seus edifícios usados para cultivar colheitas e criar animais.                                                                                        |
@@ -50,9 +54,14 @@
 | **Rotação de Culturas**     | A prática de plantar diferentes culturas sequencialmente na mesma área para melhorar a saúde do solo.                                                                     |
 | **Sensor**                  | Dispositivo que detecta ou mede uma propriedade física e registra, indica ou responde a ela de alguma forma.                                                              |
 | **Semeadura**               | Operação de semeadura, numa dada parcela, numa dada altura, com uma quantidade definida.                                                                                  |
+| **Sementeira**              | Tabela de registo de operações de Semeadura.                                                                                                                              |
 | **Sistema de Irrigação**    | A aplicação artificial de água no solo por meio de vários sistemas de tubos, bombas e pulverizações.                                                                      |
 | **Solo**                    | Camada de terra onde as plantas podem crescer.                                                                                                                            |
 | **Terras Agrícolas**        | Área cultivável.                                                                                                                                                          |
 | **Tempo**                   | Estado da atmosfera em um local e momento específico.                                                                                                                     |
+| **Tc**                      | Unidade de medida utilizada para caraterizar o tempo demorado a carregar a bateria de um veículo elétrico.                                                                |
+| **Unidade de Medida**       | Convenção utilizada para representar uma dimensão.                                                                                                                        |
 | **V**                       | Velocidade, medida em km/h.                                                                                                                                               |
+| **Veículo**                 | Máquina de transporte de pessoas ou carga.                                                                                                                                |
+| **Veículo Elétrico**        | Máquina de transporte de pessoas ou carga, movido por uma bateria, ao invés de um motor de combustão.                                                                     |
 

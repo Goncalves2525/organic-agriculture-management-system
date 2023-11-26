@@ -596,7 +596,7 @@ public class Algorithms {
      * @param graph Grafo
      * @return Mapa de vértices e sua influência
      */
-    public static <V, E> Map<V, Integer> calculateInfluence(Graph<V, E> graph) {
+    public static <V, E> Map<V, Integer> calculateInfluence(Graph<V, E> graph) { //O(V)
         Map<V, Integer> influenceMap = new HashMap<>();
 
         for (V vertex : graph.vertices()) {

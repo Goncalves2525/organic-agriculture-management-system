@@ -7,6 +7,7 @@ import graphs.Graph;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import dto.USEI02_DTO;
 
 public class USEI02UI implements Runnable {
 
@@ -19,79 +20,85 @@ public class USEI02UI implements Runnable {
         this.importDataCtrl = new ImportDataCtrl();
     }
 
-    @Override
     public void run() {
         Graph<Location, Integer> gfh = importDataCtrl.runImportGFHData(locaisPath, distanciasPath);
 
-        // Calcular a influência
-        Map<Location, Integer> influenceMap = Algorithms.calculateInfluence(gfh);
-
-        // Classificar os vértices com base nas métricas
-        List<Location> sortedLocationsByInfluence = sortLocationsByMetric(influenceMap, Comparator.reverseOrder());
-
-        System.out.println("Influence:");
-        sortedLocationsByInfluence.forEach(location -> System.out.println(location + " - " + influenceMap.get(location)));
+        // Calculate and display influence
+        displayInfluence(gfh);
 
         // Choose a source vertex for proximity calculation
-        Location sourceVertex = chooseSourceByInfluence(gfh);; // Choose a suitable source vertex
+        Location sourceVertex = chooseSourceByInfluence(gfh);
 
-        // Calculate proximity (average distance) from the source vertex to all other vertices
-        List<Double> proximities = calculateProximities(gfh, sourceVertex);
+        // Calculate and display proximities
+        displayProximities(gfh, sourceVertex);
 
-        // Display the proximities
-        System.out.println("Proximities:");
-        for (int i = 0; i < gfh.numVertices(); i++) {
-            Location vertex = gfh.vertex(i);
-            double proximity = proximities.get(i);
-            System.out.println("Proximity of " + vertex + " to other vertices: " + proximity);
+        // Calculate and display centrality
+        displayCentrality(gfh, sourceVertex);
+    }
+
+    private void displayInfluence(Graph<Location, Integer> graph) {
+        Map<Location, Integer> influenceMap = Algorithms.calculateInfluence(graph);
+        List<Location> sortedLocationsByInfluence = sortLocationsByMetric(influenceMap, Comparator.reverseOrder());
+
+        System.out.println("\nInfluence:\n");
+        sortedLocationsByInfluence.forEach(location -> System.out.println("Vertex: " + location + " - influence: " + influenceMap.get(location)));
+    }
+
+    private void displayProximities(Graph<Location, Integer> graph, Location sourceVertex) {
+        List<Double> proximities = calculateProximities(graph, sourceVertex);
+
+        System.out.println("\nProximities:\n");
+        List<Map.Entry<Location, Double>> sortedProximities = sortProximities(graph, proximities);
+
+        // Display the sorted proximities
+        for (Map.Entry<Location, Double> entry : sortedProximities) {
+            Location vertex = entry.getKey();
+            double proximity = entry.getValue();
+            System.out.println("Vertex: " + vertex +  " - proximity to other vertices: " + proximity);
         }
+    }
 
-        System.out.println("Centrality:");
-
+    private void displayCentrality(Graph<Location, Integer> graph, Location sourceVertex) {
         ArrayList<LinkedList<Location>> paths = new ArrayList<>();
         ArrayList<Integer> distances = new ArrayList<>();
-        Algorithms.shortestPaths(gfh, sourceVertex, Comparator.naturalOrder(), Integer::sum, 0, paths, distances);
+        Algorithms.shortestPaths(graph, sourceVertex, Comparator.naturalOrder(), Integer::sum, 0, paths, distances);
 
-//        for (Location vertex : gfh.vertices()) {
-//            int index = gfh.key(vertex);
-//            System.out.println("Vertex: " + vertex + ", Betweenness Centrality: " + distances.get(index));
-//        }
+        // Create and display a list of vertices with their centrality and influence measures
+        List<USEI02_DTO> centralityInfoList = buildCentralityInfoList(graph, distances);
 
-        // Create a list of vertices with their centrality and influence measures
-        List<LocationCentralityInfo> centralityInfoList = new ArrayList<>();
-        for (Location vertex : gfh.vertices()) {
-            int index = gfh.key(vertex);
-            centralityInfoList.add(new LocationCentralityInfo(vertex, distances.get(index)));
+        System.out.println("\nCentrality:\n");
+        centralityInfoList.forEach(info -> System.out.println("Vertex: " + info.getVertex() + " - centrality: " + info.getCentrality()));
+    }
+
+    private List<Map.Entry<Location, Double>> sortProximities(Graph<Location, Integer> graph, List<Double> proximities) { //O(n log n)
+        List<Map.Entry<Location, Double>> sortedProximities = new ArrayList<>();
+
+        for (int i = 0; i < graph.numVertices(); i++) {
+            Location vertex = graph.vertex(i);
+            double proximity = proximities.get(i);
+            sortedProximities.add(new AbstractMap.SimpleEntry<>(vertex, proximity));
+        }
+
+        // Sort the list based on proximity in descending order
+        sortedProximities.sort(Comparator.comparing(Map.Entry::getValue, Comparator.reverseOrder()));
+
+        return sortedProximities;
+    }
+
+    private List<USEI02_DTO> buildCentralityInfoList(Graph<Location, Integer> graph, ArrayList<Integer> distances) { //O(n)
+        List<USEI02_DTO> centralityInfoList = new ArrayList<>();
+        for (Location vertex : graph.vertices()) {
+            int index = graph.key(vertex);
+            centralityInfoList.add(new USEI02_DTO(vertex, distances.get(index)));
         }
 
         // Order the list by centrality in descending order
-        centralityInfoList.sort(Comparator.comparingInt(LocationCentralityInfo::getCentrality).reversed());
+        centralityInfoList.sort(Comparator.comparingInt(USEI02_DTO::getCentrality).reversed());
 
-        // Now, you have the list ordered by decreasing centrality
-        for (LocationCentralityInfo info : centralityInfoList) {
-            System.out.println("Vertex: " + info.getVertex() + ", Centrality: " + info.getCentrality());
-        }
+        return centralityInfoList;
     }
 
-    private static class LocationCentralityInfo {
-        private Location vertex;
-        private int centrality;
-
-        public LocationCentralityInfo(Location vertex, int centrality) {
-            this.vertex = vertex;
-            this.centrality = centrality;
-        }
-
-        public Location getVertex() {
-            return vertex;
-        }
-
-        public int getCentrality() {
-            return centrality;
-        }
-    }
-
-    private Location chooseSourceByInfluence(Graph<Location, Integer> graph) {
+    public static Location chooseSourceByInfluence(Graph<Location, Integer> graph) { //O(n)
         int maxDegree = -1;
         Location sourceVertex = null;
 
@@ -107,29 +114,15 @@ public class USEI02UI implements Runnable {
     }
 
 
-    private List<Location> getDegreeSortedLocations(Graph<Location, Integer> graph) {
-        return graph.vertices().stream()
-                .sorted(Comparator.comparingInt(graph::outDegree).reversed())
-                .collect(Collectors.toList());
-    }
 
-    private List<Location> getCentralitySortedLocations(Graph<Location, Integer> graph) {
-        return graph.vertices().stream()
-                .sorted(Comparator.comparingInt(v -> {
-                    ArrayList<LinkedList<Location>> paths = Algorithms.allPaths(graph, (Location) v, null);
-                    return paths.size();
-                }).reversed())
-                .collect(Collectors.toList());
-    }
-
-    private <T> List<Location> sortLocationsByMetric(Map<Location, T> metricMap, Comparator<? super T> comparator) {
+    public static <T> List<Location> sortLocationsByMetric(Map<Location, T> metricMap, Comparator<? super T> comparator) { //O(n log n)
         return metricMap.entrySet().stream()
                 .sorted(Map.Entry.<Location, T>comparingByValue(comparator))
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
     }
 
-    private List<Double> calculateProximities(Graph<Location, Integer> graph, Location sourceVertex) {
+    public static List<Double> calculateProximities(Graph<Location, Integer> graph, Location sourceVertex) { // O(n^2)
         List<Double> proximities = new LinkedList<>();
 
         for (Location vertex : graph.vertices()) {
