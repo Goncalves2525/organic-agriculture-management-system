@@ -2,7 +2,7 @@ package graphs;
 
 import controller.ImportDataCtrl;
 import domain.Location;
-import domain.USEI03_DTO;
+import dto.USEI03_DTO;
 import org.junit.jupiter.api.Test;
 import ui.USEI03UI;
 

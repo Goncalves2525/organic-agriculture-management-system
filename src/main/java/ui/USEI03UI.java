@@ -1,7 +1,7 @@
 package ui;
 
 import domain.Location;
-import domain.USEI03_DTO;
+import dto.USEI03_DTO;
 import graphs.Algorithms;
 import graphs.Edge;
 import graphs.Graph;

@@ -1,4 +1,6 @@
-package domain;
+package dto;
+
+import domain.Location;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
