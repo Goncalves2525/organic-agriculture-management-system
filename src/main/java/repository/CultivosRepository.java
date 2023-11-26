@@ -71,4 +71,29 @@ public class CultivosRepository {
         }
         return cultivosList;
     }
+
+    public List<CultivosDTO> getCultivosForMondas() throws SQLException {
+
+        CallableStatement callStmt = null;
+        ResultSet resultSet = null;
+        List<CultivosDTO> cultivos = null;
+
+        try {
+            Connection connection = DatabaseConnection.getInstance().getConnection();
+            callStmt = connection.prepareCall("{ ? = call getCultivosForMondasData() }");
+            callStmt.registerOutParameter(1, OracleTypes.CURSOR);
+            callStmt.execute();
+            resultSet = (ResultSet) callStmt.getObject(1);
+            cultivos = resultSetToList(resultSet);
+        } finally {
+            if (!Objects.isNull(callStmt)) {
+                callStmt.close();
+            }
+            if (!Objects.isNull(resultSet)) {
+                resultSet.close();
+            }
+        }
+
+        return cultivos;
+    }
 }

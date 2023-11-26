@@ -9,8 +9,10 @@ public class CultivosDTO {
     private int culturaid;
     private String cultura;
     private String produto;
-    private int quantidade;
+    private double quantidade;
     private String UNIDADE = "un";
+
+    private String unidadeMonda = "ha";
     private String dataColheita;
 
     public int getParcelaid() {
@@ -33,7 +35,7 @@ public class CultivosDTO {
         return produto;
     }
 
-    public int getQuantidade() {
+    public double getQuantidade() {
         return quantidade;
     }
 
@@ -41,16 +43,24 @@ public class CultivosDTO {
         return UNIDADE;
     }
 
+    public String getUnidadeMonda() {
+        return unidadeMonda;
+    }
+
     public String getDataColheita() {
         return dataColheita;
     }
 
-    public void setQuantidade(int quantidade) {
+    public void setQuantidade(double quantidade) {
         this.quantidade = quantidade;
     }
 
     public void setDataColheita(String dataColheita) {
         this.dataColheita = dataColheita;
+    }
+
+    public void setUnidadeMonda(String unidadeMonda) {
+        this.unidadeMonda = unidadeMonda;
     }
 
     public CultivosDTO(int parcelaid, String parcela, int culturaid, String cultura, String produto) {

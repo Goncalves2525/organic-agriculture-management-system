@@ -1,6 +1,7 @@
 package repository;
 
 
+import dto.CultivosDTO;
 import dto.ParcelaDTO;
 import oracle.jdbc.OracleTypes;
 import tables.Mondas;
@@ -45,27 +46,28 @@ public class MondasRepository {
         return mondas;
     }
 
-    public boolean insertMondas(ParcelaDTO mondas) throws SQLException {
-        CallableStatement callStmt = null;
+    public boolean insertMondas(CultivosDTO cultivo) throws SQLException {
 
+        CallableStatement callStmt = null;
 
         try {
             Connection connection = DatabaseConnection.getInstance().getConnection();
-            callStmt = connection.prepareCall("{ ? = call INSERTMONDAS(?,?,?,?,?,?) }");
+            callStmt = connection.prepareCall("{ ? = call insertMondas(?,?,?,?,?,?,?,?) }");
 
             callStmt.registerOutParameter(1, OracleTypes.INTEGER);
 
             callStmt.setInt(2, 1);
-            callStmt.setInt(3, mondas.getIdParcela());
-            callStmt.setInt(4, mondas.getArea());
+            callStmt.setInt(3, cultivo.getParcelaid());
+            callStmt.setInt(4, cultivo.getCulturaid());
             callStmt.setInt(5,0);
-            callStmt.setString(6, mondas.getDataMonda());
-            callStmt.setString(7, mondas.getUNIDADE());
+            callStmt.setString(6, cultivo.getDataColheita());
+            callStmt.setDouble(7, cultivo.getQuantidade());
+            callStmt.setString(8, cultivo.getUnidadeMonda());
+            callStmt.setString(9, cultivo.getProduto());
 
             callStmt.execute();
             int outcome = callStmt.getInt(1);
             connection.commit();
-
 
             boolean sucesso = false;
             if (outcome == 1) {

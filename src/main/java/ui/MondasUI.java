@@ -1,6 +1,7 @@
 package ui;
 
 import controller.MondasController;
+import dto.CultivosDTO;
 import dto.ParcelaDTO;
 import tables.Mondas;
 import utils.AnsiColor;
@@ -22,23 +23,24 @@ public class MondasUI implements Runnable {
         printTable();
 
         try {
-        ParcelaDTO mondas;
+        CultivosDTO mondas;
 
         boolean option = false;
 
         do {
             Utils.showMessageColor("Escolha um produto de um dado cultivo, para proceder à MONDA.", AnsiColor.BLUE);
-            mondas = (ParcelaDTO) Utils.showAndSelectOneNoCancel(ctrlMondas.getParcelas(), "PARCELAS:");
+            mondas = (CultivosDTO) Utils.showAndSelectOneNoCancel(ctrlMondas.getCultivosForMondas(), "CULTIVOS:");
 
-            int area = mondas.getArea();
-            mondas.setArea(area);
+            //area
+            double quantidade = Utils.readDoubleFromConsole("Qual é a área em 'ha' em que deseja aplicar a operação MONDA?");
+            mondas.setQuantidade(quantidade);
 
-            String dataMonda = Utils.readLineFromConsole("Qual a data em que foi realizada a colheita? (aaaa-mm-dd)");
-            mondas.setDataMonda(dataMonda);
+            String dataMonda = Utils.readLineFromConsole("Qual a data em que foi realizada a monda? (aaaa-mm-dd)");
+            mondas.setDataColheita(dataMonda);
 
             Utils.showMessageColor("\nVou proceder ao registo da monda de: \n" +
                             mondas + "\n Data: " + dataMonda +
-                            " | Área:: " + mondas.getArea()
+                            " | Área:: " + mondas.getQuantidade()
                     , AnsiColor.CYAN);
 
             option = Utils.confirm("Confirma o registo com estes dados? (y/n)");

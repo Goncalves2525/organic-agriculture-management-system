@@ -121,30 +121,44 @@ End;
 * quero registar uma operação de monda.
 +/
 
--- Function to get the list of PARCELAS
-create or replace function getParcelasData return SYS_REFCURSOR
+-- Function to get the list of Mondas
+create or replace FUNCTION getMondas RETURN SYS_REFCURSOR IS
+    mondas_cursor SYS_REFCURSOR;
+BEGIN
+    OPEN mondas_cursor FOR
+        SELECT * FROM MONDAS;
+    RETURN mondas_cursor;
+END getMondas;
+
+-- Function to get the list of Cultivos for Mondas
+create or replace NONEDITIONABLE function getCultivosForMondasData return SYS_REFCURSOR
 is
     v_cursor SYS_REFCURSOR;
 begin
     open v_cursor for
         select
-            parcelas.QUINTAID,
-            parcelas.idParcela,
+            cultivos.parcelaid,
             parcelas.nome,
-            parcelas.area,
-            parcelas.UNIDADEMEDIDA
-        from parcelas;
+            cultivos.culturaid,
+            culturas.nomecompleto,
+            produtos.produto
+        from cultivos
+        left join parcelas on cultivos.parcelaid = parcelas.idparcela
+        left join culturas on cultivos.culturaid = culturas.idcultura
+        left join produtos on culturas.idcultura = produtos.culturaid;
     return v_cursor;
-end getParcelasData;
+end getCultivosForMondasData;
 
 -- Function to insert data into MONDAS AND OPERACOES
-create or replace FUNCTION insertMondas (
+CREATE OR REPLACE FUNCTION insertMondas (
     quinta_id number,
     parcela_id number,
-    area number,
+    cultura_id number,
     operador_id number,
     data_inicio varchar2,
-    unidade varchar2
+    quantidade_atual number,
+    unidade varchar2,
+    produto_atual varchar2
 ) RETURN NUMBER
 IS
     opid number;
@@ -153,10 +167,10 @@ begin
     opid := (getOperacoesMaxId + 1);
     begin
         -- Insert data into the table
-        INSERT INTO OPERACOES(idOperacao, QUINTAID, PARCELAID, OPERADORID, dataInicio)
-            VALUES (opid, quinta_id, parcela_id, 0, TO_DATE(data_inicio, 'YYYY-MM-DD'));
+        INSERT INTO OPERACOES(idOperacao, QUINTAID, PARCELAID, CULTURAID, OPERADORID, dataInicio)
+            VALUES (opid, quinta_id, parcela_id, cultura_id, 0, TO_DATE(data_inicio, 'YYYY-MM-DD'));
         INSERT INTO MONDAS(OPERACAOID, quantidade, UNIDADEMEDIDA)
-            VALUES (opid, area, unidade);
+            VALUES (opid, quantidade_atual, unidade);
         COMMIT; -- Commit the transaction if successful
         RETURN 1; -- Return success status
     EXCEPTION
@@ -508,6 +522,8 @@ WITH OperationData AS (
         O.dataInicio,
         O.dataFim,
         O.PARCELAID,
+        AF.quantidade,
+        AF.UNIDADEMEDIDA,
         'APLICACAO_FATPROD' AS OperationType
     FROM
         OPERACOES O
@@ -518,6 +534,8 @@ WITH OperationData AS (
         O.dataInicio,
         O.dataFim,
         O.PARCELAID,
+        S.quantidade,
+        S.UNIDADEMEDIDA,
         'SEMENTEIRA' AS OperationType
     FROM
         OPERACOES O
@@ -528,6 +546,8 @@ WITH OperationData AS (
         O.dataInicio,
         O.dataFim,
         O.PARCELAID,
+        S.quantidade,
+        S.UNIDADEMEDIDA,
         'PLANTACOES' AS OperationType
     FROM
         OPERACOES O
@@ -538,6 +558,8 @@ WITH OperationData AS (
         O.dataInicio,
         O.dataFim,
         O.PARCELAID,
+        S.quantidade,
+        S.UNIDADEMEDIDA,
         'REGAS' AS OperationType
     FROM
         OPERACOES O
@@ -548,6 +570,8 @@ WITH OperationData AS (
         O.dataInicio,
         O.dataFim,
         O.PARCELAID,
+        S.quantidade,
+        S.UNIDADEMEDIDA,
         'PODAS' AS OperationType
     FROM
         OPERACOES O
@@ -558,6 +582,8 @@ WITH OperationData AS (
         O.dataInicio,
         O.dataFim,
         O.PARCELAID,
+        S.quantidade,
+        S.UNIDADEMEDIDA,
         'INCORPS_SOLO' AS OperationType
     FROM
         OPERACOES O
@@ -568,6 +594,8 @@ WITH OperationData AS (
         O.dataInicio,
         O.dataFim,
         O.PARCELAID,
+        S.quantidade,
+        S.UNIDADEMEDIDA,
         'COLHEITAS' AS OperationType
     FROM
         OPERACOES O
@@ -578,6 +606,8 @@ WITH OperationData AS (
         O.dataInicio,
         O.dataFim,
         O.PARCELAID,
+        S.quantidade,
+        S.UNIDADEMEDIDA,
         'MONDAS' AS OperationType
     FROM
         OPERACOES O
@@ -588,6 +618,8 @@ WITH OperationData AS (
         O.dataInicio,
         O.dataFim,
         O.PARCELAID,
+        S.quantidade,
+        S.UNIDADEMEDIDA,
         'MOBILIZACOES_SOLO' AS OperationType
     FROM
         OPERACOES O
@@ -595,17 +627,23 @@ WITH OperationData AS (
 )
 SELECT
     OD.PARCELAID,
+    P.nome AS PARCELANAME,
+    C.CULTURAID,
+    CU.nome AS CULTURANAME,
     OD.dataInicio,
     OD.OperationType,
-    COUNT(*) AS OperationCount
+    OD.quantidade,
+    OD.UNIDADEMEDIDA
 FROM
     OperationData OD
+    JOIN PARCELAS P ON OD.PARCELAID = P.idParcela
+    JOIN CULTIVOS C ON OD.PARCELAID = C.PARCELAID
+    JOIN CULTURAS CU ON C.CULTURAID = CU.idCultura
 WHERE
-    OD.dataInicio BETWEEN TO_DATE('2010-12-10  ', 'YYYY-MM-DD') AND TO_DATE('2030-01-20', 'YYYY-MM-DD')
-GROUP BY
-    OD.PARCELAID, OD.DATAiNICIO, OD.OperationType
+    OD.dataInicio BETWEEN TO_DATE('2023-07-01', 'YYYY-MM-DD') AND TO_DATE('2023-10-02', 'YYYY-MM-DD')
+    AND P.nome = 'CAMPO NOVO'
 ORDER BY
-    OD.PARCELAID, OD.OperationType;
+    OD.OperationType, OD.datainicio;
 	
 
 /** ***************************************************************************************************************** */

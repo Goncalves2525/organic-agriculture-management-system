@@ -1,6 +1,8 @@
 package controller;
 
+import dto.CultivosDTO;
 import dto.ParcelaDTO;
+import repository.CultivosRepository;
 import repository.MondasRepository;
 import repository.ParcelasRepository;
 import tables.Mondas;
@@ -15,7 +17,9 @@ public class MondasController {
 
     private ParcelasRepository parcelasRepository;
 
-    public MondasController() {getMondasRepository(); getParcelasRepository();}
+    private CultivosRepository cultivosRepository;
+
+    public MondasController() {getMondasRepository(); getParcelasRepository(); getCultivosRepository();}
 
 
     private MondasRepository getMondasRepository() {
@@ -32,16 +36,22 @@ public class MondasController {
         return parcelasRepository;
     }
 
+    private CultivosRepository getCultivosRepository() {
+        if (Objects.isNull(cultivosRepository)) {
+            cultivosRepository = new CultivosRepository();
+        }
+        return cultivosRepository;
+    }
 
     public List<Mondas> getMondas() throws SQLException {
         return mondasRepository.getMondas();
     }
 
-    public boolean insertMondas(ParcelaDTO mondas) throws SQLException {
+    public boolean insertMondas(CultivosDTO mondas) throws SQLException {
         return mondasRepository.insertMondas(mondas);
     }
 
-    public List<ParcelaDTO> getParcelas() throws SQLException {
-        return parcelasRepository.getParcelas();
+    public List<CultivosDTO> getCultivosForMondas() throws SQLException {
+        return cultivosRepository.getCultivosForMondas();
     }
 }

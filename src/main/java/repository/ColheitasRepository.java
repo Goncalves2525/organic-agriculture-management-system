@@ -71,7 +71,7 @@ public class ColheitasRepository {
             callStmt.setInt(4, cultivo.getCulturaid());
             callStmt.setInt(5,0);
             callStmt.setString(6, cultivo.getDataColheita());
-            callStmt.setInt(7, cultivo.getQuantidade());
+            callStmt.setDouble(7, cultivo.getQuantidade());
             callStmt.setString(8, cultivo.getUNIDADE());
             callStmt.setString(9, cultivo.getProduto());
 
@@ -109,7 +109,7 @@ public class ColheitasRepository {
             if (!resultSet.next()) break;
             Colheitas aplicacao = new Colheitas(
                     resultSet.getInt("OPERACAOID"),
-                    resultSet.getInt("quantidade"),
+                    resultSet.getDouble("quantidade"),
                     resultSet.getString("UNIDADEMEDIDA")
             );
             colheitasList.add(aplicacao);
