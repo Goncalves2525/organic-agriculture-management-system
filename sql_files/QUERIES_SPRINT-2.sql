@@ -423,7 +423,7 @@ left join especies_vegetais e on c.especieVegetalID=e.idespecievegetal
 left join operacoes o on c.IdCultura=o.culturaID
 left join colheitas colhe on o.idoperacao=colhe.operacaoid
 left join parcelas par on o.parcelaid=par.idparcela
-INNER JOIN cultivos ON o.parcelaid = cultivos.parcelaid AND o.culturaid = cultivos.culturaid
+left join cultivos ON o.parcelaid = cultivos.parcelaid AND o.culturaid = cultivos.culturaid
 where o.dataInicio between p_dataInicio and p_dataFim and par.Nome=p_nome_Parcela
 group by e.especie, c.NomeCompleto,par.Nome;
 
