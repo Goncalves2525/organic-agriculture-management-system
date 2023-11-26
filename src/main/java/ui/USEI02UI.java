@@ -103,7 +103,7 @@ public class USEI02UI implements Runnable {
         Location sourceVertex = null;
 
         for (Location vertex : graph.vertices()) {
-            int degree = graph.outDegree(vertex); // Assuming outDegree represents influence
+            int degree = graph.outDegree(vertex);
             if (degree > maxDegree) {
                 maxDegree = degree;
                 sourceVertex = vertex;
