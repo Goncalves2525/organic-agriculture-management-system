@@ -36,95 +36,95 @@ public class ImportGFHData {
      * @param distanciasPath
      * @return true if successful and false if not.
      */
-    private boolean importExcel(String locaisPath, String distanciasPath) {
+    private boolean importExcel(String locaisPath, String distanciasPath) { // O(n)
         try {
             // Auxiliary path initializer
-            File currentDirFile = new File(".");
-            String pathSufix = currentDirFile.getAbsolutePath();
-            pathSufix = pathSufix.substring(0, pathSufix.length() - 1);
+            File currentDirFile = new File("."); // O(1)
+            String pathSufix = currentDirFile.getAbsolutePath(); // O(1)
+            pathSufix = pathSufix.substring(0, pathSufix.length() - 1); // O(1)
 
             // Path to locais Excel file
-            String excelLocaisPath = pathSufix + locaisPath;
+            String excelLocaisPath = pathSufix + locaisPath; // O(1)
 
             // Run method for Excel file
-            importLocais(excelLocaisPath);
+            importLocais(excelLocaisPath); // O(n)
 
             // Auxiliary path initializer
-            currentDirFile = new File(".");
-            pathSufix = currentDirFile.getAbsolutePath();
-            pathSufix = pathSufix.substring(0, pathSufix.length() - 1);
+            currentDirFile = new File("."); // O(1)
+            pathSufix = currentDirFile.getAbsolutePath(); // O(1)
+            pathSufix = pathSufix.substring(0, pathSufix.length() - 1); // O(1)
 
             // Path to distancias Excel file
-            String excelDistanciasPath = pathSufix + distanciasPath;
+            String excelDistanciasPath = pathSufix + distanciasPath; // O(1)
 
             // Run method for Excel file
-            importDistancias(excelDistanciasPath);
+            importDistancias(excelDistanciasPath); // O(n)
 
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            e.printStackTrace(); // O(1)
             return false;
         }        
     }
 
-    private void importLocais(String excelLocaisPath){
+    private void importLocais(String excelLocaisPath){ // O(n)
         try {
             // load the data from file
-            Scanner sc = new Scanner(new FileReader(excelLocaisPath)).useDelimiter("\n");
+            Scanner sc = new Scanner(new FileReader(excelLocaisPath)).useDelimiter("\n"); // O(1)
 
             // checking each line, adding it to string and each of this to arraylist
-            sc.next();
-            while (sc.hasNext()) {
-                String[] array = sc.next().split(",");
+            sc.next(); // O(1)
+            while (sc.hasNext()) { // O(n)
+                String[] array = sc.next().split(","); // O(n)
 
                 // get data to variables
-                String code = array[0];
-                int numberOfEmployees = Integer.parseInt(array[0].substring(2));
-                double latitude = Double.parseDouble(array[1]);
-                double longitude = Double.parseDouble(array[2]);
-                int openHour;
-                int closeHour;
-                if (numberOfEmployees <= 105) {
-                    openHour = 9;
-                    closeHour = 14;
-                } else if (numberOfEmployees <= 215) {
-                    openHour = 11;
-                    closeHour = 16;
-                } else {
-                    openHour = 12;
-                    closeHour = 17;
+                String code = array[0]; // O(1)
+                int numberOfEmployees = Integer.parseInt(array[0].substring(2)); // O(1)
+                double latitude = Double.parseDouble(array[1]); // O(1)
+                double longitude = Double.parseDouble(array[2]); // O(1)
+                int openHour; // O(1)
+                int closeHour; // O(1)
+                if (numberOfEmployees <= 105) { // O(1)
+                    openHour = 9; // O(1)
+                    closeHour = 14; // O(1)
+                } else if (numberOfEmployees <= 215) { // O(1)
+                    openHour = 11; // O(1)
+                    closeHour = 16; // O(1)
+                } else { // O(1)
+                    openHour = 12; // O(1)
+                    closeHour = 17; // O(1)
                 }
 
-                Location location = new Location(code, numberOfEmployees, latitude, longitude, openHour, closeHour);
+                Location location = new Location(code, numberOfEmployees, latitude, longitude, openHour, closeHour); // O(1)
 
                 // add to matrix
-                gfh.addLocation(location);
+                gfh.addLocation(location); // O(1)
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // O(1)
         }
     }
 
-    private void importDistancias(String excelDistanciasPath){
+    private void importDistancias(String excelDistanciasPath){ // O(n)
         try {
             // load the data from file
-            Scanner sc = new Scanner(new FileReader(excelDistanciasPath)).useDelimiter("\n");
+            Scanner sc = new Scanner(new FileReader(excelDistanciasPath)).useDelimiter("\n"); // O(1)
 
             // checking each line, adding it to string and each of this to arraylist
-            sc.next();
-            while (sc.hasNext()) {
-                String[] array = sc.next().split(",");
+            sc.next(); // O(1)
+            while (sc.hasNext()) { // O(n)
+                String[] array = sc.next().split(","); // O(1)
 
                 // get data to variables
-                String codeOrig = array[0];
-                String codeDest = array[1];
-                Integer distance = Integer.parseInt(array[2].split("\r")[0]);
+                String codeOrig = array[0]; // O(1)
+                String codeDest = array[1]; // O(1)
+                Integer distance = Integer.parseInt(array[2].split("\r")[0]); // O(1)
 
                 // add to matrix
-                gfh.addDistance(codeOrig, codeDest, distance);
+                gfh.addDistance(codeOrig, codeDest, distance); // O(1)
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            e.printStackTrace(); // O(1)
         }
     }
 }
