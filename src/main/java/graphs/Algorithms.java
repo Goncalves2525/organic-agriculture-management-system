@@ -566,7 +566,7 @@ public class Algorithms {
 
     public static <V, E> boolean hamiltonianPathUtil(Graph<V, E> g, boolean[] visited, LinkedList<V> path, int pos) {
         if (pos == g.numVertices()) {
-            return true;  // All vertices are visited
+            return true;
         }
 
         V lastVertex = path.getLast();

@@ -1,6 +1,8 @@
 package controller;
 
+import dto.ParcelaDTO;
 import repository.MondasRepository;
+import repository.ParcelasRepository;
 import tables.Mondas;
 
 import java.sql.SQLException;
@@ -11,7 +13,10 @@ public class MondasController {
 
     private MondasRepository mondasRepository;
 
-    public MondasController() {getMondasRepository();}
+    private ParcelasRepository parcelasRepository;
+
+    public MondasController() {getMondasRepository(); getParcelasRepository();}
+
 
     private MondasRepository getMondasRepository() {
         if (Objects.isNull(mondasRepository)) {
@@ -20,12 +25,23 @@ public class MondasController {
         return mondasRepository;
     }
 
+    private ParcelasRepository getParcelasRepository() {
+        if (Objects.isNull(parcelasRepository)) {
+            parcelasRepository = new ParcelasRepository();
+        }
+        return parcelasRepository;
+    }
+
+
     public List<Mondas> getMondas() throws SQLException {
         return mondasRepository.getMondas();
     }
 
-    public int insertMondas(int operacaoId, int quantidade, String unidadeMedida) throws SQLException {
-        int worked = mondasRepository.insertMondas(operacaoId, quantidade, unidadeMedida);
-        return worked;
+    public boolean insertMondas(ParcelaDTO mondas) throws SQLException {
+        return mondasRepository.insertMondas(mondas);
+    }
+
+    public List<ParcelaDTO> getParcelas() throws SQLException {
+        return parcelasRepository.getParcelas();
     }
 }

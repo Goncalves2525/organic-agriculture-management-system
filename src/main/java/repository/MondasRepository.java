@@ -1,7 +1,10 @@
 package repository;
 
+
+import dto.ParcelaDTO;
 import oracle.jdbc.OracleTypes;
 import tables.Mondas;
+import utils.AnsiColor;
 import utils.Utils;
 
 import java.sql.CallableStatement;
@@ -42,30 +45,43 @@ public class MondasRepository {
         return mondas;
     }
 
-    public int insertMondas(int operacaoId, int quantidade, String unidadeMedida) throws SQLException {
+    public boolean insertMondas(ParcelaDTO mondas) throws SQLException {
         CallableStatement callStmt = null;
-        int worked = -1;
+
 
         try {
             Connection connection = DatabaseConnection.getInstance().getConnection();
-            callStmt = connection.prepareCall("{ ? = call INSERTMONDAS(?, ?, ?) }");
+            callStmt = connection.prepareCall("{ ? = call INSERTMONDAS(?,?,?,?,?,?) }");
 
             callStmt.registerOutParameter(1, OracleTypes.INTEGER);
-            callStmt.setInt(2, operacaoId);
-            callStmt.setInt(3, quantidade);
-            callStmt.setString(4, unidadeMedida);
+
+            callStmt.setInt(2, 1);
+            callStmt.setInt(3, mondas.getIdParcela());
+            callStmt.setInt(4, mondas.getArea());
+            callStmt.setInt(5,0);
+            callStmt.setString(6, mondas.getDataMonda());
+            callStmt.setString(7, mondas.getUNIDADE());
 
             callStmt.execute();
-            worked = callStmt.getInt(1);
+            int outcome = callStmt.getInt(1);
             connection.commit();
-            System.out.println("Data inserted successfully!");
+
+
+            boolean sucesso = false;
+            if (outcome == 1) {
+                sucesso = true;
+                Utils.showMessageColor("Monda registada com sucesso!", AnsiColor.GREEN);
+                return sucesso;
+            } else {
+                Utils.showMessageColor("Monda não resgistada.", AnsiColor.RED);
+                return sucesso;
+            }
+
         } finally {
             if (!Objects.isNull(callStmt)) {
                 callStmt.close();
             }
         }
-
-        return worked;
     }
 
     private List<Mondas> resultSetToList(ResultSet resultSet) throws SQLException {

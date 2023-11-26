@@ -5,6 +5,57 @@
 /** ***************************************************************************************************************** */
 
 /* USBD12 */
+* Como Gestor Agrícola,
+* quero registar uma operação de monda.
++/
+
+-- Function to get the list of PARCELAS
+create or replace function getParcelasData return SYS_REFCURSOR
+is
+    v_cursor SYS_REFCURSOR;
+begin
+    open v_cursor for
+        select
+            parcelas.QUINTAID,
+            parcelas.idParcela,
+            parcelas.nome,
+            parcelas.area,
+            parcelas.UNIDADEMEDIDA
+        from parcelas;
+    return v_cursor;
+end getParcelasData;
+
+-- Function to insert data into MONDAS AND OPERACOES
+create or replace FUNCTION insertMondas (
+    quinta_id number,
+    parcela_id number,
+    area number,
+    operador_id number,
+    data_inicio varchar2,
+    unidade varchar2
+) RETURN NUMBER
+IS
+    opid number;
+    quantidade_nova number;
+begin
+    opid := (getOperacoesMaxId + 1);
+    begin
+        -- Insert data into the table
+        INSERT INTO OPERACOES(idOperacao, QUINTAID, PARCELAID, OPERADORID, dataInicio)
+            VALUES (opid, quinta_id, parcela_id, 0, TO_DATE(data_inicio, 'YYYY-MM-DD'));
+        INSERT INTO MONDAS(OPERACAOID, quantidade, UNIDADEMEDIDA)
+            VALUES (opid, area, unidade);
+        COMMIT; -- Commit the transaction if successful
+        RETURN 1; -- Return success status
+    EXCEPTION
+        -- Rollback the transaction if an exception occurs
+        WHEN OTHERS THEN
+            ROLLBACK;
+            -- Log or handle the exception
+            DBMS_OUTPUT.PUT_LINE('Error: ' || SQLERRM);
+            RETURN 0; -- Return failure status
+    END;
+END insertMondas;
 
 /** ***************************************************************************************************************** */
 
