@@ -329,7 +329,7 @@ BEGIN
     idOperacao := getOperacoesMaxId + 1;
     SELECT idparcela INTO parcelaID FROM Parcelas WHERE parcelaNome = parcelas.nome;
     correctArea := func_check_parcela(parcelaID, area);
-    IF correctArea = false THEN
+    IF correctArea THEN
         INSERT INTO OPERACOES(IDOPERACAO, QUINTAID, PARCELAID, CULTURAID, OPERADORID, DATAINICIO, DATAFIM) values (idOperacao, quintaID, parcelaID, culturaID, operadorID, dataInicio, null);
         INSERT INTO APLICACOES_FATPROD(OPERACAOID, FATORPRODID, QUANTIDADE, UNIDADEMEDIDA) values (idOperacao, fatorProdID, quantidade, unidadeMedida);
         COMMIT;
