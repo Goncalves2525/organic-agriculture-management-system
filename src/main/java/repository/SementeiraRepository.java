@@ -2,6 +2,8 @@ package repository;
 
 import oracle.jdbc.OracleTypes;
 import tables.Sementeiras;
+import utils.AnsiColor;
+import utils.Utils;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -84,9 +86,6 @@ public class SementeiraRepository {
                 readStmt.registerOutParameter(2, OracleTypes.NUMERIC);
 
                 // Loop to retrieve messages until no more available
-
-
-                //adicionar cor
                 while (true) {
                     readStmt.setInt(2, 32000);  // Maximum line length
                     readStmt.execute();
@@ -99,10 +98,9 @@ public class SementeiraRepository {
             }
 
             if(result)
-                System.out.println("\nOperação de semeadura registada com sucesso!");
+                Utils.showMessageColor("\nOperação de semeadura registada com sucesso!", AnsiColor.GREEN);
             else{
-                System.out.println("\nOperação de semeadura não registada, com o seguinte erro: " + errorMessage);
-
+                Utils.showMessageColor("\nOperação de semeadura não registada, com o seguinte erro: " + errorMessage, AnsiColor.RED);
             }
 
             //System.out.println(result);
