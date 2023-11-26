@@ -1,14 +1,9 @@
 package ui;
 
-
 import domain.Location;
 import dto.USEI04_DTO;
-import graphs.Algorithms;
-import graphs.Edge;
 import graphs.Graph;
 import java.util.*;
-
-import static graphs.Algorithms.calculatePathWeight;
 
 public class USEI04UI implements Runnable {
 
@@ -52,7 +47,7 @@ public class USEI04UI implements Runnable {
         }
     }
 
-    private USEI04_DTO findShortestHamiltonianPath(Graph<Location, Integer> g) {
+    public USEI04_DTO findShortestHamiltonianPath(Graph<Location, Integer> g) {
         //Get the nr of vertices in the graph
         int numVerts = g.numVertices(); // O(1)
 
@@ -126,7 +121,7 @@ public class USEI04UI implements Runnable {
         return false;
     }
 
-    private int calculatePathWeight(Graph<Location, Integer> g, LinkedList<Location> path) {
+    public int calculatePathWeight(Graph<Location, Integer> g, LinkedList<Location> path) {
         int weight = 0;
         // for loop that goes thorugh the path to calculte it's cost
         for (int i = 0; i < path.size() - 1; i++) { //O(n)
