@@ -1,0 +1,107 @@
+@startuml
+''' FORMATING:
+'skinparam monochrome false
+'skinparam packageStyle rectangle
+'skinparam shadowing false
+skinparam linetype ortho
+'left to right direction
+'skinparam classAttributeIconSize 0
+
+''' TITLE:
+title ESINF Class Diagram Project 03
+
+
+
+''' CLASSES:
+class Coordinate {
+    - latitude : double
+    - longitude : double
+    + Coordinate(double, double)
+    + double getLatitude()
+    + double getLongitude()
+    + String toString()
+    + equals(Object)
+    + String toString()
+    + boolean equals(Object obj)
+}
+
+class Distance{
+    - origLocation : Location
+    - destLocation : Location
+    - distance : int
+    + Distance(Location origLocation,
+    Location destLocation, int distance)
+    + Location getOrigLocation()
+    + Location getDestLocation()
+    + int getDistance()
+    + int compareTo(Distance o)
+}
+
+class Location {
+    - code : String
+    - numberOfEmployees : int
+    - coordinate : Coordinate
+    - schedule : Schedule
+    + Location(String code, int numberOfEmployees,
+    double latitude, double longitude, int openHour, int closeHour)
+    + String getCode()
+    + int getNumberOfEmployees()
+    + Coordinate getCoordinate()
+    + Schedule getSchedule()
+}
+
+class Schedule {
+    - openHour : int
+    - closeHour : int
+    + Schedule(int openHour, int closeHour)
+    + int getOpenHour()
+    + int getCloseHour()
+    + String toString()
+}
+
+class GFH {
+    - gfh : Graph<Location, Integer>
+    + GFH()
+    + boolean addLocation(Location location)
+    + addDistance(String locA, String locB, Integer distance)
+    + String toString()
+}
+
+class Algorithms {
+    + <V, E> LinkedList<V> BreadthFirstSearch(Graph<V, E> g, V vert)
+    - <V, E> void DepthFirstSearch(Graph<V, E> g, V vOrig, boolean[] visited, LinkedList<V> qdfs)
+    + <V, E> LinkedList<V> DepthFirstSearch(Graph<V, E> g, V vert)
+    - <V, E> void allPaths(Graph<V, E> g, V vOrig, V vDest, boolean[] visited,
+                                              LinkedList<V> path, ArrayList<LinkedList<V>> paths)
+    + <V, E> ArrayList<LinkedList<V>> allPaths(Graph<V, E> g, V vOrig, V vDest)
+    - <V, E> void shortestPathDijkstra(Graph<V, E> g, V vOrig,
+                                                          Comparator<E> ce, BinaryOperator<E> sum, E zero,
+                                                          boolean[] visited, V[] pathKeys, E[] dist)
+    - <E> int getVertMinDist(E[] dist, boolean[] visited, Comparator<E> ce)
+    - <V, E> Integer getVertMinDist(Graph<V, E> g, V vOrig, E[] dist, boolean[] visited, Comparator<E> ce, E zero)
+    + <V, E> E shortestPath(Graph<V, E> g, V vOrig, V vDest,
+                                              Comparator<E> ce, BinaryOperator<E> sum, E zero,
+                                              LinkedList<V> shortPath)
+    + <V, E> boolean shortestPaths(Graph<V, E> g, V vOrig,
+                                                     Comparator<E> ce, BinaryOperator<E> sum, E zero,
+                                                     ArrayList<LinkedList<V>> paths, ArrayList<E> dists)
+    - <V, E> void getPath(Graph<V, E> g, V vOrig, V vDest,
+                                             V[] pathKeys, LinkedList<V> path)
+    + <V, E> MatrixGraph<V, E> minDistGraph1(Graph<V, E> g, Comparator<E> ce, BinaryOperator<E> sum)
+    + <V, E> MatrixGraph<V, E> minDistGraph2(Graph<V, E> g, Comparator<E> ce, BinaryOperator<E> sum)
+    + <V, E extends Comparable<E>> Graph<V, E> kruskalAlgorithm(Graph<V, E> g)
+    - <V, E> boolean createsCycle(Graph<V, E> graph, V vOrig, V vDest)
+    - <V, E> boolean createsCycleHelper(Graph<V, E> graph, V currentVertex, V targetVertex, LinkedList<V> visitedVertices)
+    + <V, E> int calculatePathWeight(Graph<V, E> g, LinkedList<V> path)
+    + <V, E> Map<V, Integer> calculateInfluence(Graph<V, E> graph)
+}
+
+''' RELATIONS:
+Location --> Coordinate : has
+Location --> Schedule : has
+Distance "1" *--- "2" Location : composed of >
+Location "0..*" -- "1" GFH : contained in >
+Distance "0..*" -- "1" GFH : contained in >
+Algorithms "0..*" --- "1" GFH : used by >
+
+@enduml

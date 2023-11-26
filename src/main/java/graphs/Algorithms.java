@@ -236,8 +236,7 @@ public class Algorithms {
         return indice;
     }
 
-    /** NOT-OK **/ //TODO: corrigir!
-
+    /** OK **/
     /**
      * Shortest-path between two vertices
      *
@@ -372,8 +371,8 @@ public class Algorithms {
 
         for (int i = 0; i < numVerts; i++) { // O(V^2)
             for (int j = 0; j < numVerts; j++) { // O(V)
-                Edge<V,E> edge = g2.edge(i, j); // O(1)
-                if (edge != null){ // O(1)
+                Edge<V, E> edge = g2.edge(i, j); // O(1)
+                if (edge != null) { // O(1)
                     edges[i][j] = edge.getWeight(); // O(1)
                 }
             }
@@ -550,7 +549,6 @@ public class Algorithms {
     ///// MAXIMUM NETWORK FLOW /////////////////////////////////////////////////////////////////////////////////////////
 
     // todo: ford-fulkerson
-
     public static <V, E> int calculatePathWeight(Graph<V, E> g, LinkedList<V> path) {
         int weight = 0;
         for (int i = 0; i < path.size() - 1; i++) {

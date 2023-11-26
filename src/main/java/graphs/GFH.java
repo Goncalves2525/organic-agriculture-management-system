@@ -54,11 +54,4 @@ public class GFH {
     public String toString() {
         return gfh.toString();
     }
-
-    // TODO: impletementar exercicios abaixo
-
-    // TODO: aqui ou na classe Algorithms? ou na MatrixGraph?
-
-
-
 }
