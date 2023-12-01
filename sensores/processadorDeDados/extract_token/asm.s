@@ -7,6 +7,7 @@
         movb $35, %cl                   # %cl = '#'
         movq %rsi, %r10                 # %r10 = save char* token initial address
         movb $115, %r8b                 # %r8b = 's'
+        movl $1, %eax                   # result = 1 
 
         cmpb %r8b, (%rdi)               # check if it is 's'
         je check_token
@@ -32,7 +33,6 @@
             addq $1, %rdi               # input++
             addq $1, %rsi               # token++
             jmp check_token
-            
 
         prepare_correct_token:
             addq $1, %rdi               # input++
@@ -43,6 +43,8 @@
             je prepare_convert_to_int
             cmpb $0, (%rdi)             # check if it is end of string
             je prepare_convert_to_int
+            cmpb $60, (%rdi)            # check if char is not a number
+            jg return_0                 
             addq $1, %rdi               # input++
             jmp correct_token
 
@@ -70,6 +72,10 @@
         
         store_output_value:
             movl %r10d, (%rdx)          # output = sum
+            jmp end
+        
+        return_0:
+            movl $0, %eax               # result = 0
 
         end:
             ret
