@@ -1,5 +1,6 @@
 package graphs;
 
+import domain.Location;
 import graphs.map.MapGraph;
 import graphs.matrix.MatrixGraph;
 
@@ -95,6 +96,50 @@ public class Algorithms {
 
 
     ///// PATHS ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    public static <T> void copyLinkedList(LinkedList<T> source, LinkedList<T> destination) {
+        destination.clear();
+
+        for (T element : source) {
+            destination.add(element);
+        }
+    }
+
+    public static <V, E> ArrayList<LinkedList<V>> allPathsAutonomy(Graph<V, E> g, V vOrig, V vDest, int autonomy) {
+        if (g.numVertices() <= 0) {
+            return null;
+        }
+
+        boolean[] visited = new boolean[g.numVertices()];
+        LinkedList<V> path = new LinkedList<>();
+        ArrayList<LinkedList<V>> paths = new ArrayList<>();
+
+        allPathsAutonomy(g, vOrig, vDest, visited, path, paths, autonomy);
+
+        return paths;
+    }
+
+    private static <V, E> void allPathsAutonomy(Graph<V, E> g, V vOrig, V vDest, boolean[] visited,
+                                                LinkedList<V> path, ArrayList<LinkedList<V>> paths,
+                                                int remainingAutonomy) {
+        path.push(vOrig);
+        visited[g.key(vOrig)] = true;
+
+        for (V vAdj : g.adjVertices(vOrig)) {
+            if (vAdj == vDest) {
+                path.add(vDest);
+                LinkedList<V> pathCopy = new LinkedList<>();
+                copyLinkedList(path, pathCopy);
+                paths.add(pathCopy);
+                path.removeLast();
+            } else {
+                if (!visited[g.key(vAdj)] && remainingAutonomy > 0) {
+                    allPathsAutonomy(g, vAdj, vDest, visited, path, paths, remainingAutonomy - 1);
+                }
+            }
+        }
+        visited[g.key(vOrig)] = false;
+        path.pop();
+    }
 
     /** OK **/
     /**
@@ -109,21 +154,27 @@ public class Algorithms {
      */
     private static <V, E> void allPaths(Graph<V, E> g, V vOrig, V vDest, boolean[] visited,
                                         LinkedList<V> path, ArrayList<LinkedList<V>> paths) {
-        path.push(vOrig);
+
+        path.add(vOrig);
         visited[g.key(vOrig)] = true;
+
         for (V vAdj : g.adjVertices(vOrig)) {
             if (vAdj == vDest) {
-                path.push(vDest);
-                paths.add(path);
-                path.pop();
+                path.add(vDest);
+                LinkedList<V> pathCopy = new LinkedList<>();
+                copyLinkedList(path, pathCopy);
+                paths.add(pathCopy);
+                path.removeLast();
             } else {
-                if (visited[g.key(vAdj)]) {
+                if (!visited[g.key(vAdj)]) {
                     allPaths(g, vAdj, vDest, visited, path, paths);
                 }
             }
-            path.pop();
         }
+        visited[g.key(vOrig)] = false;
+        path.removeLast();
     }
+
 
     /** OK **/
     /**
@@ -142,11 +193,11 @@ public class Algorithms {
         boolean[] visited = new boolean[g.numVertices()];
         LinkedList<V> path = new LinkedList<>();
         ArrayList<LinkedList<V>> paths = new ArrayList<>();
-
         allPaths(g, vOrig, vDest, visited, path, paths);
 
         return paths;
     }
+
 
     /** OK **/
     /**

@@ -1,7 +1,6 @@
 package domain;
 
 public class Location {
-
     public final String code;
     public final int numberOfEmployees;
     public final Coordinate coordinate;
