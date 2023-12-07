@@ -119,26 +119,34 @@ public class Algorithms {
     }
 
     private static <V, E> void allPathsAutonomy(Graph<V, E> g, V vOrig, V vDest, boolean[] visited,
-                                                LinkedList<V> path, ArrayList<LinkedList<V>> paths,
-                                                int remainingAutonomy) {
-        path.push(vOrig);
+                                                LinkedList<V> path, ArrayList<LinkedList<V>> paths, double autonomy) {
+
+        path.add(vOrig);
         visited[g.key(vOrig)] = true;
 
         for (V vAdj : g.adjVertices(vOrig)) {
-            if (vAdj == vDest) {
-                path.add(vDest);
-                LinkedList<V> pathCopy = new LinkedList<>();
-                copyLinkedList(path, pathCopy);
-                paths.add(pathCopy);
-                path.removeLast();
-            } else {
-                if (!visited[g.key(vAdj)] && remainingAutonomy > 0) {
-                    allPathsAutonomy(g, vAdj, vDest, visited, path, paths, remainingAutonomy - 1);
+            Edge edge = g.edge(vOrig, vAdj);
+            Integer edgeWeight = (Integer) edge.getWeight();
+
+            if (autonomy >= edgeWeight) {
+                autonomy -= edgeWeight;
+
+                if (vAdj == vDest) {
+                    path.add(vDest);
+                    LinkedList<V> pathCopy = new LinkedList<>(path);
+                    paths.add(pathCopy);
+                    path.removeLast();
+                } else {
+                    if (!visited[g.key(vAdj)]) {
+                        allPathsAutonomy(g, vAdj, vDest, visited, path, paths, autonomy);
+                    }
                 }
+
+                autonomy += edgeWeight;
             }
         }
         visited[g.key(vOrig)] = false;
-        path.pop();
+        path.removeLast();
     }
 
     /** OK **/
