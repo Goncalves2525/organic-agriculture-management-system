@@ -27,7 +27,7 @@ public class AplicacoesController {
         return aplicacoesList;
     }
 
-    public int aplicacoesRegister(int quintaID, String parcelaNome, int culturaID, int operadorID, Date dataInicio, String fatorProducaoID, int quantidade, String unidadeMedidaID, float area) throws SQLException {
+    public int aplicacoesRegister(int quintaID, String parcelaNome, int culturaID, int operadorID, Date dataInicio, String fatorProducaoID, int quantidade, String unidadeMedidaID, double area) throws SQLException {
         int worked = aplicacoesRepository.aplicacoesRegister(quintaID, parcelaNome, culturaID, operadorID, dataInicio, fatorProducaoID, quantidade, unidadeMedidaID, area);
         return worked;
     }

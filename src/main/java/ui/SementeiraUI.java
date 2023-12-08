@@ -22,7 +22,7 @@ public class SementeiraUI implements Runnable{
             int p_id_Quinta = 1;
             String parcela = Utils.readLineFromConsole("Parcela: ");
             int p_id_Operador = 123456789;
-            String dataInicio = Utils.readLineFromConsole("Data de início, no formato dd-MM-yyyy:");
+            String dataInicio = Utils.readLineFromConsole("Data de início, no formato yyyy-MM-dd:");
             //String dataFim = Utils.readLineFromConsole("Data de fim, no formato dd-MM-yyyy:");
             String dataFim = dataInicio;
             String produto = Utils.readLineFromConsole("Produto a semear:");

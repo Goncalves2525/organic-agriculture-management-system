@@ -2,6 +2,7 @@ package ui;
 
 import controller.AplicacoesController;
 import tables.AplicacoesFatProd;
+import utils.Utils;
 
 import java.sql.Date;
 import java.sql.SQLException;
@@ -83,8 +84,9 @@ public class AplicacoesUI implements Runnable {
         sc.nextLine();
         System.out.println("Unidade de Medida: ");
         String unidadeMedidaID = sc.nextLine();
-        System.out.println("Area: ");
-        float area = sc.nextFloat();
+        //System.out.println("Area: ");
+        //double area = sc.nextDouble();
+        double area = Utils.readDoubleFromConsole("Area: ");
 
         int worked = controller.aplicacoesRegister(quintaID, parcelaNome, culturaID, opradorID, dataInicio, fatorProducaoID, quantidade, unidadeMedidaID, area);
 

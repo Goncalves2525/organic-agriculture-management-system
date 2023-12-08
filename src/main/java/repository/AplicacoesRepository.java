@@ -44,7 +44,7 @@ public class AplicacoesRepository {
         return aplicacoes;
     }
 
-    public int aplicacoesRegister(int quintaID, String parcelaNome, int culturaID, int operadorID, Date dataInicio, String fatorProducaoID, int quantidade, String unidadeMedidaID, float area) throws SQLException {
+    public int aplicacoesRegister(int quintaID, String parcelaNome, int culturaID, int operadorID, Date dataInicio, String fatorProducaoID, int quantidade, String unidadeMedidaID, double area) throws SQLException {
 
         CallableStatement callStmt = null;
         int worked = -1;
@@ -68,7 +68,7 @@ public class AplicacoesRepository {
             callStmt.setString(7, fatorProducaoID);
             callStmt.setInt(8, quantidade);
             callStmt.setString(9, unidadeMedidaID);
-            callStmt.setFloat(10, area);
+            callStmt.setDouble(10, area);
 
             callStmt.execute();
             worked = callStmt.getInt(1);

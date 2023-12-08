@@ -292,7 +292,7 @@ begin
     select produtos.quantidade into quantidade_ver
     from produtos
     where produtos.culturaid = idcultura;
-    if quantidade_ver is null then quantidade_ver := 0;
+    if quantidade_ver is null then quantidade_ver := 0; end if;
     return quantidade_ver;
 exception
     when others then
