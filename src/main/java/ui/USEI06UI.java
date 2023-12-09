@@ -4,10 +4,11 @@ import domain.Location;
 import graphs.Algorithms;
 import graphs.Edge;
 import graphs.Graph;
+import utils.AnsiColor;
 import utils.Utils;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.sql.SQLOutput;
+import java.util.*;
 
 public class USEI06UI implements Runnable {
     private Graph<Location, Integer> gfh;
@@ -19,16 +20,58 @@ public class USEI06UI implements Runnable {
     @Override
     public void run() {
         ArrayList<Location> vertices = gfh.vertices();
-        Location origem = gfh.vertices().get(0);
+        ArrayList<Location> hubs = new ArrayList<>();
         Location hubDestino = null;
-        String hubDestinoCode = "CT10";
-        for (Location destino : vertices) {
-            if (destino.getCode().equals(hubDestinoCode)) {
-                hubDestino = destino;
+
+        int nHubs = Utils.readIntegerFromConsole("Insira o número de hubs: ");
+        int autonomia = Utils.readIntegerFromConsole("Insira a autonomia do veículo: ");
+        int velocidade = Utils.readIntegerFromConsole("Insira a velocidade (km/h) média do veículo: ");
+
+        Map<Location, Integer> influenceMap = Algorithms.calculateInfluence(gfh);
+        List<Location> sortedLocationsByInfluence = USEI02UI.sortLocationsByMetric(influenceMap, Comparator.reverseOrder());
+        for (Location location : sortedLocationsByInfluence) {
+            if (hubs.size() < nHubs) {
+                location.setHub(true);
+                hubs.add(location);
             }
         }
 
-        int autonomia = Utils.readIntegerFromConsole("Insira a autonomia do veículo: ");
+        Location origem = null;
+        boolean found = false;
+        do {
+            String localOrigemCode = Utils.readLineFromConsole("Insira o código do local do hub de origem: ");
+            for (Location location : vertices) {
+                if (location.getCode().equals(localOrigemCode)) {
+                    origem = location;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                System.out.println("Código inválido.");
+        } while (!found);
+
+        System.out.println();
+        Utils.showMessageColor("HUBS", AnsiColor.BLUE);
+        for (Location hub : hubs) {
+            System.out.println(hub.getCode());
+        }
+
+        found = false;
+        do {
+            String hubDestinoCode = Utils.readLineFromConsole("Insira o código do local do hub de destino: ");
+            for (Location hub : hubs) {
+                if (hub.getCode().equals(hubDestinoCode)) {
+                    hubDestino = hub;
+                    found = true;
+                    break;
+                }
+            }
+            if (!found)
+                System.out.println("Código inválido.");
+        }while (!found);
+
+
 
         ArrayList<LinkedList<Location>> allPathsAutonomy = Algorithms.allPathsAutonomy(gfh, origem, hubDestino, autonomia);
 
@@ -37,7 +80,7 @@ public class USEI06UI implements Runnable {
         } else if (allPathsAutonomy.isEmpty()) {
             System.out.println("Não há caminhos possíveis.");
         } else {
-            System.out.println("Caminhos possíveis:");
+            Utils.showMessageColor("Caminhos possíveis: ", AnsiColor.BLUE);
             for (LinkedList<Location> path : allPathsAutonomy) {
 
                 Integer distance = 0;
@@ -47,16 +90,29 @@ public class USEI06UI implements Runnable {
                     Edge edge = gfh.edge(path.get(i), path.get(i + 1));
                     Integer weight = (Integer) edge.getWeight();
                     distance += weight;
+
                     if (i == 0)
-                        System.out.print(path.get(i).getCode() + " -> " + "(" + weight + "m) " + path.get(i + 1).getCode());
+                        System.out.print(path.get(i).getCode() + printIfHub(path.get(i)) + " -> " + "(" + weight + "m) " + path.get(i + 1).getCode() + printIfHub(path.get(i)));
                     else
-                        System.out.print(" -> " + "(" + weight + "m) " + path.get(i + 1).getCode());
+                        System.out.print(" -> " + "(" + weight + "m) " + path.get(i + 1).getCode() + printIfHub(path.get(i + 1)));
                 }
-                System.out.println("\nDistância Total: " + distance + "m\n");
+
+                int distanciaEmKm = distance / 1000;
+                double tempo = (double) distanciaEmKm / velocidade;
+                System.out.printf("\nTempo Total: %.2fh\n", tempo);
+                System.out.println("Distância Total: " + distance + "m | " + distanciaEmKm + "km\n");
+                System.out.println();
                 System.out.println();
             }
         }
 
+    }
+
+    public String printIfHub(Location location) {
+        if (location.isHub())
+            return " (hub)";
+        else
+            return "";
     }
 
 }

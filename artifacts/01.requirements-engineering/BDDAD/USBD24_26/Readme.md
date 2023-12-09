@@ -33,9 +33,7 @@ Como Gestor Agrícula, quero registar logs de atualização/registo de operaçõ
 ### 1.3. Acceptance Criteria
 
 
-* **AC1:** 
-* **AC2:** 
-
+* **AC1:** No log deve constar o instante em que foi criado, assim como o tipo trigger, tipo de operação e detalhes da operação.
 
 ### 1.4. Found out Dependencies
 
@@ -48,11 +46,11 @@ Como Gestor Agrícula, quero registar logs de atualização/registo de operaçõ
 
 **Input Data:**
 
-* Nenhum.
+* Registo de operação.
 
 **Output Data:**
 
-* Log de operação.
+* Log da operação.
 
 ### 1.6. System Sequence Diagram (SSD)
 

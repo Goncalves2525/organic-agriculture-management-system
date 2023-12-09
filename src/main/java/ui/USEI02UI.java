@@ -36,7 +36,7 @@ public class USEI02UI implements Runnable {
         displayCentrality(gfh, sourceVertex);
     }
 
-    private void displayInfluence(Graph<Location, Integer> graph) {
+    public void displayInfluence(Graph<Location, Integer> graph) {
         Map<Location, Integer> influenceMap = Algorithms.calculateInfluence(graph);
         List<Location> sortedLocationsByInfluence = sortLocationsByMetric(influenceMap, Comparator.reverseOrder());
 
@@ -44,7 +44,7 @@ public class USEI02UI implements Runnable {
         sortedLocationsByInfluence.forEach(location -> System.out.println("Vertex: " + location + " - influence: " + influenceMap.get(location)));
     }
 
-    private void displayProximities(Graph<Location, Integer> graph, Location sourceVertex) {
+    public void displayProximities(Graph<Location, Integer> graph, Location sourceVertex) {
         List<Double> proximities = calculateProximities(graph, sourceVertex);
 
         System.out.println("\nProximities:\n");
@@ -58,7 +58,7 @@ public class USEI02UI implements Runnable {
         }
     }
 
-    private void displayCentrality(Graph<Location, Integer> graph, Location sourceVertex) {
+    public void displayCentrality(Graph<Location, Integer> graph, Location sourceVertex) {
         ArrayList<LinkedList<Location>> paths = new ArrayList<>();
         ArrayList<Integer> distances = new ArrayList<>();
         Algorithms.shortestPaths(graph, sourceVertex, Comparator.naturalOrder(), Integer::sum, 0, paths, distances);
@@ -70,7 +70,7 @@ public class USEI02UI implements Runnable {
         centralityInfoList.forEach(info -> System.out.println("Vertex: " + info.getVertex() + " - centrality: " + info.getCentrality()));
     }
 
-    private List<Map.Entry<Location, Double>> sortProximities(Graph<Location, Integer> graph, List<Double> proximities) { //O(n log n)
+    public List<Map.Entry<Location, Double>> sortProximities(Graph<Location, Integer> graph, List<Double> proximities) { //O(n log n)
         List<Map.Entry<Location, Double>> sortedProximities = new ArrayList<>();
 
         for (int i = 0; i < graph.numVertices(); i++) {
@@ -85,7 +85,7 @@ public class USEI02UI implements Runnable {
         return sortedProximities;
     }
 
-    private List<USEI02_DTO> buildCentralityInfoList(Graph<Location, Integer> graph, ArrayList<Integer> distances) { //O(n)
+    public List<USEI02_DTO> buildCentralityInfoList(Graph<Location, Integer> graph, ArrayList<Integer> distances) { //O(n)
         List<USEI02_DTO> centralityInfoList = new ArrayList<>();
         for (Location vertex : graph.vertices()) {
             int index = graph.key(vertex);

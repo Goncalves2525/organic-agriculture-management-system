@@ -5,8 +5,7 @@ public class Location {
     public final int numberOfEmployees;
     public final Coordinate coordinate;
     public Schedule schedule;
-    public int AUTONOMY = 100; // km
-    public int AVG_VELOCITY = 50; // km/h
+    private boolean isHub = false;
     public int CHARGING_TIME = 60; // min
     public int DEPLOY_TIME = 10; // min
 
@@ -33,13 +32,6 @@ public class Location {
         return schedule;
     }
 
-    public int getAUTONOMY() {
-        return AUTONOMY;
-    }
-
-    public int getAVG_VELOCITY() {
-        return AVG_VELOCITY;
-    }
 
     public int getCHARGING_TIME() {
         return CHARGING_TIME;
@@ -47,6 +39,14 @@ public class Location {
 
     public int getDEPLOY_TIME() {
         return DEPLOY_TIME;
+    }
+
+    public boolean isHub() {
+        return isHub;
+    }
+
+    public void setHub(boolean isHub) {
+        this.isHub = isHub;
     }
 
     @Override
