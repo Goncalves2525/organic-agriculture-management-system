@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Gestor Agrícola" as Gestor
+participant "System" as System
+
+activate Gestor
+
+    Gestor -> System : Regista uma operação
+    activate System
+
+    System -> System : Resgista um log da operação
+
+
+    opt check log
+
+        Gestor -> System : Seleciona opção para consultar os logs
+        System -> Gestor : Mostra os logs
+        deactivate System
+
+    end
+
+
+
+@enduml

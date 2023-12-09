@@ -20,6 +20,7 @@ public class MainMenuUI implements Runnable {
         options.add(new MenuItem("Menu Mondas", new MondasUI()));
         options.add(new MenuItem("Menu Aplicações (Fatores de Produção)", new AplicacoesUI()));
         options.add(new MenuItem("Menu Colheitas", new ColheitasUI()));
+        options.add(new MenuItem("Ver Logs das Operações", new LogsUI()));
         options.add(new MenuItem("Run GFH Manager", new ImportGFHDataUI()));
         int option = 0;
         do {
