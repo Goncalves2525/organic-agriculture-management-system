@@ -1,0 +1,35 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Gestor Agrícola" as Gestor
+participant "System" as System
+
+activate Gestor
+
+    Gestor -> System : Inicia o registo de uma receita
+    activate System
+        System -> Gestor : Pede o ID a atribuir à receita
+    deactivate System
+
+    Gestor -> System : Digita ID a usar
+    activate System
+            System -> Gestor : Apresenta ingredientes disponíveis a usar e solicita quantidade e unidade de medida
+    deactivate System
+
+    Gestor -> System : Escolhe ingredientes e digita quantidade e unidade de medida
+    activate System
+            System -> Gestor : Pede validação da receita a registar
+    deactivate System
+
+    Gestor -> System : Valida receita
+    activate System
+                System -> Gestor : Confirma registo da receita
+    deactivate System
+
+@enduml
