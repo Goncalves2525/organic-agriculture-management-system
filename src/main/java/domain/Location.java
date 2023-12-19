@@ -1,6 +1,6 @@
 package domain;
 
-public class Location {
+public class Location{
     public final String code;
     public final int numberOfEmployees;
     public final Coordinate coordinate;
@@ -53,6 +53,7 @@ public class Location {
     public String toString() {
         return this.code;
     }
+
 
     // TODO: method to convert km to m and other to convert km/h to m/min on UTILS (add other conversions).
 }

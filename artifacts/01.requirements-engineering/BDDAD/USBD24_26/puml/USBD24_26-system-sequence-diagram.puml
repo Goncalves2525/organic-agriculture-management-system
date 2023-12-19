@@ -15,7 +15,7 @@ activate Gestor
     Gestor -> System : Regista uma operação
     activate System
 
-    System -> System : Resgista um log da operação
+    System -> System : Regista um log da operação
 
 
     opt check log

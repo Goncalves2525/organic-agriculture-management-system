@@ -1,0 +1,29 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Gestor Agrícola" as Gestor
+participant "System" as System
+
+activate Gestor
+
+    Gestor -> System : Solicita a visualização dos dados dos sensores
+    activate System
+
+    System -> System : Aloca, dinamicamente, memória para uma Struct "sensores" onde vai ser \nguardada toda a informação dos sensores.
+    System -> System : Extrai os dados dos sensores para o ProcessadorDeDados
+
+    alt Operação teve sucesso
+        System -> Gestor : Devolve os dados dos sensores
+    else Erro
+        System -> Gestor : Devolve mensagem de erro
+    end
+
+
+
+@enduml

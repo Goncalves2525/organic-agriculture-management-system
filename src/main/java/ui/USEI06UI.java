@@ -22,10 +22,10 @@ public class USEI06UI implements Runnable {
         ArrayList<Location> vertices = gfh.vertices();
         ArrayList<Location> hubs = new ArrayList<>();
         Location hubDestino = null;
-
         int nHubs = Utils.readIntegerFromConsole("Insira o número de hubs: ");
         int autonomia = Utils.readIntegerFromConsole("Insira a autonomia do veículo: ");
         int velocidade = Utils.readIntegerFromConsole("Insira a velocidade (km/h) média do veículo: ");
+
 
         Map<Location, Integer> influenceMap = Algorithms.calculateInfluence(gfh);
         List<Location> sortedLocationsByInfluence = USEI02UI.sortLocationsByMetric(influenceMap, Comparator.reverseOrder());
@@ -36,10 +36,11 @@ public class USEI06UI implements Runnable {
             }
         }
 
+
         Location origem = null;
         boolean found = false;
         do {
-            String localOrigemCode = Utils.readLineFromConsole("Insira o código do local do hub de origem: ");
+            String localOrigemCode = Utils.readLineFromConsole("Insira o código do local de origem: ");
             for (Location location : vertices) {
                 if (location.getCode().equals(localOrigemCode)) {
                     origem = location;

@@ -104,49 +104,53 @@ public class Algorithms {
         }
     }
 
-    public static <V, E> ArrayList<LinkedList<V>> allPathsAutonomy(Graph<V, E> g, V vOrig, V vDest, int autonomy) {
-        if (g.numVertices() <= 0) {
-            return null;
+    public static <V, E> ArrayList<LinkedList<V>> allPathsAutonomy(Graph<V, E> g, V vOrig, V vDest, int autonomy) { // O(V*E)
+        if (g.numVertices() <= 0) { // O(1)
+            return null; // O(1)
         }
 
-        boolean[] visited = new boolean[g.numVertices()];
-        LinkedList<V> path = new LinkedList<>();
-        ArrayList<LinkedList<V>> paths = new ArrayList<>();
+        if (autonomy < 0) { // O(1)
+            return null; // O(1)
+        }
 
-        allPathsAutonomy(g, vOrig, vDest, visited, path, paths, autonomy);
+        boolean[] visited = new boolean[g.numVertices()]; // O(1)
+        LinkedList<V> path = new LinkedList<>(); // O(1)
+        ArrayList<LinkedList<V>> paths = new ArrayList<>(); // O(1)
 
-        return paths;
+        allPathsAutonomy(g, vOrig, vDest, visited, path, paths, autonomy); // O(V*E)
+
+        return paths; // O(1)
     }
 
     private static <V, E> void allPathsAutonomy(Graph<V, E> g, V vOrig, V vDest, boolean[] visited,
-                                                LinkedList<V> path, ArrayList<LinkedList<V>> paths, double autonomy) {
+                                                LinkedList<V> path, ArrayList<LinkedList<V>> paths, double autonomy) { // O(V*E)
 
-        path.add(vOrig);
-        visited[g.key(vOrig)] = true;
+        path.add(vOrig); // O(1)
+        visited[g.key(vOrig)] = true; // O(1)
 
-        for (V vAdj : g.adjVertices(vOrig)) {
-            Edge edge = g.edge(vOrig, vAdj);
-            Integer edgeWeight = (Integer) edge.getWeight();
+        for (V vAdj : g.adjVertices(vOrig)) { // O(V*E)
+            Edge edge = g.edge(vOrig, vAdj); // O(1)
+            Integer edgeWeight = (Integer) edge.getWeight(); // O(1)
 
-            if (autonomy >= edgeWeight) {
-                autonomy -= edgeWeight;
+            if (autonomy >= edgeWeight) { // O(1)
+                autonomy -= edgeWeight; // O(1)
 
-                if (vAdj == vDest) {
-                    path.add(vDest);
-                    LinkedList<V> pathCopy = new LinkedList<>(path);
-                    paths.add(pathCopy);
-                    path.removeLast();
+                if (vAdj == vDest) { // O(1)
+                    path.add(vDest); // O(1)
+                    LinkedList<V> pathCopy = new LinkedList<>(path); // O(V)
+                    paths.add(pathCopy); // O(1)
+                    path.removeLast(); // O(1)
                 } else {
-                    if (!visited[g.key(vAdj)]) {
-                        allPathsAutonomy(g, vAdj, vDest, visited, path, paths, autonomy);
+                    if (!visited[g.key(vAdj)]) { // O(1)
+                        allPathsAutonomy(g, vAdj, vDest, visited, path, paths, autonomy); // O(V*E)
                     }
                 }
 
-                autonomy += edgeWeight;
+                autonomy += edgeWeight; // O(1)
             }
         }
-        visited[g.key(vOrig)] = false;
-        path.removeLast();
+        visited[g.key(vOrig)] = false; // O(1)
+        path.removeLast(); // O(1)
     }
 
     /** OK **/

@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+autonumber
+
+actor "Produtor" as Produtor
+participant "System" as System
+
+activate Produtor
+
+    Produtor -> System : Insere nº de hubs, autonomia, velocidade média e local de origem
+    activate System
+
+    System -> "Produtor" : Mostra a lista de hubs disponíveis
+    deactivate System
+
+    Produtor -> System : Seleciona o hub de destino
+    activate System
+
+    System -> "Produtor" : Mostra a lista de caminhos possíveis
+    deactivate System
+
+
+
+
+
+@enduml
