@@ -1,0 +1,1 @@
+10#atmospheric_temperature#celsius#50#12#20000
