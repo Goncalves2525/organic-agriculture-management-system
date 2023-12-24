@@ -46,7 +46,7 @@ int main(int argc, char **argv) {
 		int readCounter = 0; // inicializar contador de leituras
 		int hasData = 0; // variável para validar se há dados a usar, durante a fase de leitura do coletor
 
-		printf("----- a abrir coletor\n"); // (!!!) a abertura e fecho do coletor é feito fora de função devido ao demorado tempo de abertura/fecho
+		//printf("----- a abrir coletor\n"); // (!!!) a abertura e fecho do coletor é feito fora de função devido ao demorado tempo de abertura/fecho
 		FILE *coletorFile = fopen(coletor, "r"); // abrir ficheiro
 		if (coletorFile == NULL) { // testa se houve erro ao abrir o ficheiro
 			perror("Error opening file"); // imprime erro
@@ -61,11 +61,11 @@ int main(int argc, char **argv) {
 			hasData = getColectorLineData(coletorFile, tempData); // função para popular o array com dados do coletor de dados (0: sucesso, 1: insucesso)
 
 			// (APAGAR printf's INFRA: apenas para teste)
-			printf("#%03d/%03d | ", readCounter+1, readCounterTotal);
-			printf("hasData: %d | ", hasData);
-			printf("id: %02d | ", tempData[0]);
-			printf("value: %d | ", tempData[1]);
-			printf("timestamp: %d\n", tempData[2]);
+			//printf("#%03d/%03d | ", readCounter+1, readCounterTotal);
+			//printf("hasData: %d | ", hasData);
+			//printf("id: %02d | ", tempData[0]);
+			//printf("value: %d | ", tempData[1]);
+			//printf("timestamp: %d\n", tempData[2]);
 
 			if (hasData == 0) {
 
@@ -73,23 +73,23 @@ int main(int argc, char **argv) {
 				int idx = getSensorIndex(sensors, nSensors, tempData[0]); // obter indice do sensor com o id obtido na linha
 
 				if (sensors[idx].lastTimestamp == -1 || idx == -1) {
-					printf("-----timestamp em erro ou indice do sensor não encontrado\n\n"); // APAGAR
+					//printf("-----timestamp em erro ou indice do sensor não encontrado\n\n");
 					// Timestamp em erro! ou indice do sensor não encontrado
 				} else if (sensors[idx].lastTimestamp == 0 || (tempData[2] - sensors[idx].lastTimestamp) < sensors[idx].timeout) { // se não, testar se leitura está abaixo do timeout
-					printf("----- vou adicionar ao buffer! (read: %02d/%02d & write: %02d/%02d)\n\n", sensors[idx].buffer.read, sensors[idx].buffer.length, sensors[idx].buffer.write, sensors[idx].buffer.length); // APAGAR
+					//printf("----- vou adicionar ao buffer! (read: %02d/%02d & write: %02d/%02d)\n\n", sensors[idx].buffer.read, sensors[idx].buffer.length, sensors[idx].buffer.write, sensors[idx].buffer.length); // APAGAR
 					enqueue_value(sensors[idx].buffer.bufferArr, sensors[idx].buffer.length, &sensors[idx].buffer.read, &sensors[idx].buffer.write, tempData[1]);
 				} else {
-					printf("----- vou colocar o sensor em erro!\n\n"); // APAGAR
+					//printf("----- vou colocar o sensor em erro!\n\n");
 					sensors[idx].lastTimestamp = -1; // se não, colocar o lastTimestamp em erro (-1)
 				}
 				readCounter++;
 			}
 		}
 
-		printf("----- a fechar coletor\n");
+		//printf("----- a fechar coletor\n");
 		fclose(coletorFile); // fechar o ficheiro
 
-		printf("\n----- a verificar existência de diretório\n"); // APAGAR: apenas para teste
+		//printf("\n----- a verificar existência de diretório\n"); // APAGAR: apenas para teste
 		if (checkOrCreateDirectory(intermedio) != 0){
 			freeAllocs(sensors, nSensors);
 			return 1; // Erro: ao validar ou criar diretório
@@ -120,21 +120,23 @@ int main(int argc, char **argv) {
 			intermedios[i] = intermedio; // adicionar intermedio ao array de Intermedio's
 		}
 
-		printf("\n----- a criar ficheiro intermedio\n"); // APAGAR: apenas para teste
+		//printf("\n----- a criar ficheiro intermedio\n"); // APAGAR: apenas para teste
 		if (createIntermSensorsTxt(intermedio) != 0) { // criar o ficheiro ’AAAAMMDDHHMMSS sensors.txt’
 			freeAllocs(sensors, nSensors);
 			return 1; // Erro: não foi possível gerar um ficheiro
 		};
 
-		printf("\n----- a escrever dados intermedios no ficheiro\n"); // APAGAR: apenas para teste
+		//printf("\n----- a escrever dados intermedios no ficheiro\n"); // APAGAR: apenas para teste
 		if (writeToIntermediosFile(intermedios, intermedio, nSensors) != 0) { // escrever no ficheiro 'fileName' no directorio 'intermedio'
 			freeAllocs(sensors, nSensors);
 			return 1; // Erro: não foi escrever no ficheiro intermedio
 		}
 
+		printf("\nDados colocados num novo ficheiro!\n");
+
 		// APAGAR BLOCO INFRA : apenas para testes
-		if (counter < 0 || counter >= 2) {
-			printf("\nTERMINOU %d CICLOS\n\n", counter);
+		if (counter < 0 || counter >= 10) {
+			printf("\n** TERMINOU %d CICLO(S) NO <ProcessadorDeDados> **\n\n", counter);
 			freeAllocs(sensors, nSensors);
 			return 0;
 		}

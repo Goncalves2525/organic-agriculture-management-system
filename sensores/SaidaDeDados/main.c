@@ -21,7 +21,7 @@ int main(int argc, char **argv) {
     printf("* Intervalo de tempo entre recolha de ficheiros: %d\n\n", periodicidade);
 
 	if (checkOrCreateDirectory(outputPath) != 0) {
-		printf("Erro ao criar diretório");
+		printf("\nErro ao criar diretório\n");
 		return 1;
 	}
 
@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 
 		counter++; // incrementar o contador
 
-		nanoSleep(periodicidade); // aguardar x nanosegundos antes de executar uma leitura dos últimos dados
+		sleep(periodicidade/1000); // aguardar x segundos (milisegundos/1000) antes de executar uma leitura dos últimos dados
 
 		// USAC13: ...
 
@@ -48,23 +48,22 @@ int main(int argc, char **argv) {
 
 				Output outputs[nSensors];
 
-				if(addDataToOutputs(latestDataPath, outputs, nSensors) != 0) {
+				if(addDataToOutputs(latestDataPath, outputs) != 0) {
 					printf("\nNão foi possível recolher dados.\n");
 				} else {
 
 					if(writeDataToCSV(outputPath, outputs, nSensors) != 0) {
 						printf("\nErro ao escrever para CSV.\n");
 					} else {
-						printf("\nDados colocados no ficheiro CSV com sucesso");
+						printf("\nDados colocados no ficheiro CSV com sucesso!\n");
 					}
 				}
 			}
 		}
 		
-
 		// APAGAR BLOCO INFRA : apenas para testes
-		if (counter < 0 || counter >= 2) {
-			printf("\nTERMINOU %d CICLOS\n\n", counter);
+		if (counter < 0 || counter >= 10) {
+			printf("\n** TERMINOU %d CICLO(S) NO <SaidaDeDados> **\n\n", counter);
 			return 0;
 		}
 

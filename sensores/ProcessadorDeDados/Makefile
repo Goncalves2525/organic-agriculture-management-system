@@ -28,13 +28,13 @@ clean:
 	rm -f *.o processadorDados
 
 valgrind:
-	valgrind ./processadorDados /dev/ttyS0 config.txt intermedio 25
+	valgrind ./processadorDados /dev/ttyS0 config.txt intermedio 100
 
 runEmpty: processadorDados
-	./processadorDados /dev/ttyS0 configEmpty.txt intermedio 25
+	./processadorDados /dev/ttyS0 configEmpty.txt intermedio 100
 
 runOne: processadorDados
-	./processadorDados /dev/ttyS0 configOne.txt intermedio 25
+	./processadorDados /dev/ttyS0 configOne.txt intermedio 100
 
 run: processadorDados
-	./processadorDados /dev/ttyS0 config.txt intermedio 150
+	./processadorDados /dev/ttyS0 config.txt intermedio 100

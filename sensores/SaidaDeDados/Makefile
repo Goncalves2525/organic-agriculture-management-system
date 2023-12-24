@@ -13,7 +13,7 @@ clean:
 	rm -f *.o saidaDados
 
 valgrind:
-	valgrind ./saidaDados intermedio output 60000
+	valgrind ./saidaDados intermedio output 110000
 
-run: processadorDados
-	./saidaDados intermedio output 60000
+run: saidaDados
+	./saidaDados intermedio output 110000
