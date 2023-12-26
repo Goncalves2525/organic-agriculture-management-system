@@ -6,6 +6,8 @@ public class Location{
     public final Coordinate coordinate;
     public Schedule schedule;
     private boolean isHub = false;
+
+    private int nrOfEmployees;
     public int CHARGING_TIME = 60; // min
     public int DEPLOY_TIME = 10; // min
 
@@ -47,6 +49,12 @@ public class Location{
 
     public void setHub(boolean isHub) {
         this.isHub = isHub;
+    }
+
+    public void setNrOfEmployees(int nrOfEmployees){this.nrOfEmployees = nrOfEmployees;}
+
+    public int getNrOfEmployees() {
+        return nrOfEmployees;
     }
 
     @Override
