@@ -4,7 +4,7 @@
 * pretendo que todos os registos relacionados com operações tenham registado o instante em que foram criados,
 * gerado pelo SGBD. */
 
-(...)
+Adicionou-se a coluna "timestamp" à tabela "operacoes" para guardar o instante em que a operação foi criada.
 
 /* USBD25 Como Gestor Agrícola,
 * pretendo que a identificação da operação seja um número sequencial,
@@ -19,7 +19,7 @@
 * pretendo que a criação ou alteração de um registo de uma operação deva ser registado num log que indique
 * o instante, tipo de operação e todos os dados relacionados com a operação (e.g. data da operação, parcela, etc.). */
 
-(...)
+
 
 /*  USBD27 Como Gestor Agrícola,
 pretendo que não seja possível alterar ou apagar os logs. */

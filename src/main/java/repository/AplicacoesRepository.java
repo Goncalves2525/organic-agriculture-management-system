@@ -2,9 +2,6 @@ package repository;
 
 import oracle.jdbc.OracleTypes;
 import tables.AplicacoesFatProd;
-import utils.AnsiColor;
-import utils.Utils;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
