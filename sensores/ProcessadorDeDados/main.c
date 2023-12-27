@@ -133,6 +133,7 @@ int main(int argc, char **argv) {
 		}
 
 		printf("\nDados colocados num novo ficheiro!\n");
+		sleep(3000/1000); // aguardar x segundos (milisegundos/1000) antes de executar o próximo ciclo
 
 		// APAGAR BLOCO INFRA : apenas para testes
 		if (counter < 0 || counter >= 10) {

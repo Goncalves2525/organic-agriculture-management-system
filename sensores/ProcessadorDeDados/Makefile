@@ -36,5 +36,8 @@ runEmpty: processadorDados
 runOne: processadorDados
 	./processadorDados /dev/ttyS0 configOne.txt intermedio 100
 
+runFile: processadorDados
+	./processadorDados ../ColletorDeDados/sample.txt config.txt intermedio 100
+
 run: processadorDados
 	./processadorDados /dev/ttyS0 config.txt intermedio 100
