@@ -23,9 +23,10 @@ public class MainMenuUI implements Runnable {
         options.add(new MenuItem("Menu Receitas", new ReceitasUI()));
         options.add(new MenuItem("Ver Logs das Operações", new LogsUI()));
         options.add(new MenuItem("Run GFH Manager", new ImportGFHDataUI()));
+        options.add(new MenuItem("Dados dos Sensores", new SensoresUI()));
         int option = 0;
         do {
-            option = Utils.showAndSelectIndex(options, "\n\nMain Menu", "Exit");
+            option = Utils.showAndSelectIndex(options, "\n\nCADERNO DE CAMPO", "Exit");
 
             if ((option >= 0) && (option < options.size())) {
                 options.get(option).run();
