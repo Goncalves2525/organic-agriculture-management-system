@@ -15,8 +15,8 @@ activate Gestor
     Gestor -> System : Solicita a visualização dos dados dos sensores
     activate System
 
-    System -> System : Aloca no ProcessadorDeDados, dinamicamente, memória para as estruturas\n necessárias onde vai ser \nguardada a informação dos sensores
-    System -> System : Extrai os dados dos sensores para o ProcessadorDeDados
+    System -> System : Aloca na SaidaDeDados, dinamicamente, memória para as estruturas\n necessárias onde vai ser \nguardada a informação do ficheiro final
+    System -> System : Extrai os dados dos sensores para o SaidaDeDados
 
     alt Operação teve sucesso
         System -> Gestor : Devolve os dados dos sensores
