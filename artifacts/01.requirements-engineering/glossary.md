@@ -31,8 +31,9 @@
 | **Culturas Temporárias**    | Culturas temporárias são aquelas que são semeadas e colhidas no mesmo ano agrícola, às vezes mais de uma vez.                                                             |
 | **Ecossistema**             | Comunidade de organismos vivos em conjunto com os componentes não vivos de seu ambiente.                                                                                  |
 | **Estábulo**                | Edifício separado e adaptado para a criação de animais.                                                                                                                   |
-| **Fertilização**            | Nutrição do solo.                                                                                                                                                         |
 | **Fator de Produção**       | Qualquer coisa que seja aplicada ao solo ou às plantas para melhorar e nutrir o solo e as plantas, prevenir doenças, corrigir desequilíbrios e combater pragas e doenças. |
+| **Fertilização**            | Nutrição do solo.                                                                                                                                                         |
+| **Fertirrega**              | Técnica de fertilização que utiliza a água de irrigação para fazer a aplicação de factores de produção ao solo cultivado.                                                 |
 | **Ficha Técnica**           | Folha com uma lista de elementos e substâncias no produto e suas quantidades.                                                                                             |
 | **Garagem**                 | Edifício para armazenar máquinas e ferramentas.                                                                                                                           |
 | **Gerente de Distribuição** | Pessoa que gerencia o processo de coleta e transporte de produtos agrícolas entre quintas, centros de distribuição e posterior coleta pelos clientes.                     |
@@ -42,6 +43,9 @@
 | **Irrigação**               | Fornecimento de água ou soluções aquosas para as culturas.                                                                                                                |
 | **Instalações Agrícolas**   | Quinta composta por uma série de terras e edifícios.                                                                                                                      |
 | **Livro de Campo**          | Plano de requisitos de irrigação, correções minerais e fertilizações a serem realizados ao longo da temporada agrícola.                                                   |
+| **Log**                     | Registo de informaçãorelevante sobre uma operação feita na aplicação.                                                                                                     |
+| **Mobilização do Solo**     | Intervenção feita numa parcela com o objetivo de descompactar o solo da mesma.                                                                                            |
+| **Monda**                   | Eliminação de ervas.                                                                                                                                                      |
 | **Motorista**               | Uma pessoa empregada para dirigir um carro particular ou alugado.                                                                                                         |
 | **Policultura**             | A prática de cultivar mais de uma espécie de cultura no mesmo local.                                                                                                      |
 | **Poda**                    | Operação de poda, numa dada parcela, numa dada altura, com uma quantidade definida.                                                                                       |
@@ -49,6 +53,7 @@
 | **Praga**                   | Surto de espécies prejudiciais ao desenvolvimento agrícola.                                                                                                               |
 | **Produtor**                | Uma pessoa ou empresa que fabrica, cultiva ou fornece produtos para venda.                                                                                                |
 | **Quinta**                  | Uma área de terra e seus edifícios usados para cultivar colheitas e criar animais.                                                                                        |
+| **Receita**                 | Um conjunto de fatores de produção.                                                                                                                                       |
 | **Recursos**                | Um estoque de algo.                                                                                                                                                       |
 | **Rega**                    | Operação de rega, numa dada parcela, numa dada altura, com uma quantidade definida.                                                                                       |
 | **Rotação de Culturas**     | A prática de plantar diferentes culturas sequencialmente na mesma área para melhorar a saúde do solo.                                                                     |
