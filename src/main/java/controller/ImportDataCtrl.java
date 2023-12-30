@@ -29,6 +29,10 @@ public class ImportDataCtrl {
         importFarmOperationsLegacy.addExtraDataSprint2();
     }
 
+    public void addExtraDataSprint3() {
+        importFarmOperationsLegacy.addExtraDataSprint3();
+    }
+
     public Graph<Location, Integer> runImportGFHData(String locaisPath, String distanciasPath) { return importGFHData.run(locaisPath, distanciasPath);}
 
     public void printGFHData() { importGFHData.toString(); }

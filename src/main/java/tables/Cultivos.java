@@ -24,6 +24,17 @@ public class Cultivos {
         this.setor = setor;
     }
 
+    public Cultivos(int quintaId, int parcelaId, int culturaId, String dataInicio, String dataFim, double quantidade, double compasso, double distancia, int setor) {
+        this.quintaId = quintaId;
+        this.parcelaId = parcelaId;
+        this.culturaId = culturaId;
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+        this.quantidade = (compasso * distancia * 0.0001) * quantidade;
+        this.unidadeMedida = "ha";
+        this.setor = setor;
+    }
+
     // GETTERS
     public int getQuintaId() {
         return quintaId;
@@ -86,7 +97,7 @@ public class Cultivos {
                 dataFimPrint + ", " + this.quantidade + ", '" + this.unidadeMedida + "', " + setorPrint + ");");
     }
 
-    public String append(){
+    public String append() {
         String dataInicioPrint = "TO_DATE('2015-01-01', 'YYYY-MM-DD')";
         String dataFimPrint = null;
         String setorPrint = null;

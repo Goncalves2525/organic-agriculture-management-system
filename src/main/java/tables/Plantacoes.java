@@ -14,6 +14,12 @@ public class Plantacoes {
         this.unidadeMedida = unidadeMedida;
     }
 
+    public Plantacoes(int operacaoId, double quantidade, double compasso, double distancia) {
+        this.operacaoId = operacaoId;
+        this.quantidade = (compasso * distancia * 0.0001) * quantidade;
+        this.unidadeMedida = "ha";
+    }
+
     // GETTERS
     public int getOperacaoId() {
         return operacaoId;

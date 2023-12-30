@@ -37,12 +37,15 @@ public class TablesRepository {
     List<Sementeiras> lstSementeiras = new ArrayList<>();
     List<Plantacoes> lstPlantacoes = new ArrayList<>();
     List<Regas> lstRegas = new ArrayList<>();
+    List<Fertirregas> lstFertirregas = new ArrayList<>();
     List<Podas> lstPodas = new ArrayList<>();
     List<IncorpsSolo> lstIncorpsSolo = new ArrayList<>();
     List<Colheitas> lstColheitas = new ArrayList<>();
     List<SetoresRega> lstSetoresRega = new ArrayList<>();
     List<Mondas> lstMondas = new ArrayList<>();
     List<MobilizacoesSolo> lstMobilizacoesSolo = new ArrayList<>();
+    List<Mix> lstMix = new ArrayList<>();
+    List<Receitas> lstReceitas = new ArrayList<>();
 
     // Incrementable IDs
     int especieId = 1;
@@ -186,7 +189,7 @@ public class TablesRepository {
         boolean found = false;
         // Checks if entry exists
         for (EspeciesVegetais obj : lstEspeciesVegetais) {
-            if (obj.getEspecie().equals(newEntry.getEspecie()) && obj.getNomeComum().equals(nomeComum)) {
+            if (obj.getEspecie().equals(newEntry.getEspecie()) && obj.getNomeComum().equals(newEntry.getNomeComum())) {
                 found = true;
                 break;
             }
@@ -241,7 +244,7 @@ public class TablesRepository {
 
         int localCulturaId = 0;
         for (Culturas obj : lstCulturas) {
-            if (obj.getNomeCompleto().equals(nomeCompleto)) {
+            if (obj.getNomeCompleto().equals(nomeCompleto.replace("_", " ").replace("TREMOCO", "TREMOÇO"))) {
                 localCulturaId = obj.getIdCultura();
                 break;
             }
@@ -576,6 +579,34 @@ public class TablesRepository {
         return !found;
     }
 
+    public boolean addToTableCultivos(int quintaId, int parcelaId, String cultura, String dataInicio, String dataFim, double quantidade, double compasso, double distancia, int setor) {
+        boolean found = false;
+
+        // Get ID Cultura
+        int culturaId = 0;
+        for (Culturas cult : lstCulturas) {
+            if (cult.getNomeCompleto().equals(cultura)) {
+                culturaId = cult.getIdCultura();
+            }
+        }
+
+        // Checks if entry exists
+        for (Cultivos obj : lstCultivos) {
+            if (obj.getParcelaId() == parcelaId && obj.getCulturaId() == culturaId) {
+                found = true;
+                break;
+            }
+        }
+
+        // Adds if it doesn't exist already
+        if (!found) {
+            Cultivos newEntry = new Cultivos(quintaId, parcelaId, culturaId, dataInicio, dataFim, quantidade, compasso, distancia, setor);
+            lstCultivos.add(newEntry);
+        }
+
+        return !found;
+    }
+
     public int addToTableOperacoes(int quintaId, int parcelaId, String cultura, int operadorId, String dataInicio) {
         boolean found = false;
 
@@ -668,6 +699,26 @@ public class TablesRepository {
         return !found;
     }
 
+    public boolean addToTablePlantacoes(int operacaoId, double quantidade, double compasso, double distancia) {
+        boolean found = false;
+
+        // Checks if entry exists
+        for (Plantacoes obj : lstPlantacoes) {
+            if (obj.getOperacaoId() == operacaoId) {
+                found = true;
+                break;
+            }
+        }
+
+        // Adds if it doesn't exist already
+        if (!found) {
+            Plantacoes newEntry = new Plantacoes(operacaoId, quantidade, compasso, distancia);
+            lstPlantacoes.add(newEntry);
+        }
+
+        return !found;
+    }
+
     public boolean addToTableRegas(int operacaoId, double quantidade, String unidadeMedida, int setor) {
         boolean found = false;
 
@@ -683,6 +734,66 @@ public class TablesRepository {
         if (!found) {
             Regas newEntry = new Regas(operacaoId, quantidade, unidadeMedida, setor);
             lstRegas.add(newEntry);
+        }
+
+        return !found;
+    }
+
+    public boolean addToTableRegas(int operacaoId, double quantidade, String unidadeMedida, int setor, String horaInicio) {
+        boolean found = false;
+
+        // Checks if entry exists
+        for (Regas obj : lstRegas) {
+            if (obj.getOperacaoId() == operacaoId) {
+                found = true;
+                break;
+            }
+        }
+
+        // Adds if it doesn't exist already
+        if (!found) {
+            Regas newEntry = new Regas(operacaoId, quantidade, unidadeMedida, setor, horaInicio);
+            lstRegas.add(newEntry);
+        }
+
+        return !found;
+    }
+
+    public boolean addToTableFertirregas(int operacaoId, double quantidade, String unidadeMedida, int setor, int receitaId) {
+        boolean found = false;
+
+        // Checks if entry exists
+        for (Fertirregas obj : lstFertirregas) {
+            if (obj.getOperacaoId() == operacaoId) {
+                found = true;
+                break;
+            }
+        }
+
+        // Adds if it doesn't exist already
+        if (!found) {
+            Fertirregas newEntry = new Fertirregas(operacaoId, quantidade, unidadeMedida, setor, receitaId);
+            lstFertirregas.add(newEntry);
+        }
+
+        return !found;
+    }
+
+    public boolean addToTableFertirregas(int operacaoId, double quantidade, String unidadeMedida, int setor, int receitaId, String horaInicio) {
+        boolean found = false;
+
+        // Checks if entry exists
+        for (Fertirregas obj : lstFertirregas) {
+            if (obj.getOperacaoId() == operacaoId) {
+                found = true;
+                break;
+            }
+        }
+
+        // Adds if it doesn't exist already
+        if (!found) {
+            Fertirregas newEntry = new Fertirregas(operacaoId, quantidade, unidadeMedida, setor, receitaId, horaInicio);
+            lstFertirregas.add(newEntry);
         }
 
         return !found;
@@ -805,6 +916,46 @@ public class TablesRepository {
             SetoresRega newEntry = new SetoresRega(idSetor, quintaId, edificioId, dataInicio,
                     dataFim, caudalMaximo, unidadeMedida);
             lstSetoresRega.add(newEntry);
+        }
+
+        return !found;
+    }
+
+    public boolean addToTableMix(int idReceita) {
+        boolean found = false;
+
+        // Checks if entry exists
+        for (Mix obj : lstMix) {
+            if (obj.getIdReceita() == idReceita) {
+                found = true;
+                break;
+            }
+        }
+
+        // Adds if it doesn't exist already
+        if (!found) {
+            Mix newEntry = new Mix(idReceita);
+            lstMix.add(newEntry);
+        }
+
+        return !found;
+    }
+
+    public boolean addToTableReceitas(int receitaId, String fatorProdId, double quantidadePorHectar, String unidade) {
+        boolean found = false;
+
+        // Checks if entry exists
+        for (Receitas obj : lstReceitas) {
+            if (obj.getReceitaId() == receitaId && obj.getFatorProdId().equals(fatorProdId)) {
+                found = true;
+                break;
+            }
+        }
+
+        // Adds if it doesn't exist already
+        if (!found) {
+            Receitas newEntry = new Receitas(receitaId, fatorProdId, quantidadePorHectar, unidade);
+            lstReceitas.add(newEntry);
         }
 
         return !found;
@@ -986,5 +1137,15 @@ public class TablesRepository {
 
     public List<MobilizacoesSolo> getLstMobilizacoesSolo() {
         return lstMobilizacoesSolo;
+    }
+
+    public List<Fertirregas> getLstFertirregas() { return lstFertirregas;}
+
+    public List<Mix> getLstMix() {
+        return lstMix;
+    }
+
+    public List<Receitas> getLstReceitas() {
+        return lstReceitas;
     }
 }

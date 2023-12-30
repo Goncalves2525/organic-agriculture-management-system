@@ -69,6 +69,9 @@ public class ImportFarmOperationsLegacy {
             // Run method to add extra data provided for Sprint2
             addExtraDataSprint2();
 
+            // Run method to add extra data provided for Sprint3
+            addExtraDataSprint3();
+
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -421,7 +424,15 @@ public class ImportFarmOperationsLegacy {
             //// Creates objects for tables that require this data:
             // CULTIVOS
             if (parcelaId != 0 && cultura != null) {
-                tblRepo.addToTableCultivos(quintaId, parcelaId, cultura, dataInicio, dataFim, quantidade, unidadeMedida, 0);
+                if (unidadeMedida.equals("un") && cultura.contains("OLIVEIRA")) {
+                    tblRepo.addToTableCultivos(quintaId, parcelaId, cultura, dataInicio, dataFim, quantidade, 6, 6, 0);
+                } else if (unidadeMedida.equals("un") && cultura.contains("MACIEIRA")) {
+                    tblRepo.addToTableCultivos(quintaId, parcelaId, cultura, dataInicio, dataFim, quantidade, 5, 5, 0);
+                } else if (unidadeMedida.equals("un") && cultura.contains("VIDEIRA")) {
+                    tblRepo.addToTableCultivos(quintaId, parcelaId, cultura, dataInicio, dataFim, quantidade, 3, 3, 0);
+                } else {
+                    tblRepo.addToTableCultivos(quintaId, parcelaId, cultura, dataInicio, dataFim, quantidade, unidadeMedida, 0);
+                }
             }
         }
 
@@ -499,7 +510,15 @@ public class ImportFarmOperationsLegacy {
 
                 // PLANTACOES
                 if (operacao.equals("PLANTAÇÃO") && operacaoId != 0) {
-                    tblRepo.addToTablePlantacoes(operacaoId, quantidade, unidadeMedida);
+                    if (cultura.contains("MACIEIRA")) {
+                        tblRepo.addToTablePlantacoes(operacaoId, quantidade, 5, 5);
+                    } else if (cultura.contains("OLIVEIRA")) {
+                        tblRepo.addToTablePlantacoes(operacaoId, quantidade, 6, 6);
+                    } else if (cultura.contains("VIDEIRA")) {
+                        tblRepo.addToTablePlantacoes(operacaoId, quantidade, 3, 3);
+                    } else {
+                        tblRepo.addToTablePlantacoes(operacaoId, quantidade, unidadeMedida);
+                    }
                 }
 
                 // REGAS
@@ -712,7 +731,25 @@ public class ImportFarmOperationsLegacy {
             }
 
             Files.write(sqlFile, System.lineSeparator().getBytes(), StandardOpenOption.APPEND);
+            for (Mix obj : tblRepo.getLstMix()) {
+                Files.write(sqlFile, obj.append().getBytes(), StandardOpenOption.APPEND);
+                Files.write(sqlFile, System.lineSeparator().getBytes(), StandardOpenOption.APPEND);
+            }
+
+            Files.write(sqlFile, System.lineSeparator().getBytes(), StandardOpenOption.APPEND);
+            for (Receitas obj : tblRepo.getLstReceitas()) {
+                Files.write(sqlFile, obj.append().getBytes(), StandardOpenOption.APPEND);
+                Files.write(sqlFile, System.lineSeparator().getBytes(), StandardOpenOption.APPEND);
+            }
+
+            Files.write(sqlFile, System.lineSeparator().getBytes(), StandardOpenOption.APPEND);
             for (Regas obj : tblRepo.getLstRegas()) {
+                Files.write(sqlFile, obj.append().getBytes(), StandardOpenOption.APPEND);
+                Files.write(sqlFile, System.lineSeparator().getBytes(), StandardOpenOption.APPEND);
+            }
+
+            Files.write(sqlFile, System.lineSeparator().getBytes(), StandardOpenOption.APPEND);
+            for (Fertirregas obj : tblRepo.getLstFertirregas()) {
                 Files.write(sqlFile, obj.append().getBytes(), StandardOpenOption.APPEND);
                 Files.write(sqlFile, System.lineSeparator().getBytes(), StandardOpenOption.APPEND);
             }
@@ -914,8 +951,26 @@ public class ImportFarmOperationsLegacy {
         }
         System.out.println();
 
+        System.out.println("----- MIX");
+        for (Mix obj : tblRepo.getLstMix()) {
+            obj.print();
+        }
+        System.out.println();
+
+        System.out.println("----- RECEITAS");
+        for (Receitas obj : tblRepo.getLstReceitas()) {
+            obj.print();
+        }
+        System.out.println();
+
         System.out.println("----- REGAS");
         for (Regas obj : tblRepo.getLstRegas()) {
+            obj.print();
+        }
+        System.out.println();
+
+        System.out.println("----- FERTIRREGAS");
+        for (Fertirregas obj : tblRepo.getLstFertirregas()) {
             obj.print();
         }
         System.out.println();
@@ -972,6 +1027,8 @@ public class ImportFarmOperationsLegacy {
         tblRepo.addToTableUnidadesMedida("l/h", "litros/hora");
         tblRepo.addToTableUnidadesMedida("pH", "pH");
         tblRepo.addToTableUnidadesMedida("%", "percentagem");
+        tblRepo.addToTableUnidadesMedida("l", "litros");
+        tblRepo.addToTableUnidadesMedida("kg/l", "kilogramas/litro");
 
         // INSERT QUINTAS
         tblRepo.addToTableQuintas(1, "QUINTA");
@@ -979,8 +1036,7 @@ public class ImportFarmOperationsLegacy {
         // INSERT EDIFICIO & SISTEMA REGA
         tblRepo.addToTableEdificios(1, 303);
         tblRepo.addToTableSistemasRega(1, 303, "Sist-Rega Novo S2", 50, "m3");
-        tblRepo.addToTableSetoresRega(0,1,303,"2017-05-01",null, 200000, "l/h");
-
+        tblRepo.addToTableSetoresRega(0, 1, 303, "2017-05-01", null, 200000, "l/h");
 
         // INSERT OPERADORES
         tblRepo.addToTableOperadores(0, "default");
@@ -1107,11 +1163,11 @@ public class ImportFarmOperationsLegacy {
 //        - Macieira Grand Fay, 40 un, 01/05/2019, sem data fim
 //        - Macieira Gronho Doce, 50 un, 01/05/2019, sem data fim
         tblRepo.addToTableSetoresRega(22, 1, 303, "2019/05/01", null, 3500, "l/h");
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA PORTA DA LOJA", "2019/05/01", null, 50, "un", 22);
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA MALÁPIO", "2019/05/01", null, 20, "un", 22);
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA REINETTE OU CANADA", "2019/05/01", null, 30, "un", 22);
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA REINETTE OU GRAND FAY", "2019/05/01", null, 40, "un", 22);
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA GRONHO DOCE", "2019/05/01", null, 50, "un", 22);
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA PORTA DA LOJA", "2019/05/01", null, 50, 5, 5, 22);
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA MALÁPIO", "2019/05/01", null, 20, 5, 5, 22);
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA REINETTE OU CANADA", "2019/05/01", null, 30, 5, 5, 22);
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA REINETTE OU GRAND FAY", "2019/05/01", null, 40, 5, 5, 22);
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA GRONHO DOCE", "2019/05/01", null, 50, 5, 5, 22);
 
 
 //        Setor 41
@@ -1122,8 +1178,8 @@ public class ImportFarmOperationsLegacy {
 //        - Cenoura Sugarsnax Hybrid, 05/04/2023 a 31/05/2023
 //        - Cenoura Danvers Half Long, 05/07/2023 a 08/10/2023
         tblRepo.addToTableSetoresRega(41, 1, 303, "2023/04/01", "2023/10/10", 2500, "l/h");
-        tblRepo.addToTableCultivos(1, 108, "CENOURA SUGARSNAX HYBRID", "2023/04/05", "2023/05/31", 0, "m2", 41);
-        tblRepo.addToTableCultivos(1, 108, "CENOURA DANVERS HALF LONG", "2023/07/05", "2023/10/08", 0, "m2", 41);
+        tblRepo.addToTableCultivos(1, 108, "CENOURA SUGARSNAX HYBRID", "2023/04/05", "2023/05/31", 0.5, "ha", 41);
+        tblRepo.addToTableCultivos(1, 108, "CENOURA DANVERS HALF LONG", "2023/07/05", "2023/10/08", 0.5, "ha", 41);
 
 //        Setor 42
 //        Início a 01/04/2023, 10/10/2023
@@ -1132,71 +1188,71 @@ public class ImportFarmOperationsLegacy {
 //        Culturas:
 //        - Abóbora Manteiga, 06/04/2023 a 10/09/2023
         tblRepo.addToTableSetoresRega(42, 1, 303, "2023/04/01", "2023/10/10", 3500, "l/h");
-        tblRepo.addToTableCultivos(1, 108, "ABOBORA MANTEIGA", "2023/04/06", "2023/09/10", 0, "m3", 42);
+        tblRepo.addToTableCultivos(1, 108, "ABOBORA MANTEIGA", "2023/04/06", "2023/09/10", 0.6, "ha", 42);
 
 //        Inserir as seguintes operações realizadas na quinta:
 //
 //        Lameiro da Ponte (id: 104)
 //
-//        14/05/2023 operação de rega, setor 21, 120 min
+//        14/05/2023 operação de rega, setor 21, 120 min, 07:00
         int op1 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/05/14");
-        tblRepo.addToTableRegas(op1, 120, "min", 21);
+        tblRepo.addToTableRegas(op1, 120, "min", 21, "07:00");
 
-//        01/06/2023 operação de rega, setor 21, 120 min
+//        01/06/2023 operação de rega, setor 21, 120 min, 07:00
         int op2 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/06/01");
-        tblRepo.addToTableRegas(op2, 120, "min", 21);
+        tblRepo.addToTableRegas(op2, 120, "min", 21, "07:00");
 
-//        15/06/2023 operação de rega, setor 21, 120 min
+//        15/06/2023 operação de rega, setor 21, 120 min, "07:00"
         int op3 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/06/15");
-        tblRepo.addToTableRegas(op3, 120, "min", 21);
+        tblRepo.addToTableRegas(op3, 120, "min", 21, "07:00");
 
-//        30/06/2023 operação de rega, setor 21, 120 min
+//        30/06/2023 operação de rega, setor 21, 120 min, "07:00"
         int op4 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/06/30");
-        tblRepo.addToTableRegas(op4, 120, "min", 21);
+        tblRepo.addToTableRegas(op4, 120, "min", 21, "07:00");
 
-//        07/07/2023 operação de rega, setor 21, 180 min
+//        07/07/2023 operação de rega, setor 21, 180 min, "07:00"
         int op5 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/07/07");
-        tblRepo.addToTableRegas(op5, 180, "min", 21);
+        tblRepo.addToTableRegas(op5, 180, "min", 21, "07:00");
 
-//        14/07/2023 operação de rega, setor 21, 180 min
+//        14/07/2023 operação de rega, setor 21, 180 min, "22:00"
         int op6 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/07/14");
-        tblRepo.addToTableRegas(op6, 180, "min", 21);
+        tblRepo.addToTableRegas(op6, 180, "min", 21, "22:00");
 
-//        21/07/2023 operação de rega, setor 21, 180 min
+//        21/07/2023 operação de rega, setor 21, 180 min, "22:00"
         int op7 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/07/21");
-        tblRepo.addToTableRegas(op7, 180, "min", 21);
+        tblRepo.addToTableRegas(op7, 180, "min", 21, "22:00");
 
-//        28/07/2023 operação de rega, setor 21, 180 min
+//        28/07/2023 operação de rega, setor 21, 180 min, "22:00"
         int op8 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/07/28");
-        tblRepo.addToTableRegas(op8, 180, "min", 21);
+        tblRepo.addToTableRegas(op8, 180, "min", 21, "22:00");
 
-//        04/08/2023 operação de rega, setor 21, 150 min
+//        04/08/2023 operação de rega, setor 21, 150 min, "22:00"
         int op9 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/08/04");
-        tblRepo.addToTableRegas(op9, 150, "min", 21);
+        tblRepo.addToTableRegas(op9, 150, "min", 21, "22:00");
 
-//        11/08/2023 operação de rega, setor 21, 150 min
+//        11/08/2023 operação de rega, setor 21, 150 min, "22:00"
         int op10 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/08/11");
-        tblRepo.addToTableRegas(op10, 150, "min", 21);
+        tblRepo.addToTableRegas(op10, 150, "min", 21, "22:00");
 
-//        18/08/2023 operação de rega, setor 21, 150 min
+//        18/08/2023 operação de rega, setor 21, 150 min, "22:00"
         int op11 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/08/18");
-        tblRepo.addToTableRegas(op11, 150, "min", 21);
+        tblRepo.addToTableRegas(op11, 150, "min", 21, "22:00");
 
-//        25/08/2023 operação de rega, setor 21, 120 min
+//        25/08/2023 operação de rega, setor 21, 120 min, "22:00"
         int op12 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/08/25");
-        tblRepo.addToTableRegas(op12, 120, "min", 21);
+        tblRepo.addToTableRegas(op12, 120, "min", 21, "22:00");
 
-//        01/09/2023 operação de rega, setor 21, 120 min
+//        01/09/2023 operação de rega, setor 21, 120 min, "22:00"
         int op13 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/09/01");
-        tblRepo.addToTableRegas(op13, 120, "min", 21);
+        tblRepo.addToTableRegas(op13, 120, "min", 21, "22:00");
 
-//        08/09/2023 operação de rega, setor 21, 120 min
+//        08/09/2023 operação de rega, setor 21, 120 min, "22:00"
         int op14 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/09/08");
-        tblRepo.addToTableRegas(op14, 120, "min", 21);
+        tblRepo.addToTableRegas(op14, 120, "min", 21, "22:00");
 
-//        15/09/2023 operação de rega, setor 21, 120 min
+//        15/09/2023 operação de rega, setor 21, 120 min, "22:00"
         int op15 = tblRepo.addToTableOperacoes(1, 104, null, 0, "2023/09/15");
-        tblRepo.addToTableRegas(op15, 120, "min", 21);
+        tblRepo.addToTableRegas(op15, 120, "min", 21, "22:00");
 
 //        18/08/2023 operação de colheita de maçã Royal Gala, 700 kg
         int op16 = tblRepo.addToTableOperacoes(1, 104, "MAÇÃ ROYAL GALA", 0, "2023/08/18");
@@ -1229,30 +1285,30 @@ public class ImportFarmOperationsLegacy {
         int op22 = tblRepo.addToTableOperacoes(1, 105, null, 0, "2019/01/04");
         tblRepo.addToTableAplicacoesFatProd(op22, "BIOFERTIL N6", 3200, "kg");
 
-//        09/01/2019 operação de plantação de Macieira Porta da Loja, 50 un
+//        09/01/2019 operação de plantação de Macieira Porta da Loja, 50 un, compasso de 5 m, distancia entre filas de 5 m
         int op23 = tblRepo.addToTableOperacoes(1, 105, "MACIEIRA PORTA DA LOJA", 0, "2019/01/09");
-        tblRepo.addToTablePlantacoes(op23, 50, "un");
+        tblRepo.addToTablePlantacoes(op23, 50, 5, 5);
 
-//        09/01/2019 operação de plantação de Macieira Malápio, 20 un
+//        09/01/2019 operação de plantação de Macieira Malápio, 20 un, compasso de 5 m, distancia entre filas de 5 m
         int op24 = tblRepo.addToTableOperacoes(1, 105, "MACIEIRA MALÁPIO", 0, "2019/01/09");
-        tblRepo.addToTablePlantacoes(op24, 20, "un");
+        tblRepo.addToTablePlantacoes(op24, 20, 5, 5);
 
-//        10/01/2019 operação de plantação de Macieira Pipo de Basto, 40 un
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA PIPO DE BASTO", "2019/01/10", null, 40, "un", 0);
+//        10/01/2019 operação de plantação de Macieira Pipo de Basto, 40 un, compasso de 5 m, distancia entre filas de 5 m
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA PIPO DE BASTO", "2019/01/10", null, 40, 5, 5, 0);
         int op25 = tblRepo.addToTableOperacoes(1, 105, "MACIEIRA PIPO DE BASTO", 0, "2019/01/10");
-        tblRepo.addToTablePlantacoes(op25, 40, "un");
+        tblRepo.addToTablePlantacoes(op25, 40, 5, 5);
 
-//        10/01/2019 operação de plantação de Macieira Canada, 30 un
+//        10/01/2019 operação de plantação de Macieira Canada, 30 un, compasso de 5 m, distancia entre filas de 5 m
         int op26 = tblRepo.addToTableOperacoes(1, 105, "MACIEIRA REINETTE OU CANADA", 0, "2019/01/10");
-        tblRepo.addToTablePlantacoes(op26, 30, "un");
+        tblRepo.addToTablePlantacoes(op26, 30, 5, 5);
 
-//        11/01/2019 operação de plantação de Macieira Grand Fay, 40 un
+//        11/01/2019 operação de plantação de Macieira Grand Fay, 40 un, compasso de 5 m, distancia entre filas de 5 m
         int op27 = tblRepo.addToTableOperacoes(1, 105, "MACIEIRA REINETTE OU GRAND FAY", 0, "2019/01/11");
-        tblRepo.addToTablePlantacoes(op27, 40, "un");
+        tblRepo.addToTablePlantacoes(op27, 40, 5, 5);
 
-//        11/01/2019 operação de plantação de Macieira Gronho Doce, 50 un
+//        11/01/2019 operação de plantação de Macieira Gronho Doce, 50 un, compasso de 5 m, distancia entre filas de 5 m
         int op28 = tblRepo.addToTableOperacoes(1, 105, "MACIEIRA GRONHO DOCE", 0, "2019/01/11");
-        tblRepo.addToTablePlantacoes(op28, 50, "un");
+        tblRepo.addToTablePlantacoes(op28, 50, 5, 5);
 
 //        06/01/2020 operação de aplicação de fator de produção Fertimax Extrume de Cavalo, no solo, Macieira Porta da Loja, 100 kg
         int op29 = tblRepo.addToTableOperacoes(1, 105, null, 0, "2020/01/06");
@@ -1449,9 +1505,9 @@ public class ImportFarmOperationsLegacy {
 //
 //        Campo Grande: (102)
 //
-//        12/10/2016 operação de plantação de Oliveira Arbquina, 40 un
+//        12/10/2016 operação de plantação de Oliveira Arbequina, 40 un, compasso de 6 m, distancia entre filas de 6 m
         int op77 = tblRepo.addToTableOperacoes(1, 102, "OLIVEIRA ARBEQUINA", 0, "2016/10/12");
-        tblRepo.addToTablePlantacoes(op77, 40, "un");
+        tblRepo.addToTablePlantacoes(op77, 40, 6, 6);
 
 //        13/01/2021 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Picual, 120 kg
         int op78 = tblRepo.addToTableOperacoes(1, 102, null, 0, "2021/01/13");
@@ -1462,7 +1518,6 @@ public class ImportFarmOperationsLegacy {
         tblRepo.addToTableAplicacoesFatProd(op79, "BIOFERTIL N6", 180, "kg");
 
 //        12/01/2021 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Arbquina, 240 kg
-        tblRepo.addToTableCultivos(1, 102, "OLIVEIRA ARBEQUINA", "2023/11/02", null, 400, "kg", 0);
         int op80 = tblRepo.addToTableOperacoes(1, 102, null, 0, "2021/01/12");
         tblRepo.addToTableAplicacoesFatProd(op80, "BIOFERTIL N6", 240, "kg");
 
@@ -1599,116 +1654,290 @@ public class ImportFarmOperationsLegacy {
 
 //        12/10/2023 operação de semeadura de Tremoço Amarelo, 1.1 ha, 32 kg
         int op108 = tblRepo.addToTableOperacoes(1, 108, "TREMOÇO AMARELO", 0, "2023/10/12");
-        tblRepo.addToTableCultivos(1, 108, "TREMOÇO AMARELO", "2023/10/12", null, 32, "kg", 0);
+        tblRepo.addToTableCultivos(1, 108, "TREMOÇO AMARELO", "2023/10/12", null, 1.1, "ha", 0);
         tblRepo.addToTableSementeiras(op108, 32, "kg");
 //
-//        12/06/2023 operação de rega, setor 42, 60 min
+//        12/06/2023 operação de rega, setor 42, 60 min, "06:00"
         int op109 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/12");
-        tblRepo.addToTableRegas(op109, 60, "min", 42);
+        tblRepo.addToTableRegas(op109, 60, "min", 42, "06:00");
 
-//        19/06/2023 operação de rega, setor 42, 60 min
+//        19/06/2023 operação de rega, setor 42, 60 min, "06:00"
         int op110 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/19");
-        tblRepo.addToTableRegas(op110, 60, "min", 42);
+        tblRepo.addToTableRegas(op110, 60, "min", 42, "06:00");
 
-//        30/06/2023 operação de rega, setor 42, 120 min
-        int op111 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/30");
-        tblRepo.addToTableRegas(op111, 120, "min", 42);
-
-//        08/07/2023 operação de rega, setor 42, 120 min
+//        08/07/2023 operação de rega, setor 42, 120 min, "04:00"
         int op112 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/08");
-        tblRepo.addToTableRegas(op112, 120, "min", 42);
+        tblRepo.addToTableRegas(op112, 120, "min", 42, "04:00");
 
-//        15/07/2023 operação de rega, setor 42, 120 min
-        int op113 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/15");
-        tblRepo.addToTableRegas(op113, 120, "min", 42);
-
-//        22/07/2023 operação de rega, setor 42, 150 min
+//        22/07/2023 operação de rega, setor 42, 150 min, "04:00"
         int op114 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/22");
-        tblRepo.addToTableRegas(op114, 150, "min", 42);
+        tblRepo.addToTableRegas(op114, 150, "min", 42, "04:00");
 
-//        29/07/2023 operação de rega, setor 42, 150 min
-        int op115 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/29");
-        tblRepo.addToTableRegas(op115, 150, "min", 42);
-
-//        05/08/2023 operação de rega, setor 42, 120 min
+//        05/08/2023 operação de rega, setor 42, 120 min, "21:30"
         int op116 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/05");
-        tblRepo.addToTableRegas(op116, 120, "min", 42);
+        tblRepo.addToTableRegas(op116, 120, "min", 42, "21:30");
 
-//        12/08/2023 operação de rega, setor 42, 120 min
-        int op117 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/12");
-        tblRepo.addToTableRegas(op117, 120, "min", 42);
-
-//        19/08/2023 operação de rega, setor 42, 120 min
+//        19/08/2023 operação de rega, setor 42, 120 min, "21:30"
         int op118 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/19");
-        tblRepo.addToTableRegas(op118, 120, "min", 42);
+        tblRepo.addToTableRegas(op118, 120, "min", 42, "21:30");
 
-//        26/08/2023 operação de rega, setor 42, 120 min
+//        26/08/2023 operação de rega, setor 42, 120 min, "21:30"
         int op119 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/26");
-        tblRepo.addToTableRegas(op119, 120, "min", 42);
+        tblRepo.addToTableRegas(op119, 120, "min", 42, "21:30");
 
-//        31/08/2023 operação de rega, setor 42, 120 min
+//        31/08/2023 operação de rega, setor 42, 120 min, "21:30"
         int op120 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/31");
-        tblRepo.addToTableRegas(op120, 120, "min", 42);
+        tblRepo.addToTableRegas(op120, 120, "min", 42, "21:30");
 
-//        05/09/2023 operação de rega, setor 42, 120 min
+//        05/09/2023 operação de rega, setor 42, 120 min, "21:30"
         int op121 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/05");
-        tblRepo.addToTableRegas(op121, 120, "min", 42);
+        tblRepo.addToTableRegas(op121, 120, "min", 42, "21:30");
 
 //
-//        20/05/2023 operação de rega, setor 41, 120 min
-        int op122 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/20");
-        tblRepo.addToTableRegas(op122, 120, "min", 41);
-
-//        02/06/2023 operação de rega, setor 41, 120 min
+//        02/06/2023 operação de rega, setor 41, 120 min, "07:30"
         int op123 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/02");
-        tblRepo.addToTableRegas(op123, 120, "min", 41);
+        tblRepo.addToTableRegas(op123, 120, "min", 41, "07:30");
 
-//        09/06/2023 operação de rega, setor 41, 120 min
+//        09/06/2023 operação de rega, setor 41, 120 min, "06:20"
         int op124 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/09");
-        tblRepo.addToTableRegas(op124, 120, "min", 41);
+        tblRepo.addToTableRegas(op124, 120, "min", 41, "06:20");
 
-//        09/07/2023 operação de rega, setor 41, 120 min
-        int op125 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/09");
-        tblRepo.addToTableRegas(op125, 120, "min", 41);
-
-//        16/07/2023 operação de rega, setor 41, 120 min
+//        16/07/2023 operação de rega, setor 41, 120 min, "06:20"
         int op126 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/16");
-        tblRepo.addToTableRegas(op126, 120, "min", 41);
+        tblRepo.addToTableRegas(op126, 120, "min", 41, "06:20");
 
-//        23/07/2023 operação de rega, setor 41, 120 min
+//        23/07/2023 operação de rega, setor 41, 120 min, "06:20"
         int op127 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/23");
-        tblRepo.addToTableRegas(op127, 120, "min", 41);
+        tblRepo.addToTableRegas(op127, 120, "min", 41, "06:20");
 
-//        30/07/2023 operação de rega, setor 41, 120 min
+//        30/07/2023 operação de rega, setor 41, 120 min, "06:20"
         int op128 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/30");
-        tblRepo.addToTableRegas(op128, 120, "min", 41);
+        tblRepo.addToTableRegas(op128, 120, "min", 41, "06:20");
 
-//        07/08/2023 operação de rega, setor 41, 120 min
+//        07/08/2023 operação de rega, setor 41, 120 min, "06:20"
         int op129 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/07");
-        tblRepo.addToTableRegas(op129, 120, "min", 41);
+        tblRepo.addToTableRegas(op129, 120, "min", 41, "06:20");
 
-//        14/08/2023 operação de rega, setor 41, 120 min
+//        14/08/2023 operação de rega, setor 41, 120 min, "06:20"
         int op130 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/14");
-        tblRepo.addToTableRegas(op130, 120, "min", 41);
+        tblRepo.addToTableRegas(op130, 120, "min", 41, "06:20");
 
-//        21/08/2023 operação de rega, setor 41, 120 min
+//        21/08/2023 operação de rega, setor 41, 120 min, "06:20"
         int op131 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/21");
-        tblRepo.addToTableRegas(op131, 120, "min", 41);
+        tblRepo.addToTableRegas(op131, 120, "min", 41, "06:20");
 
-//        28/08/2023 operação de rega, setor 41, 120 min
+//        28/08/2023 operação de rega, setor 41, 120 min, "06:20"
         int op132 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/28");
-        tblRepo.addToTableRegas(op132, 120, "min", 41);
+        tblRepo.addToTableRegas(op132, 120, "min", 41, "06:20");
 
-//        06/09/2023 operação de rega, setor 41, 120 min
+//        06/09/2023 operação de rega, setor 41, 120 min, "06:20"
         int op133 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/06");
-        tblRepo.addToTableRegas(op133, 120, "min", 41);
+        tblRepo.addToTableRegas(op133, 120, "min", 41, "06:20");
 
-//        13/09/2023 operação de rega, setor 41, 120 min
+//        13/09/2023 operação de rega, setor 41, 120 min, "07:00"
         int op134 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/13");
-        tblRepo.addToTableRegas(op134, 120, "min", 41);
+        tblRepo.addToTableRegas(op134, 120, "min", 41, "07:00");
 
-//        20/09/2023 operação de rega, setor 41, 120 min
+//        20/09/2023 operação de rega, setor 41, 120 min, "07:00"
         int op135 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/20");
-        tblRepo.addToTableRegas(op135, 120, "min", 41);
+        tblRepo.addToTableRegas(op135, 120, "min", 41, "07:00");
+    }
+
+    public void addExtraDataSprint3() {
+
+        // Inserir os seguintes fatores de produção:
+        // Matéria Orgânica Líquida, Tecniferti MOL, da Tecniferti, líquido, Matéria Orgânica 27%, Azoto (N) 3,6%, Azoto orgânico (N) 2%, Fósforo total (P2O5) 1%, Potássio total (K2O) 3%, Carbono Orgânico Total (COT) 15%, Ácidos Fúlvicos (AF) 10%
+        int ft1 = tblRepo.addToTableFichasTecnicas("TECNIFERTI MOL");
+        tblRepo.addToTableFormulacoes("LIQUIDO", "MATERIA ORGANICA", "SOLO");
+        tblRepo.addToTableFatoresProducao("TECNIFERTI MOL", "TECNIFERTI", ft1, "LIQUIDO", "MATERIA ORGANICA", "SOLO");
+        int subsId1 = tblRepo.addToTableSubstancias("Matéria Orgânica", 0.27, "%");
+        tblRepo.addToTableComponentesFT(ft1, 1, subsId1);
+        int subsId2 = tblRepo.addToTableSubstancias("N", 5.6, "%");
+        tblRepo.addToTableComponentesFT(ft1, 2, subsId2);
+        int subsId3 = tblRepo.addToTableSubstancias("P2O5", 1.0, "%");
+        tblRepo.addToTableComponentesFT(ft1, 3, subsId3);
+        int subsId4 = tblRepo.addToTableSubstancias("K2O", 3.0, "%");
+        tblRepo.addToTableComponentesFT(ft1, 4, subsId4);
+        int subId5 = tblRepo.addToTableSubstancias("COT", 15.0, "%");
+        tblRepo.addToTableComponentesFT(ft1, 5, subId5);
+        int subsId6 = tblRepo.addToTableSubstancias("AF", 10.0, "%");
+        tblRepo.addToTableComponentesFT(ft1, 6, subsId6);
+
+        // Adubo orgânico, soluSOP 52, da K+S, pó molhavel, Enxofre (SO3) 45%, Potássio total (K2O) 52,5%, pH 7
+        int ft2 = tblRepo.addToTableFichasTecnicas("SOLUSOP 52");
+        tblRepo.addToTableFormulacoes("PO MOLHAVEL", "ADUBO ORGANICO", "SOLO");
+        tblRepo.addToTableFatoresProducao("SOLUSOP 52", "K+S", ft2, "PO MOLHAVEL", "ADUBO ORGANICO", "SOLO");
+        int subsId7 = tblRepo.addToTableSubstancias("SO3", 45.0, "%");
+        tblRepo.addToTableComponentesFT(ft2, 1, subsId7);
+        int subsId8 = tblRepo.addToTableSubstancias("K2O", 52.5, "%");
+        tblRepo.addToTableComponentesFT(ft2, 2, subsId8);
+        int subsId9 = tblRepo.addToTableSubstancias("pH", 7.0, "pH");
+        tblRepo.addToTableComponentesFT(ft2, 3, subsId9);
+
+        // Adubo líquido, Floracal Flow SL, da Plymag, líquido, pH 7.8, densidade 1,6 kg/l, Óxido de calcio (CaO) 35%
+        int ft3 = tblRepo.addToTableFichasTecnicas("FLORACAL FLOW SL");
+        tblRepo.addToTableFormulacoes("LIQUIDO", "ADUBO LIQUIDO", "SOLO");
+        tblRepo.addToTableFatoresProducao("FLORACAL FLOW SL", "PLYMAG", ft3, "LIQUIDO", "ADUBO LIQUIDO", "SOLO");
+        int subsId10 = tblRepo.addToTableSubstancias("pH", 7.8, "pH");
+        tblRepo.addToTableComponentesFT(ft3, 1, subsId10);
+        int subsId11 = tblRepo.addToTableSubstancias("DENSIDADE", 1.6, "kg/l");
+        tblRepo.addToTableComponentesFT(ft3, 1, subsId11);
+        int subsId12 = tblRepo.addToTableSubstancias("CaO", 35.0, "%");
+        tblRepo.addToTableComponentesFT(ft3, 1, subsId12);
+
+        // Adubo líquido, Kiplant AllGrip, da Asfertglobal, líquido
+        int ft4 = tblRepo.addToTableFichasTecnicas("KIPLANT ALLGRIP");
+        tblRepo.addToTableFormulacoes("LIQUIDO", "ADUBO LIQUIDO", "SOLO");
+        tblRepo.addToTableFatoresProducao("KIPLANT ALLGRIP", "ASFERTGOBAL", ft4, "LIQUIDO", "ADUBO LIQUIDO", "SOLO");
+
+        // Adubo líquido, Cuperdem, da Asfertglobal, líquido, Cobre (Cu) 6%
+        int ft5 = tblRepo.addToTableFichasTecnicas("CUPERDEM");
+        tblRepo.addToTableFormulacoes("LIQUIDO", "ADUBO LIQUIDO", "SOLO");
+        tblRepo.addToTableFatoresProducao("CUPERDEM", "ASFERTGOBAL", ft5, "LIQUIDO", "ADUBO LIQUIDO", "SOLO");
+        int subsId13 = tblRepo.addToTableSubstancias("Cu", 6.0, "%");
+        tblRepo.addToTableComponentesFT(ft5, 1, subsId13);
+
+
+        //Inserir as seguintes receitas de fertirrega
+        // Receita 10
+        //      EPSO TOP, K+S, 1.5 kg/ha
+        //      soluSOP 52, K+S, 2.5 kg/ha
+        //      Floracal Flow SL, Plymag, 1.7 l/ha
+        tblRepo.addToTableMix(10);
+        tblRepo.addToTableReceitas(10, "EPSO TOP", 1.5, "kg");
+        tblRepo.addToTableReceitas(10, "SOLUSOP 52", 2.5, "kg");
+        tblRepo.addToTableReceitas(10, "FLORACAL FLOW SL", 1.7, "l");
+
+
+        // Receita 11
+        //      Tecniferti MOL, Tecniferti, 60 l/ha
+        //      Kiplant AllGrip, Asfertglobal, 2 l/ha
+        tblRepo.addToTableMix(11);
+        tblRepo.addToTableReceitas(11, "TECNIFERTI MOL", 60, "l");
+        tblRepo.addToTableReceitas(11, "KIPLANT ALLGRIP", 2, "l");
+
+
+        ///// Campo Novo: (108)
+
+        // 30/06/2023 operação de fertirrega, setor 42, 120 min, 04:00, receita 11
+        int op1 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/30");
+        tblRepo.addToTableFertirregas(op1, 120, "min", 42, 11, "04:00");
+
+        // 15/07/2023 operação de fertirrega, setor 42, 120 min, 04:00, receita 10
+        int op2 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/15");
+        tblRepo.addToTableFertirregas(op2, 120, "min", 42, 10, "04:00");
+
+        // 29/07/2023 operação de fertirrega, setor 42, 150 min, 04:00, receita 11
+        int op3 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/29");
+        tblRepo.addToTableFertirregas(op3, 150, "min", 42, 11, "04:00");
+
+        // 12/08/2023 operação de fertirrega, setor 42, 120 min, 21:30, receita 10
+        int op4 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/12");
+        tblRepo.addToTableFertirregas(op4, 120, "min", 42, 10, "21:30");
+
+        // 20/05/2023 operação de fertirrega, setor 41, 120 min, 07:30, receita 11
+        int op5 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/20");
+        tblRepo.addToTableFertirregas(op5, 120, "min", 41, 11, "07:30");
+
+        // 09/07/2023 operação de fertirrega, setor 41, 120 min, 06:20, receita 10
+        int op6 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/09");
+        tblRepo.addToTableFertirregas(op6, 120, "min", 41, 10, "06:20");
+
+        // 02/06/2023 operação de fertirrega, setor 10, 60 min, 06:00, receita 10
+        int op7 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/02");
+        tblRepo.addToTableFertirregas(op7, 60, "min", 10, 10, "06:00");
+
+        // 17/06/2023 operação de rega, setor 10, 30 min, 05:00
+        int op8 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/17");
+        tblRepo.addToTableRegas(op8, 30, "min", 10, "05:00");
+
+        // 02/07/2023 operação de fertirrega, setor 10, 120 min, 06:00, receita 10
+        int op9 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/02");
+        tblRepo.addToTableFertirregas(op9, 120, "min", 10, 10, "06:00");
+
+        // 17/07/2023 operação de rega, setor 10, 30 min, 05:00
+        int op10 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/17");
+        tblRepo.addToTableRegas(op10, 30, "min", 10, "05:00");
+
+        // 02/08/2023 operação de fertirrega, setor 10, 180 min, 05:00, receita 10
+        int op11 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/02");
+        tblRepo.addToTableFertirregas(op11, 180, "min", 10, 10, "05:00");
+
+        // 17/08/2023 operação de rega, setor 10, 60 min, 05:00
+        int op12 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/17");
+        tblRepo.addToTableRegas(op12, 60, "min", 10, "05:00");
+
+        // 04/09/2023 operação de rega, setor 10, 120 min, 06:00
+        int op13 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/04");
+        tblRepo.addToTableRegas(op13, 120, "min", 10, "06:00");
+
+        // 18/09/2023 operação de rega, setor 10, 30 min, 05:00
+        int op14 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/18");
+        tblRepo.addToTableRegas(op14, 30, "min", 10, "05:00");
+
+        // 02/10/2023 operação de rega, setor 10, 60 min, 06:00
+        int op15 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/10/02");
+        tblRepo.addToTableRegas(op15, 60, "min", 10, "06:00");
+
+        //
+        // 13/05/2023 operação de rega, setor 22, 120 min, 23:00
+        int op16 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/05/13");
+        tblRepo.addToTableRegas(op16, 120, "min", 22, "23:00");
+
+        // 02/06/2023 operação de rega, setor 22, 120 min, 23:00
+        int op17 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/02");
+        tblRepo.addToTableRegas(op17, 120, "min", 22, "23:00");
+
+        // 16/06/2023 operação de fertirrega, setor 22, 120 min, 23:00, receita 10
+        int op18 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/06/16");
+        tblRepo.addToTableFertirregas(op18, 120, "min", 22, 10, "23:00");
+
+        // 01/07/2023 operação de rega, setor 22, 120 min, 23:00
+        int op19 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/01");
+        tblRepo.addToTableRegas(op19, 120, "min", 22, "23:00");
+
+        // 08/07/2023 operação de rega, setor 22, 180 min, 23:00
+        int op20 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/08");
+        tblRepo.addToTableRegas(op20, 180, "min", 22, "23:00");
+
+        // 15/07/2023 operação de fertirrega, setor 22, 180 min, 23:00, receita 11
+        int op21 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/15");
+        tblRepo.addToTableFertirregas(op21, 180, "min", 22, 11, "23:00");
+
+        // 22/07/2023 operação de rega, setor 22, 180 min, 23:00
+        int op22 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/22");
+        tblRepo.addToTableRegas(op22, 180, "min", 22, "23:00");
+
+        // 29/07/2023 operação de rega, setor 22, 180 min, 23:00
+        int op23 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/07/29");
+        tblRepo.addToTableRegas(op23, 180, "min", 22, "23:00");
+
+        // 05/08/2023 operação de rega, setor 22, 150 min, 23:00
+        int op24 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/05");
+        tblRepo.addToTableRegas(op24, 150, "min", 22, "23:00");
+
+        // 10/08/2023 operação de fertirrega, setor 22, 150 min, 23:00, receita 10
+        int op25 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/10");
+        tblRepo.addToTableFertirregas(op25, 150, "min", 22, 10, "23:00");
+
+        // 17/08/2023 operação de rega, setor 22, 150 min, 23:00
+        int op26 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/17");
+        tblRepo.addToTableRegas(op26, 150, "min", 22, "23:00");
+
+        // 24/08/2023 operação de rega, setor 22, 120 min, 23:00
+        int op27 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/08/24");
+        tblRepo.addToTableRegas(op27, 120, "min", 22, "23:00");
+
+        // 02/09/2023 operação de rega, setor 22, 120 min, 23:00
+        int op28 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/02");
+        tblRepo.addToTableRegas(op28, 120, "min", 22, "23:00");
+
+        // 09/09/2023 operação de fertirrega, setor 22, 120 min, 23:00, receita 10
+        int op29 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/09");
+        tblRepo.addToTableFertirregas(op29, 120, "min", 22, 10, "23:00");
+
+        // 18/09/2023 operação de rega, setor 22, 120 min, 23:00
+        int op30 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/18");
+        tblRepo.addToTableRegas(op30, 120, "min", 22, "23:00");
     }
 }
