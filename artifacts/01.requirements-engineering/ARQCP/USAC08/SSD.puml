@@ -1,0 +1,28 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+autonumber
+
+participant "Processador de Dados" as PD
+participant "Coletor de Dados" as CD
+
+activate PD
+
+loop repete o nr de vezes definido pelo utilizador
+    PD -> CD : Recolhe linha de dados do Coletor de Dados
+    activate CD
+        CD -> PD : Devolve próxima linha de dados
+    deactivate CD
+
+    PD -> PD : Verifica se a linha está vazia
+
+    PD -> PD : Inicia função da US09
+end
+
+deactivate PD
+
+@enduml

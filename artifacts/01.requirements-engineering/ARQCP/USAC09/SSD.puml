@@ -1,0 +1,34 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+autonumber
+
+participant "Processador de Dados" as PD
+participant "Coletor de Dados" as CD
+
+activate PD
+
+loop repete o nr de vezes definido pelo utilizador
+
+    PD -> PD : Executa função da US08
+
+    PD -> PD : Identifica o indice do sensor com o id atual leitura
+
+    PD -> PD : Verifica se o sensor está em erro (diferença entre timestamp da leitura atual vs última)
+
+    alt Sensor OK
+    PD -> PD : Aloca os dados ao respetivo sensor no indice encontrado
+    else Sensor NOK
+    PD -> PD : Coloca o sensor em erro, timestamp (-1), evitando registos adicionais nesse sensor
+    end
+
+    PD -> PD : Executa função da US10
+end
+
+deactivate PD
+
+@enduml

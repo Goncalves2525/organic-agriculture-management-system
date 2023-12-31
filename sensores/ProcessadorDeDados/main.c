@@ -28,7 +28,7 @@ int main(int argc, char **argv) {
 
 	int counter = 0;
 
-	// USAC07: ...
+	// USAC07: Alocar dinamicamente as estruturas de dados utilizadas no ProcessadorDeDados
 	int nSensors = getNumberOfLines(config); // obter o nr de linhas do ficheiro de configuração (ou seja, o nr de sensores)
 	if (nSensors <= 0) { // validar se há sensores configurados para leitura
 		printf("\nNão há dados no ficheiro de configuração.\n");
@@ -56,7 +56,7 @@ int main(int argc, char **argv) {
 
 		while (readCounter < readCounterTotal && hasData == 0) { // fazer leituras do Coletor, até atingir a qtd definida pelo parâmetro, ou não existir dados para ler
 			
-			// USAC08: ...
+			// USAC08: Função que receba os dados enviados pelo componente ColetorDeDados
 			int tempData[3] = {0,0,0}; // [0] id, [1] value, [2] timestamp
 			hasData = getColectorLineData(coletorFile, tempData); // função para popular o array com dados do coletor de dados (0: sucesso, 1: insucesso)
 
@@ -69,7 +69,7 @@ int main(int argc, char **argv) {
 
 			if (hasData == 0) {
 
-				// USAC09: ...
+				// USAC09: Função que insira os dados recebidos do componente ColetorDeDados nas estruturas de dados
 				int idx = getSensorIndex(sensors, nSensors, tempData[0]); // obter indice do sensor com o id obtido na linha
 
 				if (sensors[idx].lastTimestamp == -1 || idx == -1) {
