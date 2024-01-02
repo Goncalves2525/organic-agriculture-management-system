@@ -1,7 +1,7 @@
 package ui;
 
 import domain.Location;
-import dto.USEI04_DTO;
+import dto.USEI08_DTO;
 import graphs.Graph;
 import java.util.*;
 
@@ -25,7 +25,7 @@ public class USEI04UI implements Runnable {
         }
 
         // Find the shortest path
-        USEI04_DTO result = findShortestHamiltonianPath(gfh);
+        USEI08_DTO result = findShortestHamiltonianPath(gfh);
 
         // Prints the path
         if (result.hasHamiltonianPath()) {
@@ -47,13 +47,13 @@ public class USEI04UI implements Runnable {
         }
     }
 
-    public USEI04_DTO findShortestHamiltonianPath(Graph<Location, Integer> g) {
+    public USEI08_DTO findShortestHamiltonianPath(Graph<Location, Integer> g) {
         //Get the nr of vertices in the graph
         int numVerts = g.numVertices(); // O(1)
 
         // If 0, returns a null list
         if (numVerts == 0) {
-            return new USEI04_DTO(false, new LinkedList<>(), 0); // O(1)
+            return new USEI08_DTO(false, new LinkedList<>(), 0); // O(1)
         }
 
         // Array to check if the vertices have been visited
@@ -84,7 +84,7 @@ public class USEI04UI implements Runnable {
             Arrays.fill(visited, false);
         }
 
-        return new USEI04_DTO(!shortestPath.isEmpty(), shortestPath, minPathWeight[0]);
+        return new USEI08_DTO(!shortestPath.isEmpty(), shortestPath, minPathWeight[0]);
     }
 
     private boolean shortestHamiltonianPathUtil(Graph<Location, Integer> g, boolean[] visited,

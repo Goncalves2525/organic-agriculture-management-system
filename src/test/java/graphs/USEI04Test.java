@@ -2,14 +2,11 @@ package graphs;
 
 import controller.ImportDataCtrl;
 import domain.Location;
-import dto.USEI04_DTO;
+import dto.USEI08_DTO;
 import graphs.map.MapGraph;
 import org.junit.jupiter.api.Test;
-import ui.USEI03UI;
 import ui.USEI04UI;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.LinkedList;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,13 +27,13 @@ public class USEI04Test {
     public void testFindShortestHamiltonianPathEmptyGraph() {
         Graph<Location, Integer> emptyGraph = new MapGraph<>(true);
 
-        USEI04_DTO result = usei04uiBig.findShortestHamiltonianPath(emptyGraph);
+        USEI08_DTO result = usei04uiBig.findShortestHamiltonianPath(emptyGraph);
         assertTrue(result.getPath().isEmpty());
     }
 
     @Test
     public void testFindShortestHamiltonianPathNonEmptyGraph() {
-        USEI04_DTO result = usei04uiBig.findShortestHamiltonianPath(gfhBig);
+        USEI08_DTO result = usei04uiBig.findShortestHamiltonianPath(gfhBig);
 
         assertFalse(result.getPath().isEmpty());
         assertTrue(result.getPathWeight() >= 0);
@@ -56,7 +53,7 @@ public class USEI04Test {
         Location vertexA = new Location("A", 10, 0, 0, 8, 17); // Example parameters
         singleVertexGraph.addVertex(vertexA);
 
-        USEI04_DTO result = usei04uiBig.findShortestHamiltonianPath(singleVertexGraph);
+        USEI08_DTO result = usei04uiBig.findShortestHamiltonianPath(singleVertexGraph);
         assertEquals( 0, result.getPathWeight());
     }
 }
