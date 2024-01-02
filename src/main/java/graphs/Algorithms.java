@@ -223,9 +223,9 @@ public class Algorithms {
      * @param pathKeys minimum path vertices keys
      * @param dist     minimum distances
      */
-    private static <V, E> void shortestPathDijkstra(Graph<V, E> g, V vOrig,
-                                                    Comparator<E> ce, BinaryOperator<E> sum, E zero,
-                                                    boolean[] visited, V[] pathKeys, E[] dist) { // O(V^2)
+    public static <V, E> void shortestPathDijkstra(Graph<V, E> g, V vOrig,
+                                                   Comparator<E> ce, BinaryOperator<E> sum, E zero,
+                                                   boolean[] visited, V[] pathKeys, E[] dist) { // O(V^2)
 
         Iterable<V> verticesIterator = g.vertices(); // O(V)
 

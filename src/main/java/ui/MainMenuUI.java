@@ -24,6 +24,7 @@ public class MainMenuUI implements Runnable {
         options.add(new MenuItem("Ver Logs das Operações", new LogsUI()));
         options.add(new MenuItem("Run GFH Manager", new ImportGFHDataUI()));
         options.add(new MenuItem("Dados dos Sensores", new SensoresUI()));
+        options.add(new MenuItem("Anular Operações", new AnularOpsUI()));
         int option = 0;
         do {
             option = Utils.showAndSelectIndex(options, "\n\nCADERNO DE CAMPO", "Exit");
