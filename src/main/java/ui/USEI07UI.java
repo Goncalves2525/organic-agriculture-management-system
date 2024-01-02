@@ -2,14 +2,13 @@ package ui;
 
 import controller.ImportDataCtrl;
 import domain.Location;
-import domain.Schedule;
 import dto.USEI07_DTO;
 import graphs.Edge;
 import graphs.Graph;
+import utils.Utils;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class USEI07UI implements Runnable {
@@ -23,21 +22,47 @@ public class USEI07UI implements Runnable {
         this.importDataCtrl = new ImportDataCtrl();
     }
 
+    private Location chooseStartingLocation(Graph<Location, Integer> graph) {
+        // local de origem
+        System.out.println("Escolha o local de origem:");
+        int option = 1;
+
+        //  lista de vértices
+        List<Location> vertices = graph.vertices();
+        for (Location location : vertices) {
+            System.out.println(option + ". " + location.getCode());
+            option++;
+        }
+
+        int opcaoLocal = Utils.readIntegerFromConsole("Opção:");
+
+        // Obter a localidade correspondente à opção
+        Location startingLocation;
+        try {
+            startingLocation = vertices.get(opcaoLocal - 1);
+        } catch (IndexOutOfBoundsException e) {
+            System.out.println("Opção inválida. Usando valor padrão.");
+            startingLocation = vertices.get(0); // Valor padrão, o primeiro da lista
+        }
+
+        System.out.println("Local de origem escolhido: " + startingLocation.getCode());
+
+        return startingLocation;
+    }
+
+
     public void run() {
         // Create a graph from imported data
         Graph<Location, Integer> gfh = importDataCtrl.runImportGFHData(locaisPath, distanciasPath);
 
-        // Find an optimized path using Circuit Euler
-        List<Location> optimizedPath = findOptimizedPath(gfh);
+        Location startingLocation = chooseStartingLocation(gfh);
 
-        // Display the results
-        System.out.println("Optimized Path:");
-        for (Location location : optimizedPath) {
-            System.out.println(location);
-        }
+        // Find an optimized path using Circuit Euler
+        //List<Location> optimizedPath = findOptimizedPath(gfh);
+        List<Location> optimizedPath = findOptimizedPath(gfh, startingLocation);
 
         // Additional logic for USEI07_DTO if required
-        List<USEI07_DTO> centralityInfoList = calculateCentrality(gfh);
+        List<USEI07_DTO> centralityInfoList = calculateCentrality(gfh, optimizedPath);
         for (USEI07_DTO centralityInfo : centralityInfoList) {
             displayCentralityInfo(centralityInfo);
         }
@@ -46,129 +71,117 @@ public class USEI07UI implements Runnable {
     private void displayCentralityInfo(USEI07_DTO centralityInfo) {
         USEI07_DTO.Hub hub = centralityInfo.getHub();
 
-        // Converter String para LocalTime
-        int openHour = hub.openHour;
-        int closeHour = hub.closeHour;
+        System.out.println("Local: " + hub.name);
 
-        // Validar os horários
-        if (isTimeWithinRange(String.valueOf(hub.arrivalTime), openHour, closeHour)) {
-            System.out.println("Hub: " + hub.name);
-            System.out.println("Arrival Time: " + hub.arrivalTime);
-            System.out.println("Departure Time: " + hub.departureTime);
+        if (hub.isHub()) {
+            System.out.println("Hub de Partida");
+            System.out.println("Hora de Chegada: " + centralityInfo.getArrivalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
+            System.out.println("Hora de Partida: " + centralityInfo.getDepartureTime().format(DateTimeFormatter.ofPattern("HH:mm")));
         } else {
-            // Lógica para lidar com horário inválido
-            System.out.println("Horário inválido para o hub " + hub.name);
+            System.out.println("Hora de Chegada: " + centralityInfo.getArrivalTime().format(DateTimeFormatter.ofPattern("HH:mm")));
         }
+
+        System.out.println("Distância Total: " + centralityInfo.getTotalDistance() + "m");
+        System.out.println("Número de Carregamentos: " + centralityInfo.getNumberOfLoadings());
+        System.out.println("Tempo Total: " + centralityInfo.getTotalTime() + " minutos\n");
     }
 
-
-
-    private boolean isTimeWithinRange(String time, int openHour, int closeHour) {
-        try {
-            // Parse a string no formato "hh:mm" para um objeto LocalTime
-            LocalTime parsedTime = LocalTime.parse(time, DateTimeFormatter.ofPattern("HH:mm"));
-
-            // Converta os horários de abertura e fechamento para objetos LocalTime
-            LocalTime openingTime = LocalTime.of(openHour, 0);
-            LocalTime closingTime = LocalTime.of(closeHour, 0);
-
-            // Verifique se o horário está no intervalo
-            return !parsedTime.isBefore(openingTime) && !parsedTime.isAfter(closingTime);
-        } catch (DateTimeParseException e) {
-            // Lógica para lidar com horários em formato inválido
-            return false;
-        }
-    }
-
-
-    // Assuming USEI07_DTO class has a constructor that accepts a Hub object
-    public List<USEI07_DTO> calculateCentrality(Graph<Location, Integer> graph) {
+    public List<USEI07_DTO> calculateCentrality(Graph<Location, Integer> graph, List<Location> optimizedPath) {
         List<USEI07_DTO> centralityList = new ArrayList<>();
 
-        for (Location location : graph.vertices()) {
-            int degreeCentrality = calculateDegreeCentrality(graph, location);
+        for (int i = 0; i < optimizedPath.size(); i++) {
+            Location location = optimizedPath.get(i);
 
-            LocalTime currentDepartureTime = LocalTime.of(9, 0);
-            int travelTime = 30;
-            int chargingTime = 60;
+            // Create a Hub object for the location
+            USEI07_DTO.Hub hub = new USEI07_DTO.Hub(location.getCode(), location.getSchedule().getOpenHour(), location.getSchedule().getCloseHour());
 
-            USEI07_DTO.Hub hub = new USEI07_DTO.Hub(
-                    location.getCode(),
-                    degreeCentrality,
-                    LocalTime.MIDNIGHT,
-                    location.getSchedule().getOpenHour(),
-                    location.getSchedule().getCloseHour(),
-                    travelTime,
-                    chargingTime
-            );
+            // Calculate arrival and departure time for hubs
+            if (hub.isHub()) {
+                LocalTime arrivalTime = LocalTime.now();
+                LocalTime departureTime = arrivalTime.plusMinutes(60); // Example time, adjust as needed
 
+                hub.setArrivalTime(arrivalTime);
+                hub.setDepartureTime(departureTime);
+            }
 
-
+            // Create a USEI07_DTO object and add it to the list
             USEI07_DTO centralityInfo = new USEI07_DTO(hub);
+
+            // Set additional information for hubs
+            if (hub.isHub()) {
+                centralityInfo.setArrivalTime(hub.getArrivalTime());
+                centralityInfo.setDepartureTime(hub.getDepartureTime());
+            }
+
+            // Calculate total distance
+            double totalDistance = calculateTotalDistance(graph, optimizedPath);
+            centralityInfo.setTotalDistance(totalDistance);
+
+            // Calculate number of loadings (assuming 1 loading per hub)
+            int numberOfLoadings = i;
+            centralityInfo.setNumberOfLoadings(numberOfLoadings);
+
+            // Calculate total time (placeholder values, adjust as needed)
+            int totalTime = numberOfLoadings * 30 + (int) (totalDistance / 1000 / 30);
+            centralityInfo.setTotalTime(totalTime);
+
             centralityList.add(centralityInfo);
         }
 
         return centralityList;
     }
 
-    private LocalTime calculateArrivalTime(Location location, LocalTime departureTime, int travelTime) {
-        // Obter o horário de funcionamento da localização
-        Schedule schedule = location.getSchedule();
-        LocalTime openingTime = LocalTime.ofSecondOfDay(schedule.getOpenHour());
-        LocalTime closingTime = LocalTime.ofSecondOfDay(schedule.getCloseHour());
+    private double calculateTotalDistance(Graph<Location, Integer> graph, List<Location> optimizedPath) {
+        double totalDistance = 0.0;
 
-        // Calcular o horário de chegada
-        LocalTime potentialArrivalTime = departureTime.plusMinutes(travelTime);
+        for (int i = 0; i < optimizedPath.size() - 1; i++) {
+            Location currentLocation = optimizedPath.get(i);
+            Location nextLocation = optimizedPath.get(i + 1);
 
-        // Verificar se o horário de chegada ultrapassa o horário de fechamento
-        if (potentialArrivalTime.isAfter(closingTime)) {
-            // Se ultrapassar, definir o horário de chegada como o horário de fechamento
-            return closingTime;
-        } else {
-            // Caso contrário, manter o horário calculado
-            return potentialArrivalTime;
+            Edge<Location, Integer> edge = graph.edge(currentLocation, nextLocation);
+            if (edge != null) {
+                totalDistance += edge.getWeight();
+            }
         }
+
+        return totalDistance;
     }
 
-    private LocalTime calculateDepartureTime(Location location, LocalTime arrivalTime, int chargingTime) {
-        // Obter o horário de funcionamento da localização
-        Schedule schedule = location.getSchedule();
-        LocalTime openingTime = LocalTime.ofSecondOfDay(schedule.getOpenHour());
-        LocalTime closingTime = LocalTime.ofSecondOfDay(schedule.getCloseHour());
+//    private List<Location> findOptimizedPath(Graph<Location, Integer> graph) {
 
-        // Calcular o horário de partida
-        LocalTime potentialDepartureTime = arrivalTime.plusMinutes(chargingTime);
+//        Map<Location, List<Location>> adjacencyList = getAdjacencyList(graph);
+//
+//        // Initialize a stack to store the path
+//        Stack<Location> path = new Stack<>();
+//        // Select a starting vertex (replace with your logic)
+//        Location startLocation = graph.vertices().iterator().next();
+//        path.push(startLocation);
+//
+//        List<Location> optimizedPath = new ArrayList<>();
+//
+//        while (!path.isEmpty()) {
+//            Location current = path.peek();
+//
+//            if (adjacencyList.get(current) != null && !adjacencyList.get(current).isEmpty()) {
+//                // If there are remaining edges from the current vertex
+//                Location next = adjacencyList.get(current).remove(0);
+//                path.push(next);
+//            } else {
+//                // If no more edges from the current vertex, add it to the final path
+//                optimizedPath.add(0, path.pop());
+//            }
+//        }
+//
+//        return optimizedPath;
+//    }
 
-        // Verificar se o horário de partida é anterior ao horário de abertura
-        if (potentialDepartureTime.isBefore(openingTime)) {
-            // Se for anterior, definir o horário de partida como o horário de abertura
-            return openingTime;
-        } else {
-            // Caso contrário, manter o horário calculado
-            return potentialDepartureTime;
-        }
-    }
+    private List<Location> findOptimizedPath(Graph<Location, Integer> graph, Location startingLocation) {
 
-
-
-
-
-    private int calculateDegreeCentrality(Graph<Location, Integer> graph, Location location) {
-        // For directed graphs, degree centrality is the sum of in-degrees and out-degrees
-        int inDegree = graph.inDegree(location);
-        int outDegree = graph.outDegree(location);
-        return inDegree + outDegree;
-    }
-
-    private List<Location> findOptimizedPath(Graph<Location, Integer> graph) {
-        // Assuming your graph class has a method to get adjacent vertices of a vertex
         Map<Location, List<Location>> adjacencyList = getAdjacencyList(graph);
 
         // Initialize a stack to store the path
         Stack<Location> path = new Stack<>();
-        // Select a starting vertex (replace with your logic)
-        Location startLocation = graph.vertices().iterator().next();
-        path.push(startLocation);
+        path.push(startingLocation);
 
         List<Location> optimizedPath = new ArrayList<>();
 
@@ -188,10 +201,6 @@ public class USEI07UI implements Runnable {
         return optimizedPath;
     }
 
-    public static void main(String[] args) {
-        USEI07UI usei07UI = new USEI07UI();
-        usei07UI.run();
-    }
 
     private Map<Location, List<Location>> getAdjacencyList(Graph<Location, Integer> graph) {
         Map<Location, List<Location>> adjacencyList = new HashMap<>();
@@ -224,5 +233,10 @@ public class USEI07UI implements Runnable {
         }
 
         return neighbors;
+    }
+
+    public static void main(String[] args) {
+        USEI07UI usei07UI = new USEI07UI();
+        usei07UI.run();
     }
 }
