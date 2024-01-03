@@ -17,7 +17,6 @@ public class USEI07_DTO {
         public Hub(String name, int openHour, int closeHour) {
             this.name = name;
             this.isHub = true;
-            // Set additional initialization logic if needed
         }
 
         public boolean isHub() {
@@ -57,17 +56,9 @@ public class USEI07_DTO {
             this.numberOfLoadings = numberOfLoadings;
             this.totalTime = totalTime;
         }
-
-        public static PathResult createWithPathAndDistance(List<Hub> path, double totalDistance, String arrivalTime, String departureTime, int numberOfLoadings, int totalTime) {
-            return new PathResult(path, totalDistance, arrivalTime, departureTime, numberOfLoadings, totalTime);
-        }
     }
 
     private Hub hub;
-
-//    public USEI07_DTO(Hub hub) {
-//        this.hub = hub;
-//    }
 
     public Hub getHub() {
         return hub;
@@ -78,14 +69,6 @@ public class USEI07_DTO {
     public USEI07_DTO(Hub hub) {
         this.hub = hub;
         this.pathResult = new PathResult(new ArrayList<>(), 0, "", "", 0, 0);
-    }
-
-    public void setPathResult(PathResult pathResult) {
-        this.pathResult = pathResult;
-    }
-
-    public PathResult getPathResult() {
-        return pathResult;
     }
 
     public double getTotalDistance() {
@@ -116,11 +99,6 @@ public class USEI07_DTO {
         return LocalTime.parse(pathResult.departureTime, DateTimeFormatter.ofPattern("HH:mm"));
     }
 
-    public void addToPath(Hub hub) {
-        pathResult.path.add(hub);
-    }
-
-    // Métodos adicionados
     public void setTotalDistance(double totalDistance) {
         pathResult.totalDistance = totalDistance;
     }
