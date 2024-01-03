@@ -9,7 +9,6 @@ public class CultivosDTO {
     private String produto;
     private double quantidade;
     private String unidadeColheita = "un";
-
     private String unidadeMonda = "ha";
     private String dataColheita;
 
