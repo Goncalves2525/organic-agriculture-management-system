@@ -61,7 +61,6 @@ public class USEI07UI implements Runnable {
         //List<Location> optimizedPath = findOptimizedPath(gfh);
         List<Location> optimizedPath = findOptimizedPath(gfh, startingLocation);
 
-        // Additional logic for USEI07_DTO if required
         List<USEI07_DTO> centralityInfoList = calculateCentrality(gfh, optimizedPath);
         for (USEI07_DTO centralityInfo : centralityInfoList) {
             displayCentralityInfo(centralityInfo);
@@ -98,7 +97,7 @@ public class USEI07UI implements Runnable {
             // Calculate arrival and departure time for hubs
             if (hub.isHub()) {
                 LocalTime arrivalTime = LocalTime.now();
-                LocalTime departureTime = arrivalTime.plusMinutes(60); // Example time, adjust as needed
+                LocalTime departureTime = arrivalTime.plusMinutes(60);
 
                 hub.setArrivalTime(arrivalTime);
                 hub.setDepartureTime(departureTime);
@@ -117,11 +116,11 @@ public class USEI07UI implements Runnable {
             double totalDistance = calculateTotalDistance(graph, optimizedPath);
             centralityInfo.setTotalDistance(totalDistance);
 
-            // Calculate number of loadings (assuming 1 loading per hub)
+            // Calculate number of loadings
             int numberOfLoadings = i;
             centralityInfo.setNumberOfLoadings(numberOfLoadings);
 
-            // Calculate total time (placeholder values, adjust as needed)
+            // Calculate total time
             int totalTime = numberOfLoadings * 30 + (int) (totalDistance / 1000 / 30);
             centralityInfo.setTotalTime(totalTime);
 
@@ -180,21 +179,21 @@ public class USEI07UI implements Runnable {
         Map<Location, List<Location>> adjacencyList = getAdjacencyList(graph);
 
         // Initialize a stack to store the path
-        Stack<Location> path = new Stack<>();
+        Stack<Location> path = new Stack<>(); //O(1)
         path.push(startingLocation);
 
         List<Location> optimizedPath = new ArrayList<>();
 
-        while (!path.isEmpty()) {
+        while (!path.isEmpty()) { //O(n)
             Location current = path.peek();
 
             if (adjacencyList.get(current) != null && !adjacencyList.get(current).isEmpty()) {
                 // If there are remaining edges from the current vertex
                 Location next = adjacencyList.get(current).remove(0);
-                path.push(next);
+                path.push(next); //O(1)
             } else {
                 // If no more edges from the current vertex, add it to the final path
-                optimizedPath.add(0, path.pop());
+                optimizedPath.add(0, path.pop());//O(1)
             }
         }
 
@@ -235,8 +234,8 @@ public class USEI07UI implements Runnable {
         return neighbors;
     }
 
-    public static void main(String[] args) {
-        USEI07UI usei07UI = new USEI07UI();
-        usei07UI.run();
-    }
+//    public static void main(String[] args) {
+//        USEI07UI usei07UI = new USEI07UI();
+//        usei07UI.run();
+//    }
 }
