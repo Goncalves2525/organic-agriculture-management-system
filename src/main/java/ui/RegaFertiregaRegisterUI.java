@@ -6,6 +6,7 @@ import dto.RegaDTO;
 import utils.AnsiColor;
 import utils.Utils;
 
+import java.sql.Date;
 import java.sql.SQLException;
 
 public class RegaFertiregaRegisterUI implements Runnable{
@@ -52,16 +53,17 @@ public class RegaFertiregaRegisterUI implements Runnable{
             try {
                 FertirregasDTO fertirrega = new FertirregasDTO(); // Initialize the variable
                 boolean option = false;
-
+                String horaInicio = "";
+                String dataInicio = "";
                 do {
                     regasCtrl.getSetoresForRega();
                     int setor = Utils.readIntegerFromConsole("Escolha um algarismo de um dado SETOR, para proceder à REGA.");
                     fertirrega.setSetor(setor);
-                    String dataInicio = Utils.readLineFromConsole("Indique a data de inicio da operação (YYYY/MM/DD): ");
+                    dataInicio = Utils.readLineFromConsole("Indique a data de inicio da operação (YYYY/MM/DD): ");
                     fertirrega.setDataInicio(dataInicio);
                     double quantidade = Utils.readDoubleFromConsole("Qual é a quantidade em minutos da rega?");
                     fertirrega.setQuantidade(quantidade);
-                    String horaInicio = Utils.readLineFromConsole("Qual é a hora de inicio (hh:mm)?");
+                    horaInicio = Utils.readLineFromConsole("Qual é a hora de inicio (hh:mm)?");
                     fertirrega.setHoraInicio(horaInicio);
                     int receitaId = Utils.readIntegerFromConsole("Indique o id da receita:");
                     fertirrega.setReceitaId(receitaId);
@@ -73,7 +75,10 @@ public class RegaFertiregaRegisterUI implements Runnable{
                 } while (Utils.confirm("Quer tentar de novo? (y/n)"));
 
                 if (option) {
-                    regasCtrl.insertFertirregas(fertirrega);
+                    //regasCtrl.insertFertirregas(fertirrega);
+                    int quantidade = (int) fertirrega.getQuantidade();
+                    Date dataInicioSQL = new java.sql.Date(new java.util.Date(dataInicio).getTime());
+                    regasCtrl.registarFertiRega(1, 106, 0, quantidade, "min", fertirrega.getSetor(), fertirrega.getReceitaId(), dataInicio, horaInicio);
                 }
 
                 Utils.readLineFromConsole("Press Enter to continue.");
