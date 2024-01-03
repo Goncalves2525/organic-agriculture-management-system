@@ -152,6 +152,37 @@ BEGIN
 END getLogs;
 /
 
+-- Função para obter os setores
+create or replace NONEDITIONABLE FUNCTION getSetores RETURN SYS_REFCURSOR
+IS
+    v_cursor SYS_REFCURSOR;
+BEGIN
+
+    OPEN v_cursor FOR
+
+        SELECT
+
+            setores_rega.idsetor,
+
+            setores_rega.quintaid,
+
+            setores_rega.edificioid,
+
+            setores_rega.datainicio,
+
+            setores_rega.datafim,
+
+            setores_rega.caudalmaximo,
+
+            setores_rega.unidademedida
+
+        FROM setores_rega;
+
+    RETURN v_cursor;
+
+END getSetores;
+/
+
 ------------
 ------------
 -- SPRINT 2
