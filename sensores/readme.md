@@ -1,7 +1,7 @@
 # Precentagem de contribuição de cada elemento do grupo no projecto:
-1212044 : -%
-1212047 : -%
-1221720 : -%
+1212044 : 20%
+1212047 : 50%
+1221720 : 30%
 
 # As funcionalidades implementadas e a repectiva percentagem funcional
 ## (isto é, se está 100% funcional ou 80% ou outra, nestes casos devem identificar as situações que levam a essa percentagem)
