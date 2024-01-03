@@ -1,0 +1,31 @@
+@startuml
+skinparam monochrome true
+skinparam packageStyle rectangle
+skinparam shadowing false
+
+title System Sequence Diagram (SSD)
+
+autonumber
+
+participant "Saida de Dados" as SD
+participant "Processador de Dados" as PD
+
+activate SD
+
+    SD -> PD : Pede o caminho para o ficheiro com os dados da última leitura
+
+    activate PD
+        PD -> SD : Retorna o caminho para o ficheiro com os dados da última leitura
+    deactivate PD
+
+    SD -> PD : Executa leitura do ficheiro com os dados da última leitura
+
+    SD -> SD : Compila dados num array de uma estrutura própria
+
+    SD -> SD : Cria ficheiro de output, caso não exista
+
+    SD -> SD : Escreve no ficheiro de output
+
+deactivate SD
+
+@enduml
