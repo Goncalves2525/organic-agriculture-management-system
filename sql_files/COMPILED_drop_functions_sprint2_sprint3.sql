@@ -1,0 +1,43 @@
+drop function createmix;
+drop function func_check_operador;
+drop function func_check_parcela;
+drop function func_check_quinta;
+drop function func_check_unmedida;
+drop function func_registar_semeadura;
+drop function get_listaprodcolhidos;
+drop function getcultivosdata;
+drop function getcultivosformondasdata;
+drop function getlistafatprod;
+drop function getlistareceitas;
+drop function getmondas;
+drop function getoperacoesmaxid;
+drop function getprodutoquantidade;
+drop function insert_poda;
+drop function insertmondas;
+drop function registaraplicacao;
+drop function registarreceita;
+drop function registercolheita;
+drop function anular_operacao;
+drop function checkexistingmixid;
+drop function checkexistingmixingredient;
+drop function func_registar_fertirega;
+drop function func_registar_rega;
+drop function getaplicacoes;
+drop function getlogs;
+drop function getparcelasdata;
+drop function FUNC_REGISTAR_FERTIREGA;
+drop function FUNC_REGISTAR_REGA;
+
+drop procedure ObterSubstanciasNaoUsadasNoAno;
+
+drop trigger LOGAPLICACAOTRIGGER;
+drop trigger LOGCOLHEITATRIGGER;
+drop trigger LOGINCORP_SOLOTRIGGER;
+drop trigger LOGMOBILIZACAO_SOLOTRIGGER;
+drop trigger LOGMONDATRIGGER;
+drop trigger LOGPLANTACAOTRIGGER;
+drop trigger LOGREGATRIGGER;
+drop trigger LOGSEMENTEIRATRIGGER;
+drop trigger NEGAR_ALTERACOES_LOGS;
+drop trigger NEGAR_DELETE_OPERACOES;
+
