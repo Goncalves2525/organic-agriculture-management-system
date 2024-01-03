@@ -179,21 +179,21 @@ public class USEI07UI implements Runnable {
         Map<Location, List<Location>> adjacencyList = getAdjacencyList(graph);
 
         // Initialize a stack to store the path
-        Stack<Location> path = new Stack<>();
+        Stack<Location> path = new Stack<>(); //O(1)
         path.push(startingLocation);
 
         List<Location> optimizedPath = new ArrayList<>();
 
-        while (!path.isEmpty()) {
+        while (!path.isEmpty()) { //O(n)
             Location current = path.peek();
 
             if (adjacencyList.get(current) != null && !adjacencyList.get(current).isEmpty()) {
                 // If there are remaining edges from the current vertex
                 Location next = adjacencyList.get(current).remove(0);
-                path.push(next);
+                path.push(next); //O(1)
             } else {
                 // If no more edges from the current vertex, add it to the final path
-                optimizedPath.add(0, path.pop());
+                optimizedPath.add(0, path.pop());//O(1)
             }
         }
 
@@ -234,8 +234,8 @@ public class USEI07UI implements Runnable {
         return neighbors;
     }
 
-    public static void main(String[] args) {
-        USEI07UI usei07UI = new USEI07UI();
-        usei07UI.run();
-    }
+//    public static void main(String[] args) {
+//        USEI07UI usei07UI = new USEI07UI();
+//        usei07UI.run();
+//    }
 }
