@@ -146,33 +146,33 @@ public class USEI07UI implements Runnable {
         return totalDistance;
     }
 
-//    private List<Location> findOptimizedPath(Graph<Location, Integer> graph) {
+    public List<Location> findOptimizedPath2(Graph<Location, Integer> graph) {
 
-//        Map<Location, List<Location>> adjacencyList = getAdjacencyList(graph);
-//
-//        // Initialize a stack to store the path
-//        Stack<Location> path = new Stack<>();
-//        // Select a starting vertex (replace with your logic)
-//        Location startLocation = graph.vertices().iterator().next();
-//        path.push(startLocation);
-//
-//        List<Location> optimizedPath = new ArrayList<>();
-//
-//        while (!path.isEmpty()) {
-//            Location current = path.peek();
-//
-//            if (adjacencyList.get(current) != null && !adjacencyList.get(current).isEmpty()) {
-//                // If there are remaining edges from the current vertex
-//                Location next = adjacencyList.get(current).remove(0);
-//                path.push(next);
-//            } else {
-//                // If no more edges from the current vertex, add it to the final path
-//                optimizedPath.add(0, path.pop());
-//            }
-//        }
-//
-//        return optimizedPath;
-//    }
+        Map<Location, List<Location>> adjacencyList = getAdjacencyList(graph);
+
+        // Initialize a stack to store the path
+        Stack<Location> path = new Stack<>();
+        // Select a starting vertex (replace with your logic)
+        Location startLocation = graph.vertices().iterator().next();
+        path.push(startLocation);
+
+        List<Location> optimizedPath = new ArrayList<>();
+
+        while (!path.isEmpty()) {
+            Location current = path.peek();
+
+            if (adjacencyList.get(current) != null && !adjacencyList.get(current).isEmpty()) {
+                // If there are remaining edges from the current vertex
+                Location next = adjacencyList.get(current).remove(0);
+                path.push(next);
+            } else {
+                // If no more edges from the current vertex, add it to the final path
+                optimizedPath.add(0, path.pop());
+            }
+        }
+
+        return optimizedPath;
+    }
 
     private List<Location> findOptimizedPath(Graph<Location, Integer> graph, Location startingLocation) {
 

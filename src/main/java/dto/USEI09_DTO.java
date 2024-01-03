@@ -34,7 +34,7 @@ public class USEI09_DTO {
     public static <V, E> List<Cluster<V>> clusterize(Graph<V, E> graph) {
         List<Cluster<V>> clusters = new ArrayList<>();
 
-        while (graph.numEdges() > 0) {
+        while (graph.numEdges() > 0) { //O(E)
             Edge<V, Integer> edgeToRemove = findEdgeToRemove((Graph<V, Integer>) graph);
             if (edgeToRemove != null) {
                 V vOrig = edgeToRemove.getVOrig();
@@ -46,10 +46,10 @@ public class USEI09_DTO {
         }
 
         // Identify clusters
-        Set<V> visitedLocations = new HashSet<>();
-        for (V vertex : graph.vertices()) {
+        Set<V> visitedLocations = new HashSet<>(); // O(1)
+        for (V vertex : graph.vertices()) { // O(V)
             if (!visitedLocations.contains(vertex)) {
-                Cluster<V> cluster = exploreCluster(graph, vertex);
+                Cluster<V> cluster = exploreCluster(graph, vertex); // O(V + E)
                 if (cluster != null) {
                     clusters.add(cluster);
                 }
@@ -188,7 +188,7 @@ public class USEI09_DTO {
 
 
 
-    private static <V, E> Cluster<V> exploreCluster(Graph<V, E> graph, V startVertex) {
+    public static <V, E> Cluster<V> exploreCluster(Graph<V, E> graph, V startVertex) {
         Set<V> visitedLocations = new HashSet<>();
         LinkedList<V> queue = new LinkedList<>();
         queue.add(startVertex);
