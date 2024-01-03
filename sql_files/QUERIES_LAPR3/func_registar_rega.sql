@@ -28,4 +28,5 @@ begin
 exception
     when others then
         dbms_output.put_line('Erro:' || sqlerrm);
+        return '';
 end;
