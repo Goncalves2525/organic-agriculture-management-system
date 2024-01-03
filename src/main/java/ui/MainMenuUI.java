@@ -21,7 +21,8 @@ public class MainMenuUI implements Runnable {
         options.add(new MenuItem("Menu Aplicações (Fatores de Produção)", new AplicacoesUI()));
         options.add(new MenuItem("Menu Colheitas", new ColheitasUI()));
         options.add(new MenuItem("Menu Receitas", new ReceitasUI()));
-        options.add(new MenuItem("Menu Regas e Fertiregas", new RegaFertiregaUI()));
+        options.add(new MenuItem("Menu  de registo Regas e Fertiregas", new RegaFertiregaRegisterUI()));
+        options.add(new MenuItem("Menu de consulta de Regas e Fertirregas", new RegaFertirregaUI()));
         options.add(new MenuItem("Ver Logs das Operações", new LogsUI()));
         options.add(new MenuItem("Run GFH Manager", new ImportGFHDataUI()));
         options.add(new MenuItem("Dados dos Sensores", new SensoresUI()));

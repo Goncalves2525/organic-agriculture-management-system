@@ -1,20 +1,18 @@
 package ui;
 
 import controller.RegasController;
-import dto.CultivosDTO;
 import dto.FertirregasDTO;
 import dto.RegaDTO;
-import tables.Regas;
 import utils.AnsiColor;
 import utils.Utils;
 
 import java.sql.SQLException;
 
-public class RegaFertiregaUI implements Runnable{
+public class RegaFertiregaRegisterUI implements Runnable{
 
     private RegasController regasCtrl;
 
-    public RegaFertiregaUI(){regasCtrl = new RegasController();}
+    public RegaFertiregaRegisterUI(){regasCtrl = new RegasController();}
 
     @Override
     public void run() {
