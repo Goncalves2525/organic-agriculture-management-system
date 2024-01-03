@@ -410,3 +410,56 @@ VALUES (operacaoID, log_timestamp, descricao);
 
 END;
 
+
+
+
+--log das fertirregas
+
+create or replace NONEDITIONABLE TRIGGER LOGFERTIRREGATRIGGER
+    AFTER INSERT OR UPDATE ON Fertirregas
+                               FOR EACH ROW
+DECLARE
+operacaoID NUMBER;
+    log_timestamp TIMESTAMP(0) WITH TIME ZONE;
+    tipoTrigger VARCHAR2(255);
+    data_operacao DATE;
+    tipoOperacao VARCHAR2(255);
+    parcelaID NUMBER(10);
+    parcelaNome VARCHAR2(255);
+    unidade VARCHAR2(255);
+    quantidade NUMBER(10);
+
+    setor NUMBER(10);
+    receita number(10);
+
+    descricao VARCHAR2(255);
+BEGIN
+
+     if inserting then
+        tipoTrigger := 'INSERT';
+else
+        tipoTrigger := 'UPDATE';
+end if;
+
+    operacaoId := :new.operacaoid;
+SELECT CURRENT_TIMESTAMP INTO log_timestamp FROM DUAL;
+select datainicio into data_operacao from operacoes where operacoes.idoperacao = operacaoID;
+tipoOperacao := 'Fertirrega';
+select parcelaid into parcelaID from operacoes where operacoes.idoperacao = operacaoID;
+select nome into parcelaNome from parcelas where idParcela = parcelaid;
+unidade := :new.unidademedida;
+    quantidade := :new.quantidade;
+
+    setor := :new.setor;
+    receita := :new.receitaID;
+
+    descricao := 'Timestamp: ' || log_timestamp || '; Trigger: ' || tipoTrigger || '; Tipo de Operação: ' || tipoOperacao ||
+    '; Data: ' || data_operacao || '; Parcela: ' || parcelaNome || '; Nº Setor: ' || setor || '; Receita ID: ' || receita ||
+    '; Quantidade: ' || quantidade || unidade;
+
+
+INSERT INTO operacoes_logs(operacaoId, timestamp, descricao)
+VALUES (operacaoID, log_timestamp, descricao);
+
+
+END;
