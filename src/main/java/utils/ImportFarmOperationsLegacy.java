@@ -1112,83 +1112,6 @@ public class ImportFarmOperationsLegacy {
         int subsId16 = tblRepo.addToTableSubstancias("B", 0.00002, "%");
         tblRepo.addToTableComponentesFT(ft2, 8, subsId16);
 
-//        Inserir os seguintes setores de rega:
-//
-//        Setor 10
-//        Início a 01/05/2017, sem data fim
-//        Caudal máximo: 2500 l/h
-//        Parcelas: Campo grande
-//        Culturas:
-//        - Oliveira Galega, 30 un, 01/05/2017, sem data fim
-//        - Oliveira Picual, 20 un, 01/05/2017, sem data fim
-        tblRepo.addToTableSetoresRega(10, 1, 303, "2017/05/01", null, 2500, "l/h");
-        tblRepo.setSetorRegaToCultivo(10, "CAMPO GRANDE", "OLIVEIRA GALEGA");
-        tblRepo.setSetorRegaToCultivo(10, "CAMPO GRANDE", "OLIVEIRA PICUAL");
-
-//        Setor 11
-//        Início a 01/05/2017, sem data fim
-//        Caudal máximo: 1500 l/h
-//        Parcelas: Campo grande
-//        Culturas:
-//        - Oliveira Arbquina, 40 un, 01/05/2017, sem data fim
-        tblRepo.addToTableSetoresRega(11, 1, 303, "2017/05/01", null, 1500, "l/h");
-        tblRepo.setSetorRegaToCultivo(11, "CAMPO GRANDE", "OLIVEIRA ARBEQUINA");
-
-//        Setor 21
-//        Início a 01/05/2017, sem data fim
-//        Caudal máximo: 3500 l/h
-//        Parcelas: Lameiro da ponte, Lameiro do Moinho
-//        Culturas:
-//        - Macieira Jonagored, 90 un, 01/05/2017, sem data fim
-//        - Macieira Fuji, 60 un, 01/05/2017, sem data fim
-//        - Macieira Royal Gala, 60 un, 01/05/2017, sem data fim
-//        - Macieira Royal Gala, 40 un, 01/05/2019, sem data fim
-//        - Macieira Pipo de Basto, 40 un, 01/05/2019, sem data fim
-        tblRepo.addToTableSetoresRega(21, 1, 303, "2017/05/01", null, 3500, "l/h");
-        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA JONAGORED");
-        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA FUJI");
-        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA ROYAL GALA");
-        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA ROYAL GALA");
-        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA PIPO DE BASTO");
-
-
-//        Setor 22
-//        Início a 01/05/2019, sem data fim
-//        Caudal máximo: 3500 l/h
-//        Parcelas: Lameiro do Moinho
-//        Culturas:
-//        - Macieira Porta da Loja, 50 un, 01/05/2019, sem data fim
-//        - Macieira Malápio, 20 un, 01/05/2019, sem data fim
-//        - Macieira Canada, 30 un, 01/05/2019, sem data fim
-//        - Macieira Grand Fay, 40 un, 01/05/2019, sem data fim
-//        - Macieira Gronho Doce, 50 un, 01/05/2019, sem data fim
-        tblRepo.addToTableSetoresRega(22, 1, 303, "2019/05/01", null, 3500, "l/h");
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA PORTA DA LOJA", "2019/05/01", null, 50, 5, 5, 22);
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA MALÁPIO", "2019/05/01", null, 20, 5, 5, 22);
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA REINETTE OU CANADA", "2019/05/01", null, 30, 5, 5, 22);
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA REINETTE OU GRAND FAY", "2019/05/01", null, 40, 5, 5, 22);
-        tblRepo.addToTableCultivos(1, 105, "MACIEIRA GRONHO DOCE", "2019/05/01", null, 50, 5, 5, 22);
-
-
-//        Setor 41
-//        Início a 01/04/2023, 10/10/2023
-//        Caudal máximo: 2500 l/h
-//        Parcelas: Campo Novo
-//        Culturas:
-//        - Cenoura Sugarsnax Hybrid, 05/04/2023 a 31/05/2023
-//        - Cenoura Danvers Half Long, 05/07/2023 a 08/10/2023
-        tblRepo.addToTableSetoresRega(41, 1, 303, "2023/04/01", "2023/10/10", 2500, "l/h");
-        tblRepo.addToTableCultivos(1, 108, "CENOURA SUGARSNAX HYBRID", "2023/04/05", "2023/05/31", 0.5, "ha", 41);
-        tblRepo.addToTableCultivos(1, 108, "CENOURA DANVERS HALF LONG", "2023/07/05", "2023/10/08", 0.5, "ha", 41);
-
-//        Setor 42
-//        Início a 01/04/2023, 10/10/2023
-//        Caudal máximo: 3500 l/h
-//        Parcelas: Campo Novo
-//        Culturas:
-//        - Abóbora Manteiga, 06/04/2023 a 10/09/2023
-        tblRepo.addToTableSetoresRega(42, 1, 303, "2023/04/01", "2023/10/10", 3500, "l/h");
-        tblRepo.addToTableCultivos(1, 108, "ABOBORA MANTEIGA", "2023/04/06", "2023/09/10", 0.6, "ha", 42);
 
 //        Inserir as seguintes operações realizadas na quinta:
 //
@@ -1508,6 +1431,7 @@ public class ImportFarmOperationsLegacy {
 //        12/10/2016 operação de plantação de Oliveira Arbequina, 40 un, compasso de 6 m, distancia entre filas de 6 m
         int op77 = tblRepo.addToTableOperacoes(1, 102, "OLIVEIRA ARBEQUINA", 0, "2016/10/12");
         tblRepo.addToTablePlantacoes(op77, 40, 6, 6);
+        tblRepo.addToTableCultivos(1, 102, "OLIVEIRA ARBEQUINA", "2016/10/12", null, 40, 6, 6, 0);
 
 //        13/01/2021 operação de aplicação de fator de produção BIOFERTIL N6, Oliveira Picual, 120 kg
         int op78 = tblRepo.addToTableOperacoes(1, 102, null, 0, "2021/01/13");
@@ -1741,6 +1665,86 @@ public class ImportFarmOperationsLegacy {
 //        20/09/2023 operação de rega, setor 41, 120 min, "07:00"
         int op135 = tblRepo.addToTableOperacoes(1, 108, null, 0, "2023/09/20");
         tblRepo.addToTableRegas(op135, 120, "min", 41, "07:00");
+
+
+        //        Inserir os seguintes setores de rega:
+//
+//        Setor 10
+//        Início a 01/05/2017, sem data fim
+//        Caudal máximo: 2500 l/h
+//        Parcelas: Campo grande
+//        Culturas:
+//        - Oliveira Galega, 30 un, 01/05/2017, sem data fim
+//        - Oliveira Picual, 20 un, 01/05/2017, sem data fim
+        tblRepo.addToTableSetoresRega(10, 1, 303, "2017/05/01", null, 2500, "l/h");
+        tblRepo.setSetorRegaToCultivo(10, "CAMPO GRANDE", "OLIVEIRA GALEGA");
+        tblRepo.setSetorRegaToCultivo(10, "CAMPO GRANDE", "OLIVEIRA PICUAL");
+
+//        Setor 11
+//        Início a 01/05/2017, sem data fim
+//        Caudal máximo: 1500 l/h
+//        Parcelas: Campo grande
+//        Culturas:
+//        - Oliveira Arbquina, 40 un, 01/05/2017, sem data fim
+        tblRepo.addToTableSetoresRega(11, 1, 303, "2017/05/01", null, 1500, "l/h");
+        tblRepo.setSetorRegaToCultivo(11, "CAMPO GRANDE", "OLIVEIRA ARBEQUINA");
+
+//        Setor 21
+//        Início a 01/05/2017, sem data fim
+//        Caudal máximo: 3500 l/h
+//        Parcelas: Lameiro da ponte, Lameiro do Moinho
+//        Culturas:
+//        - Macieira Jonagored, 90 un, 01/05/2017, sem data fim
+//        - Macieira Fuji, 60 un, 01/05/2017, sem data fim
+//        - Macieira Royal Gala, 60 un, 01/05/2017, sem data fim
+//        - Macieira Royal Gala, 40 un, 01/05/2019, sem data fim
+//        - Macieira Pipo de Basto, 40 un, 01/05/2019, sem data fim
+        tblRepo.addToTableSetoresRega(21, 1, 303, "2017/05/01", null, 3500, "l/h");
+        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA JONAGORED");
+        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA FUJI");
+        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA ROYAL GALA");
+        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA ROYAL GALA");
+        tblRepo.setSetorRegaToCultivo(21, "LAMEIRO DA PONTE", "MACIEIRA PIPO DE BASTO");
+
+
+//        Setor 22
+//        Início a 01/05/2019, sem data fim
+//        Caudal máximo: 3500 l/h
+//        Parcelas: Lameiro do Moinho
+//        Culturas:
+//        - Macieira Porta da Loja, 50 un, 01/05/2019, sem data fim
+//        - Macieira Malápio, 20 un, 01/05/2019, sem data fim
+//        - Macieira Canada, 30 un, 01/05/2019, sem data fim
+//        - Macieira Grand Fay, 40 un, 01/05/2019, sem data fim
+//        - Macieira Gronho Doce, 50 un, 01/05/2019, sem data fim
+        tblRepo.addToTableSetoresRega(22, 1, 303, "2019/05/01", null, 3500, "l/h");
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA PORTA DA LOJA", "2019/05/01", null, 50, 5, 5, 22);
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA MALÁPIO", "2019/05/01", null, 20, 5, 5, 22);
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA REINETTE OU CANADA", "2019/05/01", null, 30, 5, 5, 22);
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA REINETTE OU GRAND FAY", "2019/05/01", null, 40, 5, 5, 22);
+        tblRepo.addToTableCultivos(1, 105, "MACIEIRA GRONHO DOCE", "2019/05/01", null, 50, 5, 5, 22);
+
+
+//        Setor 41
+//        Início a 01/04/2023, 10/10/2023
+//        Caudal máximo: 2500 l/h
+//        Parcelas: Campo Novo
+//        Culturas:
+//        - Cenoura Sugarsnax Hybrid, 05/04/2023 a 31/05/2023
+//        - Cenoura Danvers Half Long, 05/07/2023 a 08/10/2023
+        tblRepo.addToTableSetoresRega(41, 1, 303, "2023/04/01", "2023/10/10", 2500, "l/h");
+        tblRepo.addToTableCultivos(1, 108, "CENOURA SUGARSNAX HYBRID", "2023/04/05", "2023/05/31", 0.5, "ha", 41);
+        tblRepo.addToTableCultivos(1, 108, "CENOURA DANVERS HALF LONG", "2023/07/05", "2023/10/08", 0.5, "ha", 41);
+
+//        Setor 42
+//        Início a 01/04/2023, 10/10/2023
+//        Caudal máximo: 3500 l/h
+//        Parcelas: Campo Novo
+//        Culturas:
+//        - Abóbora Manteiga, 06/04/2023 a 10/09/2023
+        tblRepo.addToTableSetoresRega(42, 1, 303, "2023/04/01", "2023/10/10", 3500, "l/h");
+        tblRepo.addToTableCultivos(1, 108, "ABOBORA MANTEIGA", "2023/04/06", "2023/09/10", 0.6, "ha", 42);
+
     }
 
     public void addExtraDataSprint3() {
