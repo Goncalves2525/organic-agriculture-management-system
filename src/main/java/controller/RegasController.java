@@ -69,15 +69,19 @@ public class RegasController {
         return regaRepository.insertRegas(rega);
     }
 
-    public boolean insertFertirregas(FertirregasDTO fertirregas) throws  SQLException{
+    public boolean insertFertirregas(FertirregasDTO fertirregas) throws SQLException {
         return regaRepository.insertFertirregas(fertirregas);
     }
+
     public List<SetoresRega> getSetoresForRega() throws SQLException {
         return setoresRegaRepository.getSetoresForRega();
     }
 
-    public String registarFertiRega(int p_id_Quinta, int p_id_Parcela, int p_id_Operador, int p_quantidade, String p_unMedida, int p_Setor, int p_receitaID, String dataInicio, String horaInicio) throws SQLException {
-        return regaRepository.registarFertiRega(p_id_Quinta,p_id_Parcela, p_id_Operador, p_quantidade,p_unMedida,p_Setor,p_receitaID,dataInicio,horaInicio);
+    public String registarRega(int p_id_Quinta, int p_id_Parcela, int p_id_Operador, int p_quantidade, String p_unMedida, int p_Setor, String dataInicio, String horaInicio) throws SQLException {
+        return regaRepository.registarRega(p_id_Quinta, p_id_Parcela, p_id_Operador, p_quantidade, p_unMedida, p_Setor, dataInicio, horaInicio);
     }
 
+    public String registarFertiRega(int p_id_Quinta, int p_id_Parcela, int p_id_Operador, int p_quantidade, String p_unMedida, int p_Setor, int p_receitaID, String dataInicio, String horaInicio) throws SQLException {
+        return regaRepository.registarFertiRega(p_id_Quinta, p_id_Parcela, p_id_Operador, p_quantidade, p_unMedida, p_Setor, p_receitaID, dataInicio, horaInicio);
+    }
 }

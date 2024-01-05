@@ -102,6 +102,42 @@ public class RegaRepository {
         return false;
     }
 
+    public String registarRega(int p_id_Quinta, int p_id_Parcela, int p_id_Operador, int p_quantidade, String p_unMedida, int p_Setor, String dataInicio, String p_horaInicio) throws SQLException {
+
+        String result = "";
+        CallableStatement callStmt = null;
+        try {
+            Connection connection = DatabaseConnection.getInstance().getConnection();
+            callStmt = connection.prepareCall("{ ? = call FUNC_REGISTAR_REGA(?,?,?,?,?,?,?,?) }");
+            callStmt.registerOutParameter(1, OracleTypes.VARCHAR);
+
+            callStmt.setInt(2, p_id_Quinta);
+            callStmt.setInt(3, p_id_Parcela);
+            callStmt.setInt(4, p_id_Operador);
+            callStmt.setString(5, dataInicio);
+            callStmt.setInt(6, p_quantidade);
+            callStmt.setString(7, p_unMedida);
+            callStmt.setInt(8, p_Setor);
+            callStmt.setString(9,p_horaInicio );
+
+            callStmt.execute();
+
+            result = callStmt.getString(1);
+            callStmt.close();
+            connection.commit();
+        }
+        catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+        finally {
+            if (!Objects.isNull(callStmt)) {
+                callStmt.close();
+            }
+        }
+
+        return result;
+    }
+
     public String registarFertiRega(int p_id_Quinta, int p_id_Parcela, int p_id_Operador, int p_quantidade, String p_unMedida, int p_Setor, int p_receitaID, String dataInicio, String p_horaInicio) throws SQLException {
 
         String result = "";

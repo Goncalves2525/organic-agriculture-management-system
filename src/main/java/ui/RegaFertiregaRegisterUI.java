@@ -27,6 +27,8 @@ public class RegaFertiregaRegisterUI implements Runnable{
                     regasCtrl.getSetoresForRega();
                     int setor = Utils.readIntegerFromConsole("Escolha um algarismo de um dado SETOR, para proceder à REGA.");
                     rega.setSetorId(setor);
+                    String dataInicio = Utils.readLineFromConsole("Indique a data de inicio da operação (YYYY/MM/DD): ");
+                    rega.setDataColheita(dataInicio);
                     double quantidade = Utils.readDoubleFromConsole("Qual é a quantidade em minutos da rega?");
                     rega.setQuantidade(quantidade);
                     String horaInicio = Utils.readLineFromConsole("Qual é a hora de inicio (hh:mm)?");
@@ -40,7 +42,10 @@ public class RegaFertiregaRegisterUI implements Runnable{
                 } while (Utils.confirm("Quer tentar de novo? (y/n)"));
 
                 if (option) {
-                    regasCtrl.insertRegas(rega);
+                    //regasCtrl.insertRegas(rega);
+                    int quantidade = (int) rega.getQuantidade();
+                    //Date dataInicioSQL = new java.sql.Date(new java.util.Date(rega.getDataColheita()).getTime());
+                    regasCtrl.registarRega(1, 0, 0, quantidade, "min", rega.getSetorId(), rega.getDataColheita(), rega.getHoraInicio());
                 }
 
                 Utils.readLineFromConsole("Press Enter to continue.");
@@ -78,7 +83,7 @@ public class RegaFertiregaRegisterUI implements Runnable{
                     //regasCtrl.insertFertirregas(fertirrega);
                     int quantidade = (int) fertirrega.getQuantidade();
                     Date dataInicioSQL = new java.sql.Date(new java.util.Date(dataInicio).getTime());
-                    regasCtrl.registarFertiRega(1, 106, 0, quantidade, "min", fertirrega.getSetor(), fertirrega.getReceitaId(), dataInicio, horaInicio);
+                    regasCtrl.registarFertiRega(1, 0, 0, quantidade, "min", fertirrega.getSetor(), fertirrega.getReceitaId(), dataInicio, horaInicio);
                 }
 
                 Utils.readLineFromConsole("Press Enter to continue.");
