@@ -1,5 +1,7 @@
 # Sistema de Gestão para Agricultura Biológica
 
+![Menu da Aplicação](images/Menu.png)
+
 Este projeto consiste num sistema integrado para apoiar a gestão de uma instalação agrícola em modo de produção biológico (MPB). O sistema permite gerir parcelas, culturas, operações agrícolas, regas, sensores, comercialização de produtos e outros componentes essenciais para a agricultura biológica.
 
 ## Visão Geral

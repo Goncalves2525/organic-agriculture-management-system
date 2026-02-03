@@ -1,5 +1,7 @@
 # Organic Agriculture Management System
 
+![Application Menu](images/Menu.png)
+
 This project consists of an integrated system to support the management of an agricultural facility in organic production mode (OPM). The system allows managing plots, crops, agricultural operations, irrigation, sensors, product marketing, and other essential components for organic agriculture.
 
 ## Overview
