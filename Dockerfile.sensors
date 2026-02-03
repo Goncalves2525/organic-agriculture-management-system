@@ -1,0 +1,49 @@
+# Dockerfile for Sensors Components (C/Assembly)
+FROM gcc:11 AS builder
+
+# Install make and other build tools
+RUN apt-get update && apt-get install -y \
+    make \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set working directory
+WORKDIR /app
+
+# Copy sensor source code
+COPY sensores ./sensores
+
+# Build ProcessadorDeDados
+WORKDIR /app/sensores/ProcessadorDeDados
+RUN make clean && make
+
+# Build SaidaDeDados
+WORKDIR /app/sensores/SaidaDeDados
+RUN make clean && make
+
+# Runtime stage
+FROM debian:bullseye-slim
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    libc6 \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create working directories
+WORKDIR /app
+RUN mkdir -p /app/config /app/data/input /app/data/output
+
+# Copy compiled binaries from builder
+COPY --from=builder /app/sensores/ProcessadorDeDados/processadorDados /app/bin/processadorDados
+COPY --from=builder /app/sensores/SaidaDeDados/saidaDados /app/bin/saidaDados
+
+# Copy configuration files
+COPY --from=builder /app/sensores/ProcessadorDeDados/config.txt /app/config/
+
+# Make binaries executable
+RUN chmod +x /app/bin/processadorDados /app/bin/saidaDados
+
+# Set PATH to include our binaries
+ENV PATH="/app/bin:${PATH}"
+
+# Default command (can be overridden in docker-compose)
+CMD ["/bin/bash"]

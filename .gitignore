@@ -36,3 +36,34 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+### Docker ###
+.env
+.env.local
+.env.*.local
+docker-compose.override.yml
+
+### Application ###
+*.log
+logs/
+*.tmp
+*.bak
+*.backup
+*.swp
+*.swo
+*~
+
+### Database ###
+*.db
+*.sqlite
+*.sql.backup
+
+### Sensors - Compiled binaries and object files ###
+sensores/**/processadorDados
+sensores/**/saidaDados
+sensores/**/*.o
+sensores/**/output/*.txt
+sensores/**/intermedio/
+
+### Application resources backups ###
+src/main/resources/config/application.properties.backup

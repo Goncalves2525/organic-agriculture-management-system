@@ -1,0 +1,97 @@
+services:
+  # Oracle Database Service
+  oracle-db:
+    image: gvenzl/oracle-xe:21-slim
+    platform: linux/amd64
+    container_name: farm-oracle-db
+    ports:
+      - "1521:1521"
+    environment:
+      - ORACLE_PASSWORD=${ORACLE_PASSWORD:-OraclePassword123}
+      - APP_USER=${DATABASE_USER:-farm_manager}
+      - APP_USER_PASSWORD=${DATABASE_PASSWORD:-password}
+    volumes:
+      - oracle-data:/opt/oracle/oradata
+      - ./sql_files:/container-entrypoint-initdb.d/sql_files:ro
+    healthcheck:
+      test: ["CMD-SHELL", "healthcheck.sh"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+    networks:
+      - farm-network
+    restart: unless-stopped
+
+  # Java Application Service
+  farm-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: farm-management-app
+    depends_on:
+      oracle-db:
+        condition: service_healthy
+    environment:
+      - JAVA_OPTS=-Xmx512m -Xms256m
+      - DATABASE_HOST=oracle-db
+      - DATABASE_PORT=1521
+      - DATABASE_SID=${DATABASE_SID:-XEPDB1}
+      - DATABASE_USER=${DATABASE_USER:-farm_manager}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD:-password}
+    volumes:
+      - ./src/main/resources/config:/app/resources/config:rw
+      - sensor-data:/app/data/sensors
+      - app-logs:/app/logs
+    networks:
+      - farm-network
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  # Sensors Data Processor Service (Optional - for processing sensor data)
+  sensors-processor:
+    build:
+      context: .
+      dockerfile: Dockerfile.sensors
+    container_name: farm-sensors-processor
+    depends_on:
+      - farm-app
+    volumes:
+      - sensor-data:/app/data
+      - ./sensores/ProcessadorDeDados/config.txt:/app/config/config.txt:ro
+    networks:
+      - farm-network
+    # Override with actual sensor processing command
+    # Example: command: ["processadorDados", "/dev/ttyUSB0", "/app/config/config.txt", "/app/data/output", "50"]
+    command: ["/bin/bash", "-c", "echo 'Sensors processor ready. Override command to start processing.' && tail -f /dev/null"]
+    restart: unless-stopped
+
+  # Sensors Data Output Service (Optional - for outputting processed data)
+  sensors-output:
+    build:
+      context: .
+      dockerfile: Dockerfile.sensors
+    container_name: farm-sensors-output
+    depends_on:
+      - sensors-processor
+    volumes:
+      - sensor-data:/app/data
+    networks:
+      - farm-network
+    # Override with actual sensor output command
+    # Example: command: ["saidaDados", "/app/data/output", "/app/data/final", "60000"]
+    command: ["/bin/bash", "-c", "echo 'Sensors output service ready. Override command to start processing.' && tail -f /dev/null"]
+    restart: unless-stopped
+
+volumes:
+  oracle-data:
+    driver: local
+  sensor-data:
+    driver: local
+  app-logs:
+    driver: local
+
+networks:
+  farm-network:
+    driver: bridge

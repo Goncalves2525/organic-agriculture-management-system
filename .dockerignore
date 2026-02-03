@@ -1,0 +1,54 @@
+# Git
+.git
+.gitignore
+.gitattributes
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Build artifacts
+target/
+out/
+*.class
+*.jar
+*.war
+
+# Documentation
+*.md
+!README-DOCKER.md
+deliverables/
+artifacts/
+
+# Docker
+docker-compose.yml
+Dockerfile*
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Test files
+*.test
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Node modules (if any)
+node_modules/
+
+# Maven
+.mvn/
+mvnw
+mvnw.cmd
