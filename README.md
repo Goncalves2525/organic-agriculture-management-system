@@ -63,6 +63,8 @@ Main Java application that integrates all components and provides user interface
 
 ## Installation and Configuration
 
+> **💡 Docker Alternative**: If you prefer not to install all dependencies locally on your machine, you can use Docker to run the entire application in containers. See [README-DOCKER.md](README-DOCKER.md) for simplified setup instructions using Docker Compose.
+
 ### Prerequisites
 - Java JDK 11 or higher
 - Oracle Database 19c or higher
